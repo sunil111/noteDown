@@ -1,0 +1,9 @@
+/*footer CSS*/
+	nav#footernav {
+		width:100%;
+		height:4%;
+		text-align:center;
+		padding:1px 0px 1px 0px;
+		color:white;
+		background-color:#000000;
+	} 
