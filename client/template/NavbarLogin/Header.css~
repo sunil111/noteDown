@@ -1,0 +1,131 @@
+/*Header CSS*/
+		/*Header css */
+		nav a{
+	  		padding:8px 8px 8px 8px !important;
+			font-size: 16px;
+			-webkit-transition:0.2s;
+			-moz-transition:0.2s;
+			-o-transition:0.2s;
+			transition:0.2s;
+		}
+
+		/*.navbar {					/*transparent*//*
+			background-color: transparent;
+			background: transparent;
+			border-color: transparent;
+		}
+
+		.navbar li { color: #000 }*/
+
+		.navbar{
+			background:#000000;
+		}
+	
+		.navbar-gNote {
+	  		font-size: 50px;
+			color:white;
+		}
+		
+		.navbar-DropDown{
+			padding:20px 10px 20px 10px !important;
+			
+		}
+		.navbar-nav{
+			padding:5px 0px 0px 0px !important;		
+		}
+		
+		.navbar-Search{
+			padding:20px 10px 20px 10px !important;
+			
+		}
+
+		nav.navbar.shrink {
+	  		min-height:20px;
+		}
+
+		nav.shrink a {
+			padding:5px 5px 0px 5px !important;
+			font-size: 14px;
+			-webkit-transition:0.2s;
+			-moz-transition:0.2s;
+			-o-transition:0.2s;
+			transition:0.2s;
+		}
+
+		nav.shrink .navbar-gNote {
+	  		font-size: 35px;
+			padding:5px 5px 0px 5px !important;
+		}
+		
+		nav.shrink .navbar-DropDown{
+			padding:5px 5px 0px 5px !important;
+		}
+
+		nav.shrink .navbar-nav{
+			padding:2px 5px 0px 5px !important;		
+		}
+
+		nav.shrink .navbar-Search{
+			padding:8px 5px 0px 5px !important;
+		}
+		
+		/*Search Button css*/
+
+		.navbar-Search .form-group {
+			float: right !important;
+			transition: all 0.35s, border-radius 0s;
+			width: 30px;
+			height: 28px;
+			background-color: #fff;
+			box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+			border-radius: 25px;
+			border: 1px solid #ccc;
+		}
+
+		.navbar-Search .form-group input.form-control {
+			padding-right: 20px;	
+			border: 0 none;
+			background: transparent;
+			box-shadow: none;
+			display:block;
+		}
+
+		.navbar-Search .form-group input.form-control::-webkit-input-placeholder {
+			display: none;
+		}
+
+		.navbar-Search .form-group input.form-control:-moz-placeholder {
+		  /* Firefox 18- */
+		  	display: none;
+		}
+
+		.navbar-Search .form-group input.form-control::-moz-placeholder {
+		  /* Firefox 19+ */
+		  	display: none;
+		}
+
+		.navbar-Search .form-group input.form-control:-ms-input-placeholder {
+		  	display: none;
+		}
+
+		.navbar-Search .form-group:hover,
+		.navbar-Search .form-group.hover {
+		  	width: 100%;
+		  	border-radius: 4px 25px 25px 4px;
+		}
+
+		.navbar-Search .form-group span.form-control-feedback {
+			position: absolute;
+			top: -1px;
+			right: -2px;
+			z-index: 2;
+			display: block;
+			width: 30px;
+			height:28px;
+			line-height: 30px;
+			text-align: center;
+			/*color: #3596e0;*/
+			left: initial;
+			font-size: 14px;
+		}
+
