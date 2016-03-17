@@ -16,7 +16,6 @@ standard-minifiers      # JS/CSS minifiers run for production mode
 es5-shim                # ECMAScript 5 compatibility for older browsers.
 ecmascript              # Enable ECMAScript2015+ syntax in app code
 
-<<<<<<< HEAD
 #autopublish             # Publish all data to the clients (for prototyping)
 #insecure                # Allow all DB writes from clients (for prototyping)
 
@@ -27,7 +26,6 @@ accounts-twitter
 accounts-google
 iron:router
 mrt:bootstrap-3
-=======
-autopublish             # Publish all data to the clients (for prototyping)
-insecure                # Allow all DB writes from clients (for prototyping)
->>>>>>> 18fe8b082da7f0d267ce727b57b24439038ce8b0
+
+#autopublish             # Publish all data to the clients (for prototyping)
+#insecure                # Allow all DB writes from clients (for prototyping)
