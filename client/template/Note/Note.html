@@ -1,0 +1,68 @@
+<template name="Note">
+	<div class="container-fluid top-margin">
+		<div class="row">
+			<div class="col-md-12" style="background-color:#11d3bc">
+				{{> docMeta}} 
+			</div>
+			<div class="col-md-12" style="background-color:#11d3bc">
+				{{> noteHeader}}
+			</div>
+			<div class="col-md-12" style="background-color:#55e9bc">
+  				{{> editingUsers}}
+			</div>
+			<div class="col-md-6">
+  				{{> editor}}
+			</div>
+		</div>
+  	</div>
+</template>
+
+<template name="noteHeader">
+	<ul class="nav navbar-nav" style="font-color:#537780">
+			     	<li>
+				     	<a href="#" class="js-add-doc"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>New Document
+				     	</a>
+			     	</li>
+			     	<!--DropDown-->
+			     	<li class="dropdown" >
+		          		<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Documents <span class="caret"></span></a>
+			          <ul class="dropdown-menu" style="background-color:#11d3bc">
+			          	{{#each documents}}
+			            <li><a href="#" class="js-load-doc">{{title}}</a></li>
+			           	{{/each}}
+			          </ul>
+	        		</li>
+			     	<!--End Dropdown-->
+			     	<!--<li>
+				     	<a href="#" class="js-del-doc"><span class=" glyphicon glyphicon-trash" aria-hidden="true"></span> Discard
+				     	</a>
+			     		</li>
+			     	-->
+			    </ul>
+</template>
+
+<template name="editor">
+	{{>sharejsCM docid=docid onRender=config id="editor"}}
+</template>
+
+
+<template name="docMeta">
+	{{#with document}}
+		<span class="h1" style="color:#5e366a">{{> editableText collection="documents" field="title"}}</span>
+		{{#if canEdit}}
+		 <div class="checkbox">
+		    <label>
+		      <input type="checkbox" class="js-tog-private"> Private
+		    </label>
+		   </div>
+		{{/if}}
+	{{/with}}
+</template>
+
+<template name="editingUsers">
+	Editors: 
+	{{#each users}}
+	<span class="label label-success">{{firstname}}</span>
+	{{/each}}
+</template>
+ 
