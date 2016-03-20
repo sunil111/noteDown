@@ -1,13 +1,12 @@
 <template name="Home">
-{{> NavbarLogin}}
 <!-- Start Container-->
-	<br><br><br><br><br>
-	
-	<p><center><b>Body part goes here</b></center></p>
+	<div id="body">
+	{{#if currentUser}}
+		{{> HomePage}}
+	{{/if}}
 
 	<br><br><br><br><br>
-	<br><br><br><br><br>
-	<br><br><br><br><br>
 	
+	</div>
 <!-- End Container-->
 </template>

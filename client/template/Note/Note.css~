@@ -1,0 +1,9 @@
+/* CSS declarations go here */
+
+
+
+#viewer_iframe{
+	border:1px solid grey;
+	resize:both;
+	width:100%;
+}
