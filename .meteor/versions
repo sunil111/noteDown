@@ -39,6 +39,7 @@ facebook@1.2.2
 fastclick@1.0.7
 geojson-utils@1.0.4
 google@1.1.7
+gwendall:auth-client-callbacks@0.1.0
 gwendall:body-events@0.1.6
 handlebars@1.0.4
 hot-code-push@1.0.0
