@@ -1,12 +1,6 @@
 Meteor.subscribe("documents");
 Meteor.subscribe("editingUsers");
 
-
-Template.notes.helpers({ 
-	documents:function(){
-		return Documents.find({ _id: this.userId});
-	}
-});
 Template.editor.helpers({
 	docid:function(){
 		setupCurrentDocument();
