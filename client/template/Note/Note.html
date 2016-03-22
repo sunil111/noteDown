@@ -73,4 +73,11 @@
 	<span class="label label-success">{{firstname}}</span>
 	{{/each}}
 </template>
+
+<template name='notes'>
+	{{#each documents}}
+		<a href="#" class="js-load-doc">{{title}}</a>
+	{{/each}}
+</template>
+
  

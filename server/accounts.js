@@ -1,30 +1,25 @@
-// first, remove configuration entry in case service is already configured
-Meteor.startup(function () {
-Accounts.loginServiceConfiguration.remove({
-  service: "facebook"
-});
-Accounts.loginServiceConfiguration.insert({
-  service: "facebook",
-  appId: "",
-  secret: ""
+ServiceConfiguration.configurations.upsert({
+	service: "facebook"
+},
+{
+	$set: {
+    		clientId: Meteor.settings.facebook.appId,
+    		loginStyle: "popup",
+    		secret: Meteor.settings.facebook.secret
+  	}
 });
 
-// first, remove configuration entry in case service is already configured
-/*Accounts.loginServiceConfiguration.remove({
-  service: "twitter"
+ServiceConfiguration.configurations.upsert({
+	service: "google"
+},
+{
+	$set: {
+    		clientId: Meteor.settings.google.clientId,
+    		loginStyle: "popup",
+    		secret: Meteor.settings.google.secret
+  	}
 });
-Accounts.loginServiceConfiguration.insert({
-  service: "twitter",
-  consumerKey: "yourConsumerKey",
-  secret: "yourSecret"
-});*/
 
-// first, remove configuration entry in case service is already configured
-Accounts.loginServiceConfiguration.remove({
-  service: "google"
-});
-Accounts.loginServiceConfiguration.insert({
-  service: "",
-  secret: ""
-});
-});
+
+
+
