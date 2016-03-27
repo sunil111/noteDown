@@ -26,3 +26,11 @@ Meteor.publish("documents", function(){
       ]
     });
   });  
+
+    Meteor.publish("todo", function(){
+    return Todo.find({
+      $and:[
+        { owner: this.userId }
+      ]
+    });
+  });  

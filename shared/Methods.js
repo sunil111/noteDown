@@ -75,6 +75,22 @@ Meteor.methods({
 			var id= Groups.insert(group);
 			return id;
 		}
+	},
+
+	addList: function(list) {
+		var List;
+		if(!this.userId){// NOt logged in
+			return;
+		}
+		else {
+			List={
+				title: list,
+				owner: this.userId,
+				createdOn: new Date()
+			};
+			var id= Todo.insert(List);
+			return id;
+		}
 	}
 
 	
