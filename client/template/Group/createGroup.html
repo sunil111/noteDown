@@ -1,0 +1,26 @@
+<template name="createGroup">
+	<div class="container">  
+		<h2>Create Groups <a href="{{pathFor route='newGroup'}}"><img src="images/add.png"  height="50" ></a></h2>
+		<hr class="divider">
+	</div>
+</template>
+
+<template name="newGroup">
+	{{> Navbar }}
+	<!-- Start Container -->
+	<div class="container-fluid"><br>
+		<h2>Create Group</h2><br>
+		<form class="form">
+    		<div class="form-group">
+      			<label for="inputdefault">Group Title:</label>
+      			<input class="form-control" id="gTitle" type="text">
+   				<label for="Descripion">Description:</label>
+   				<input class="form-control" type="text" rows="5" id="gDescription">
+   				<label class="control-label">Attach Files</label>
+   				<input id="input-folder-2" name="input-folder-2[]" class="file-loading" type="file" multiple webkitdirectory accept="image/*"><br>
+				<input type="submit" value="Create Group">
+   			</div>
+  		</form>	
+	</div><br><br><br>
+	<!-- End Container -->
+</template>
