@@ -57,6 +57,25 @@ Meteor.methods({
 		user.lastEdit = new Date();
 		eusers.users[this.userId] = user;
 		EditingUsers.upsert({_id:eusers._id},eusers);
+	},
+
+	//---------------Group Function--------------------------------------------
+	addGroup: function(gtitle,gdesc) {
+		var group;
+		if(!this.userId){// NOt logged in
+			return;
+		}
+		else {
+			group={
+				gname: gtitle,
+				gdesc: gdesc,
+				owner: this.userId,
+				createdOn: new Date()
+			};
+			var id= Groups.insert(group);
+			return id;
+		}
 	}
+
 	
 })
