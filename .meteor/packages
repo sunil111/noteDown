@@ -29,6 +29,7 @@ mrt:bootstrap-3
 babrahams:editable-text
 mizzao:sharejs-codemirror
 gwendall:auth-client-callbacks
+service-configuration
 #autopublish             # Publish all data to the clients (for prototyping)
 #insecure                # Allow all DB writes from clients (for prototyping)
 service-configuration
