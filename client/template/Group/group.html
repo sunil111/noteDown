@@ -1,0 +1,32 @@
+<template name="displayGroup">
+	<div class="container">  
+		<h2>Display Groups <a href="{{pathFor route='showGroup'}}"><img src="images/add.png"  height="50" ></a></h2>
+		<hr class="divider">
+	</div>
+</template>
+
+<template name="showGroup">
+	{{> Navbar }}
+	<!-- Start Container -->
+	<div class="container-fluid"><br><br><br> 
+		<hr class="divider">
+		<div class="row">
+			{{#each groups}}
+			<div class="col-sm-6 col-xs-3 col-md-3 col-lg-2 img-zoom">
+				<div class="thumbnail">
+					<div class="caption">
+						<img src="images/groups.png" width="80%" height="50%" alt="thumb01">
+						<hr>
+                				<h3 id="gname">{{gname}}</h3>
+						<hr class="divider">
+  						<h3 id="gdesc">{{gdesc}}</h3>
+					</div>
+            			</div>
+          		</div>
+        		{{/each}}
+      		</div>
+    		<hr class="divider">
+   	</div>
+	<!-- End Container -->
+</template>
+
