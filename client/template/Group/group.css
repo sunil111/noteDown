@@ -13,6 +13,10 @@ h3#gdesc{
 	border: none;
 }
 
+/*.btn-join-group {
+	width: 150px !important;
+}*/
+
 		/*Image zoom*/
 		.img-zoom img {
 	    		-webkit-transition: all 1s ease; /* Safari and Chrome */

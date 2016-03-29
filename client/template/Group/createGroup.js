@@ -27,3 +27,6 @@ Template.newGroup.events({
 	}  
 });
 
+
+
+
