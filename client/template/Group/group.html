@@ -17,15 +17,19 @@
 					<div class="caption">
 						<img src="images/groups.png" width="80%" height="50%" alt="thumb01">
 						<hr>
-                				<h3 id="gname">{{gname}}</h3>
+						<h3 id="gname">{{gname}}</h3> 
+                		<span style="float: right;" id="privacy"><i>{{privacy}}-group...</i></span>
+					</div>
 						<hr class="divider">
   						<h3 id="gdesc">{{gdesc}}</h3>
-					</div>
-            			</div>
-          		</div>
-        		{{/each}}
-      		</div>
-    		<hr class="divider">
+  						<hr class="divider">
+  						<input type="submit" class="btn btn-success" id="join" value="Join">
+  						<input type="submit" class="btn btn-danger" id="delete" value="Delete">
+	           	</div>
+          	</div>
+        	{{/each}}
+      	</div>
+    	<hr class="divider">
    	</div>
 	<!-- End Container -->
 </template>

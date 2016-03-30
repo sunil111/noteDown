@@ -21,9 +21,9 @@ Meteor.publish("editingUsers",function(){
 
 Meteor.publish("groups", function(){
   return Groups.find({
-    $and:[
+    /*$and:[
       { owner: this.userId }
-    ]
+    ]*/
   });
 });  
 

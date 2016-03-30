@@ -60,7 +60,7 @@ Meteor.methods({
 	},
 
 	//---------------Group Function--------------------------------------------
-	addGroup: function(gtitle,gdesc) {
+	addGroup: function(gtitle,gdesc, privacy) {
 		var group;
 		if(!this.userId){// NOt logged in
 			return;
@@ -69,7 +69,9 @@ Meteor.methods({
 			group={
 				gname: gtitle,
 				gdesc: gdesc,
+				privacy: privacy,
 				owner: this.userId,
+				members: "",
 				createdOn: new Date()
 			};
 			var id= Groups.insert(group);
@@ -77,6 +79,21 @@ Meteor.methods({
 		}
 	},
 
+	deleteGroup : function(groupId){
+		var id= Groups.findOne(groupId);
+		if(id.owner !== Meteor.userId()){// if not the owner of the group
+			throw new Meteor.Error("not-authorised");
+			alert("Not authorised to delete");
+		}
+		Groups.remove(groupId);
+	},
+
+	joinGroup : function(groupId, member){
+		var id= Groups.findOne(groupId);
+		Groups.update({ "_id":id }, {$set:{"members": member}});
+	},
+
+	//---------------Todo Function--------------------------------------------
 	addList: function(list) {
 		var List;
 		if(!this.userId){// NOt logged in

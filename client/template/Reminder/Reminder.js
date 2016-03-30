@@ -8,7 +8,7 @@ $(document).ready(function () {
 	});
 });
 
-Template.createRemainder.events({
+Template.createReminder.events({
 	"submit .save": function(event) {
 		event.defaultPrevented();
 
