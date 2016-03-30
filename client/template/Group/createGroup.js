@@ -15,7 +15,8 @@ Template.newGroup.events({
        var gdesc = event.target.gDescription.value;
 
       // Insert a task into the collection
-      Meteor.call("addGroup", gtitle,gdesc,function(err, res){
+
+      Meteor.call("addGroup", gtitle, gdesc,function(err, res){
 				if(!err){//all good
 					console.log("callback recieved: "+res);
 				};
