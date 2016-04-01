@@ -20,11 +20,7 @@ Meteor.publish("editingUsers",function(){
 });
 
 Meteor.publish("groups", function(){
-  return Groups.find({
-    /*$and:[
-      { owner: this.userId }
-    ]*/
-  });
+  return Groups.find({ /*owner: { $ne: this.userId} */});
 });  
 
 Meteor.publish("todo", function(){

@@ -9,17 +9,21 @@
 	{{> Navbar }}
 	<!-- Start Container -->
 	<div class="container-fluid"><br>
+		<!--<div class="container">
 		<h2>Create Group</h2><br>
 		<form class="form">
     		<div class="form-group">
       			<label for="inputdefault">Group Title:</label>
-      			<input class="form-control" id="gTitle" type="text" required><br>
+      			<input class="form-control" id="gTitle" type="text" width="50" required><br>
    				<label for="Descripion">Description:</label>
-   				<input class="form-control" type="text" rows="5" id="gDescription" required><br>
+   				<textarea class="form-control" rows='5' type="text" id="gDescription" width="50" required></textarea> <br>
    				<input type="checkbox" id="privacy" value="Private">Private
 				<input type="submit" class="btn btn-primary" value="Create Group">
    			</div>
   		</form>	
+  		
+  		</div>-->
+  		{{> quickForm id="quick" collection="Groups" type="insert"}}
 	</div><br><br><br>
 	<!-- End Container -->
 </template>

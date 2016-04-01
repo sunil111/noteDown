@@ -1,22 +1,41 @@
-Meteor.subscribe("groups");
+Template.showGroup.onCreated(function(){
+	var self= this;
+	this.autorun( function() {
+		self.subscribe('groups');
+	});
+});
 
-Template.showGroup.events({
+Template.showGroup.helpers({
+	groups : function(){
+		return Groups.find({});
+	}
+});
+
+Template.Group.onCreated(function(){
+	var self= this;
+	this.autorun( function() {
+		self.subscribe('groups');
+	});
+});
+
+Template.Group.helpers({
+	group : function(){
+		var groupId = Session.get('groupId'); //instead of Router.current().params.gameId;
+        var group = Groups.findOne({_id: groupId});
+        return group;
+	}
+});
+
+Template.Group.events({
 	"click #delete": function(event) {
-		Meteor.call('deleteGroup', this._id, function(err,res) {
-			if(err) {
-				throw new Meteor.Error("Error: "+err);
-				alert("Not authorised to delete");
-			}
-		});
+		var groupId = Session.get('groupId');
+		Meteor.call('deleteGroup', groupId);
 	},
 
 	"click #join": function(event) {
-		var members= {};
-		var id = this.userId;
-		members= id;
-		Meteor.call('joinGroup',this._id,members, function(err,res) {
-			if(err) { console.log(err);}
-			else console.log(res);
-		});
+		Session.set('member', Meteor.userId());
+		var member = Session.get('member');
+		var groupId = Session.get('groupId');
+		Meteor.call('joinGroup',groupId, member);
 	}
 });

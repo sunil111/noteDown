@@ -1,11 +1,5 @@
 Meteor.subscribe("groups");
 
-Template.showGroup.helpers({
-	groups : function(){
-		return Groups.find({});
-	}
-});
-
 Template.newGroup.events({
 	"submit .form": function(event) {
 	  event.preventDefault();

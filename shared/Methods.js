@@ -80,8 +80,9 @@ Meteor.methods({
 	},
 
 	deleteGroup : function(groupId){
-		var id= Groups.findOne(groupId);
-		if(id.owner !== Meteor.userId()){// if not the owner of the group
+
+		var id = Groups.findOne(groupId);
+		if(id.owner !== Meteor.userId()){ // if not the owner of the group
 			throw new Meteor.Error("not-authorised");
 			alert("Not authorised to delete");
 		}
@@ -90,7 +91,14 @@ Meteor.methods({
 
 	joinGroup : function(groupId, member){
 		var id= Groups.findOne(groupId);
-		Groups.update({ "_id":id }, {$set:{"members": member}});
+		console.log('Inside method '+ member)
+		if(id.owner != member){
+			throw new Meteor.Error("err");
+			Groups.update({ "_id":id }, {$set:{"members": member}});
+		}
+		else{
+			//throw new Meteor.Error("not-authorised");
+		}
 	},
 
 	//---------------Todo Function--------------------------------------------
