@@ -29,13 +29,22 @@ Template.Group.helpers({
 Template.Group.events({
 	"click #delete": function(event) {
 		var groupId = Session.get('groupId');
-		Meteor.call('deleteGroup', groupId);
+		Meteor.call('deleteGroup', groupId, function(err,res){
+			if(!err){//all good
+				console.log("group deleted: "+res);
+                alert('Group deleted succesfully');
+			}
+		});
 	},
 
 	"click #join": function(event) {
-		Session.set('member', Meteor.userId());
-		var member = Session.get('member');
 		var groupId = Session.get('groupId');
-		Meteor.call('joinGroup',groupId, member);
+		console.log(groupId);
+		Meteor.call('joinGroup',groupId, function(err,res){
+			if(!err){//all good
+				console.log("group joined: "+res);
+                alert('Group joined succesfully');
+			}
+		});		
 	}
 });

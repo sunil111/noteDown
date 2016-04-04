@@ -60,6 +60,7 @@ Meteor.methods({
 	},
 
 	//---------------Group Function--------------------------------------------
+
 	addGroup: function(gtitle,gdesc, privacy) {
 		var group;
 		if(!this.userId){// NOt logged in
@@ -70,8 +71,12 @@ Meteor.methods({
 				gname: gtitle,
 				gdesc: gdesc,
 				privacy: privacy,
-				owner: this.userId,
-				members: "",
+				owner:
+					{
+						"id": this.userId,
+					    "name": Meteor.user().username 
+					},
+				
 				createdOn: new Date()
 			};
 			var id= Groups.insert(group);
@@ -80,24 +85,38 @@ Meteor.methods({
 	},
 
 	deleteGroup : function(groupId){
-
-		var id = Groups.findOne(groupId);
-		if(id.owner !== Meteor.userId()){ // if not the owner of the group
+		var data = Groups.findOne(groupId);
+		var owner= data.owner.id;
+		console.log(owner);
+		if(owner !== Meteor.userId()){ // if not the owner of the group
 			throw new Meteor.Error("not-authorised");
 			alert("Not authorised to delete");
 		}
-		Groups.remove(groupId);
+		var id=Groups.remove(groupId);
+		return id;
 	},
 
-	joinGroup : function(groupId, member){
-		var id= Groups.findOne(groupId);
-		console.log('Inside method '+ member)
-		if(id.owner != member){
-			throw new Meteor.Error("err");
-			Groups.update({ "_id":id }, {$set:{"members": member}});
+	joinGroup : function(groupId){
+		var data= Groups.findOne(groupId);
+		console.log("data: " +data);
+		
+		var id= data._id;
+		console.log("id: " +id);
+
+		//member= data.members.id;
+		if(!this.userId){// NOt logged in
+			return;
 		}
 		else{
-			//throw new Meteor.Error("not-authorised");
+				var id=Groups.update({ "_id":id }, {
+					$push:{
+						"members":{
+							"id" : this.userId,
+							"name":Meteor.user().username
+						}
+					}
+				});
+				return id;
 		}
 	},
 
@@ -117,6 +136,4 @@ Meteor.methods({
 			return id;
 		}
 	}
-
-	
 })
