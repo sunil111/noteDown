@@ -60,7 +60,8 @@ Meteor.methods({
 	},
 
 	//---------------Group Function--------------------------------------------
-	addGroup: function(gtitle,gdesc) {
+
+	addGroup: function(gtitle,gdesc, privacy) {
 		var group;
 		if(!this.userId){// NOt logged in
 			return;
@@ -69,13 +70,70 @@ Meteor.methods({
 			group={
 				gname: gtitle,
 				gdesc: gdesc,
-				owner: this.userId,
+				privacy: privacy,
+				owner:
+					{
+						"id": this.userId,
+					    "name": Meteor.user().username 
+					},
+				
 				createdOn: new Date()
 			};
 			var id= Groups.insert(group);
 			return id;
 		}
-	}
+	},
 
-	
+	deleteGroup : function(groupId){
+		var data = Groups.findOne(groupId);
+		var owner= data.owner.id;
+		console.log(owner);
+		if(owner !== Meteor.userId()){ // if not the owner of the group
+			throw new Meteor.Error("not-authorised");
+			alert("Not authorised to delete");
+		}
+		var id=Groups.remove(groupId);
+		return id;
+	},
+
+	joinGroup : function(groupId){
+		var data= Groups.findOne(groupId);
+		console.log("data: " +data);
+		
+		var id= data._id;
+		console.log("id: " +id);
+
+		//member= data.members.id;
+		if(!this.userId){// NOt logged in
+			return;
+		}
+		else{
+				var id=Groups.update({ "_id":id }, {
+					$push:{
+						"members":{
+							"id" : this.userId,
+							"name":Meteor.user().username
+						}
+					}
+				});
+				return id;
+		}
+	},
+
+	//---------------Todo Function--------------------------------------------
+	addList: function(list) {
+		var List;
+		if(!this.userId){// NOt logged in
+			return;
+		}
+		else {
+			List={
+				title: list,
+				owner: this.userId,
+				createdOn: new Date()
+			};
+			var id= Todo.insert(List);
+			return id;
+		}
+	}
 })

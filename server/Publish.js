@@ -15,14 +15,18 @@ Meteor.publish("documents", function(){
 	});
 })
 
-  Meteor.publish("editingUsers",function(){
-  	return EditingUsers.find({});
-  });
+Meteor.publish("editingUsers",function(){
+	return EditingUsers.find({});
+});
 
-  Meteor.publish("groups", function(){
-    return Groups.find({
-      $and:[
-        { owner: this.userId }
-      ]
-    });
-  });  
+Meteor.publish("groups", function(){
+  return Groups.find({ /*owner: { $ne: this.userId} */});
+});  
+
+Meteor.publish("todo", function(){
+  return Todo.find({
+    $and:[
+      { owner: this.userId }
+    ]
+  });
+});  

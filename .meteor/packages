@@ -32,3 +32,6 @@ gwendall:auth-client-callbacks
 service-configuration
 #autopublish             # Publish all data to the clients (for prototyping)
 #insecure                # Allow all DB writes from clients (for prototyping)
+aldeed:collection2
+aldeed:simple-schema
+msavin:mongol

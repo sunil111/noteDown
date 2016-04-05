@@ -9,19 +9,19 @@
 	{{> Navbar }}
 	<!-- Start Container -->
 	<div class="container-fluid"><br>
-		<h2>Create Group</h2><br>
-		<form class="form">
-    		<div class="form-group">
-      			<label for="inputdefault">Group Title:</label>
-      			<input class="form-control" id="gTitle" type="text" required autofocus><br>
-   			<label for="Descripion">Description:</label>
-   			<input class="form-control" type="text" rows="5" id="gDescription" required autofocus>
-   			<!--<label class="control-label">Attach Files</label>
-   			<input id="input-folder-2" name="input-folder-2[]" class="file-loading" type="file" multiple webkitdirectory accept="image/*"><br>-->
-			<br>
-			<input type="submit" class="btn btn-primary" value="Create Group">
-   		</div>
-  		</form>	
+		<div class="container">
+			<h2>Create Group</h2><br>
+			<form class="form">
+	    		<div class="form-group">
+	      			<label for="inputdefault">Group Title:</label>
+	      			<input class="form-control" id="gTitle" type="text" width="50" required><br>
+	   				<label for="Descripion">Description:</label>
+	   				<textarea class="form-control" rows='5' type="text" id="gDescription" width="50" required></textarea> <br>
+	   				<input type="checkbox" id="privacy" value="Private">Private
+					<input type="submit" class="btn btn-primary" value="Create Group">
+	   			</div>
+	  		</form>	
+  		</div>
 	</div><br><br><br>
 	<!-- End Container -->
 </template>
