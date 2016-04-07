@@ -1,32 +1,42 @@
-Template.showGroup.onCreated(function(){
+Template.otherGroup.onCreated(function(){
 	var self= this;
 	this.autorun( function() {
 		self.subscribe('groups');
 	});
 });
 
-Template.showGroup.helpers({
+Template.otherGroup.helpers({
 	groups : function(){
 		return Groups.find({});
 	}
 });
 
-Template.Group.onCreated(function(){
+Template.singleGroup.onCreated(function(){
 	var self= this;
 	this.autorun( function() {
 		self.subscribe('groups');
 	});
 });
 
-Template.Group.helpers({
+Template.singleGroup.helpers({
 	group : function(){
 		var groupId = Session.get('groupId'); //instead of Router.current().params.gameId;
         var group = Groups.findOne({_id: groupId});
         return group;
+	},
+	owner: function(){
+		var groupId = Session.get('groupId'); //instead of Router.current().params.gameId;
+        var group = Groups.findOne({_id: groupId});
+        var owner= group.owner.id;
+        console.log("Owner is: " +owner);
+        if(owner=== Meteor.user()._id)
+        	return owner;
+        else 
+        	return;
 	}
 });
 
-Template.Group.events({
+Template.singleGroup.events({
 	"click #delete": function(event) {
 		var groupId = Session.get('groupId');
 		Meteor.call('deleteGroup', groupId, function(err,res){
@@ -46,5 +56,18 @@ Template.Group.events({
                 alert('Group joined succesfully');
 			}
 		});		
+	}
+});
+
+Template.yourGroup.onCreated(function(){
+	var self= this;
+	this.autorun( function() {
+		self.subscribe('yourGroup');
+	});
+});
+
+Template.yourGroup.helpers({
+	groups : function(){
+		return Groups.find({});
 	}
 });

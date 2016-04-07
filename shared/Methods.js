@@ -61,6 +61,7 @@ Meteor.methods({
 
 	//---------------Group Function--------------------------------------------
 
+
 	addGroup: function(gtitle,gdesc, privacy) {
 		var group;
 		if(!this.userId){// NOt logged in
@@ -71,15 +72,22 @@ Meteor.methods({
 				gname: gtitle,
 				gdesc: gdesc,
 				privacy: privacy,
-				owner:
-					{
+				owner:{
 						"id": this.userId,
 					    "name": Meteor.user().username 
-					},
-				
+				},
+				members:[],
 				createdOn: new Date()
 			};
 			var id= Groups.insert(group);
+			console.log(id);
+			var group_Id= Meteor.users.update({ _id: Meteor.userId},{
+				$push: {
+					group_ids: id,
+					group_name:gtitle
+				}
+			});
+			console.log(Meteor.users.find());
 			return id;
 		}
 	},
@@ -94,29 +102,31 @@ Meteor.methods({
 		}
 		var id=Groups.remove(groupId);
 		return id;
+
 	},
 
 	joinGroup : function(groupId){
 		var data= Groups.findOne(groupId);
 		console.log("data: " +data);
-		
+		var member=Groups.find({},{ "members_id":1, _id: 0 });
 		var id= data._id;
 		console.log("id: " +id);
-
+		
 		//member= data.members.id;
 		if(!this.userId){// NOt logged in
 			return;
 		}
 		else{
-				var id=Groups.update({ "_id":id }, {
-					$push:{
-						"members":{
-							"id" : this.userId,
-							"name":Meteor.user().username
-						}
-					}
-				});
-				return id;
+			var id= Groups.update(
+				{"_id" : id},
+				{$addToSet: {members:{ id: this.userId, name: Meteor.user().username }}});
+			/*var id=Groups.update({ "_id":id }, {
+				$push:{
+					"members_id" : this.userId,
+					"member_name":Meteor.user().username
+				}
+			});*/
+			return id;
 		}
 	},
 
