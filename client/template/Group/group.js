@@ -1,16 +1,3 @@
-Template.otherGroup.onCreated(function(){
-	var self= this;
-	this.autorun( function() {
-		self.subscribe('groups');
-	});
-});
-
-Template.otherGroup.helpers({
-	groups : function(){
-		return Groups.find({});
-	}
-});
-
 Template.singleGroup.onCreated(function(){
 	var self= this;
 	this.autorun( function() {
@@ -31,8 +18,13 @@ Template.singleGroup.helpers({
         console.log("Owner is: " +owner);
         if(owner=== Meteor.user()._id)
         	return owner;
-        else 
-        	return;
+	},
+	member: function(){
+		var groupId = Session.get('groupId'); //instead of Router.current().params.gameId;
+        var group = Groups.findOne({_id: groupId});
+        var member= group.member.id;
+        console.log(member);
+        return member;
 	}
 });
 
@@ -54,6 +46,7 @@ Template.singleGroup.events({
 			if(!err){//all good
 				console.log("group joined: "+res);
                 alert('Group joined succesfully');
+                $(event.target).text("edit"); 
 			}
 		});		
 	}
@@ -62,12 +55,25 @@ Template.singleGroup.events({
 Template.yourGroup.onCreated(function(){
 	var self= this;
 	this.autorun( function() {
-		self.subscribe('yourGroup');
+		self.subscribe('groups');
 	});
 });
 
 Template.yourGroup.helpers({
 	groups : function(){
-		return Groups.find({});
+		return Groups.find({ "owner": this.userId });
+	}
+});
+
+Template.otherGroup.onCreated(function(){
+	var self= this;
+	this.autorun( function() {
+		self.subscribe('groups');
+	});
+});
+
+Template.otherGroup.helpers({
+	groups : function(){
+		return Groups.find({ "owner": { $ne: this.userId } });
 	}
 });

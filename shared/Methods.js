@@ -80,14 +80,13 @@ Meteor.methods({
 				createdOn: new Date()
 			};
 			var id= Groups.insert(group);
-			console.log(id);
-			var group_Id= Meteor.users.update({ _id: Meteor.userId},{
-				$push: {
-					group_ids: id,
-					group_name:gtitle
+			//console.log(id);
+			var group_Id= Meteor.users.update({ _id: Meteor.userId },{
+				$addToSet: {
+					group_ids: id
 				}
 			});
-			console.log(Meteor.users.find());
+			//console.log(Meteor.users.find());
 			return id;
 		}
 	},
@@ -101,31 +100,38 @@ Meteor.methods({
 			alert("Not authorised to delete");
 		}
 		var id=Groups.remove(groupId);
+		Meteor.users.update(
+			{ _id: Meteor.userId },
+			{ 
+				$pull: {
+					group_ids: groupId 
+				}
+			}
+		);
 		return id;
-
 	},
 
 	joinGroup : function(groupId){
 		var data= Groups.findOne(groupId);
-		console.log("data: " +data);
+		//console.log("data: " +data);
 		var member=Groups.find({},{ "members_id":1, _id: 0 });
 		var id= data._id;
 		console.log("id: " +id);
-		
+		console.log(member);
 		//member= data.members.id;
 		if(!this.userId){// NOt logged in
 			return;
 		}
 		else{
 			var id= Groups.update(
-				{"_id" : id},
-				{$addToSet: {members:{ id: this.userId, name: Meteor.user().username }}});
-			/*var id=Groups.update({ "_id":id }, {
-				$push:{
-					"members_id" : this.userId,
-					"member_name":Meteor.user().username
-				}
-			});*/
+				{"_id" : id},{
+					$addToSet: {
+						members:{ 
+							"id": this.userId,
+							 "name":Meteor.user().username 
+							}
+						}
+					});
 			return id;
 		}
 	},

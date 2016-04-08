@@ -53,7 +53,11 @@
   						{{#if owner}}
   						<input type="submit" class="btn btn-danger" id="delete" value="Delete">
   						{{else}}
-  						<input type="submit" class="btn btn-success" id="join" value="Join">
+  							<!--{{#if member}}-->
+  									<input type="submit" class="btn btn-success" id="join" value="Join">
+  							<!--{{else}}
+  									<input type="submit" class="btn btn-danger" id="leave" value="Leave">
+  								{{/if}}-->
   						{{/if}}
   						
 	           	</div>
