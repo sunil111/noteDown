@@ -26,6 +26,7 @@ caching-html-compiler@1.0.2
 callback-hook@1.0.4
 check@1.1.0
 coffeescript@1.0.11
+dburles:google-maps@1.1.5
 dburles:mongo-collection-instances@0.3.4
 ddp@1.2.2
 ddp-client@1.2.1
@@ -60,6 +61,8 @@ iron:location@1.0.11
 iron:middleware-stack@1.0.11
 iron:router@1.0.12
 iron:url@1.0.11
+jaymc:google-reverse-geocode@0.0.5
+jeffrey:easy-map@0.0.9
 jquery@1.11.4
 lai:collection-extensions@0.1.4
 launch-screen@1.0.4
@@ -67,6 +70,8 @@ less@2.5.1
 livedata@1.0.15
 localstorage@1.0.5
 logging@1.0.8
+matb33:bootstrap-base@10.0.0
+matb33:bootstrap-glyphicons@10.0.0
 mdg:validation-error@0.2.0
 meteor@1.1.10
 meteor-base@1.0.1

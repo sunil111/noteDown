@@ -35,3 +35,9 @@ service-configuration
 aldeed:collection2
 aldeed:simple-schema
 msavin:mongol
+matb33:bootstrap-glyphicons
+dburles:google-maps
+jeffrey:easy-map
+jaymc:google-reverse-geocode
+#jeremy:geocomplete
+#aldeed:geocoder

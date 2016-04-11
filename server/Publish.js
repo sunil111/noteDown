@@ -1,9 +1,10 @@
 Meteor.startup(function () {
-  // code to run on server at startup
-  if(!Documents.findOne()){
-  	//No Docs yet
-  	Documents.insert({title:"Untitled Document"});
-  }
+  	// code to run on server at startup
+  	if(!Documents.findOne()){
+  		//No Docs yet
+  		Documents.insert({title:"Untitled Document"});
+  	}
+
 });
 
 Meteor.publish("documents", function(){
@@ -20,13 +21,34 @@ Meteor.publish("editingUsers",function(){
 });
 
 Meteor.publish("groups", function(){
-  return Groups.find({ /*owner: { $ne: this.userId} */});
+  	return Groups.find({ /*owner: { $ne: this.userId} */});
 });  
 
 Meteor.publish("todo", function(){
-  return Todo.find({
-    $and:[
-      { owner: this.userId }
-    ]
-  });
+  	return Todo.find({
+    		$and:[
+      			{ owner: this.userId }
+    		]
+  	});
 });  
+
+if (Meteor.isClient) {
+  	Meteor.startup(function() {
+    		GoogleMaps.load();
+  	});
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

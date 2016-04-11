@@ -1,5 +1,6 @@
 Meteor.methods({
 	addDoc:function(){
+
 		var doc;
 		if(!this.userId){// NOt logged in
 			return;
@@ -7,7 +8,8 @@ Meteor.methods({
 			doc={
 				owner:this.userId, 
 				createdOn:new Date(), 
-				title:"Untitled Document"
+				title:"Untitled Document",
+				
 			};
 			var id = Documents.insert(doc);
 			return id; //return was missing. caused problem in method call.
@@ -76,6 +78,7 @@ Meteor.methods({
 						"id": this.userId,
 					    "name": Meteor.user().username 
 					},
+				
 				
 				createdOn: new Date()
 			};
