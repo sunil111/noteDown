@@ -16,7 +16,7 @@ Template.singleGroup.helpers({
         var group = Groups.findOne({_id: groupId});
         var owner= group.owner.id;
         console.log("Owner is: " +owner);
-        if(owner=== Meteor.user()._id)
+        if(owner=== this.userId)
         	return owner;
 	},
 	member: function(){
@@ -30,25 +30,30 @@ Template.singleGroup.helpers({
 
 Template.singleGroup.events({
 	"click #delete": function(event) {
-		var groupId = Session.get('groupId');
-		Meteor.call('deleteGroup', groupId, function(err,res){
-			if(!err){//all good
-				console.log("group deleted: "+res);
-                alert('Group deleted succesfully');
-			}
-		});
+		if(confirm("Are you sure you want to delete ?")== true){
+			var groupId = Session.get('groupId');
+			Meteor.call('deleteGroup', groupId, function(err,res){
+				if(!err){//all good
+					console.log("group deleted: "+res);
+	                alert('Group deleted succesfully');
+	                Meteor.call('deletedSuccessfully');
+				}
+			});
+		}
 	},
 
 	"click #join": function(event) {
-		var groupId = Session.get('groupId');
-		console.log(groupId);
-		Meteor.call('joinGroup',groupId, function(err,res){
-			if(!err){//all good
-				console.log("group joined: "+res);
-                alert('Group joined succesfully');
-                $(event.target).text("edit"); 
-			}
-		});		
+		if(confirm("Are you sure you want to join ?")== true){
+			var groupId = Session.get('groupId');
+			console.log(groupId);
+			Meteor.call('joinGroup',groupId, function(err,res){
+				if(!err){//all good
+					console.log("group joined: "+res);
+	                alert('Group joined succesfully');
+	                $(event.target).text("edit"); 
+				}
+			});	
+		}	
 	}
 });
 
@@ -61,7 +66,7 @@ Template.yourGroup.onCreated(function(){
 
 Template.yourGroup.helpers({
 	groups : function(){
-		return Groups.find({ "owner": this.userId });
+		return Groups.find({ "owner.id": {$ne:Meteor.userId} });
 	}
 });
 
@@ -74,6 +79,8 @@ Template.otherGroup.onCreated(function(){
 
 Template.otherGroup.helpers({
 	groups : function(){
-		return Groups.find({ "owner": { $ne: this.userId } });
+		var id= Meteor.users.find({ "_id": this.userId  },{ "group_ids": 1, "_id":0});
+		console.log(id);
+		return Groups.find({ _id: {$in: id}});
 	}
 });
