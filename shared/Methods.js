@@ -81,11 +81,12 @@ Meteor.methods({
 			};
 			var id= Groups.insert(group);
 			//console.log(id);
-			var group_Id= Meteor.users.update({ _id: Meteor.userId },{
+			var group_Id= Meteor.users.update({ _id: this.userId },{
 				$addToSet: {
 					group_ids: id
 				}
 			});
+			
 			//console.log(Meteor.users.find());
 			return id;
 		}
@@ -95,13 +96,13 @@ Meteor.methods({
 		var data = Groups.findOne(groupId);
 		var owner= data.owner.id;
 		console.log(owner);
-		if(owner !== Meteor.userId()){ // if not the owner of the group
+		if(owner !== this.userId()){ // if not the owner of the group
 			throw new Meteor.Error("not-authorised");
 			alert("Not authorised to delete");
 		}
 		var id=Groups.remove(groupId);
 		Meteor.users.update(
-			{ _id: Meteor.userId },
+			{ _id: this.userId },
 			{ 
 				$pull: {
 					group_ids: groupId 
@@ -135,21 +136,60 @@ Meteor.methods({
 			return id;
 		}
 	},
+	deletedSuccessfully:function(){
+		Router.go('User');
+	},
 
 	//---------------Todo Function--------------------------------------------
-	addList: function(list) {
-		var List;
-		if(!this.userId){// NOt logged in
-			return;
+
+	createReminder : function(text){
+		var task;
+	    if(! this.userId){
+	    	throw new Meteor.Error("non-authorized");
+	    }
+		else{
+			task={
+				text: text,
+		    createdAt : new Date(),
+		    owner:{
+				"id": this.userId,
+				"name": Meteor.user().username 
+			}
+			}
 		}
-		else {
-			List={
-				title: list,
-				owner: this.userId,
-				createdOn: new Date()
-			};
-			var id= Todo.insert(List);
-			return id;
+		var id=Tasks.insert(task);
+		var reminderId= Meteor.users.update({ _id: this.userId },{
+				$addToSet: {
+					reminder_ids: id
+				}
+			});
+		return id;
+    },
+
+    deleteReminder : function(taskId){
+		//Tasks.remove(taskId);
+		var task = Tasks.findOne(taskId);
+		if(task.private && task.owner.id !== this.userId){
+			throw new Meteor.Error("not-authorized");
 		}
-	}
+		var id=Tasks.remove(taskId);
+		Meteor.users.update({ _id: this.userId },{ 
+				$pull: {
+					reminder_ids: taskId 
+				}
+		});
+		return id;
+
+    },
+
+    setCheckedReminder : function(taskId, setChecked){
+		//Tasks.update(taskId, {$set : {checked:setChecked} });
+		var task = Tasks.findOne(taskId);
+		if(task.private && task.owner.id !== this.userId){
+			throw new Meteor.Error("not-authorized");
+		}
+		else{
+			Tasks.update({_id: taskId},{$set: {checked:setChecked}});
+		}
+    }
 })

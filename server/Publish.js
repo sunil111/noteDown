@@ -23,11 +23,6 @@ Meteor.publish("groups", function(){
   return Groups.find({ });
 });  
 
-
-Meteor.publish("todo", function(){
-  return Todo.find({
-    $and:[
-      { owner: this.userId }
-    ]
-  });
-});  
+Meteor.publish("tasks",function(){
+  return Tasks.find({ "owner.id":this.userId });
+});
