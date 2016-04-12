@@ -16,7 +16,7 @@ Template.singleGroup.helpers({
         var group = Groups.findOne({_id: groupId});
         var owner= group.owner.id;
         console.log("Owner is: " +owner);
-        if(owner=== this.userId)
+        if(owner=== Meteor.user()._id)
         	return owner;
 	},
 	member: function(){
@@ -66,7 +66,11 @@ Template.yourGroup.onCreated(function(){
 
 Template.yourGroup.helpers({
 	groups : function(){
-		return Groups.find({ "owner.id": {$ne:Meteor.userId} });
+		return Groups.find({ $or:[ 
+				{"owner.id": Meteor.userId()},
+				{"members.id": Meteor.userId()}
+			]
+		});
 	}
 });
 
@@ -79,8 +83,11 @@ Template.otherGroup.onCreated(function(){
 
 Template.otherGroup.helpers({
 	groups : function(){
-		var id= Meteor.users.find({ "_id": this.userId  },{ "group_ids": 1, "_id":0});
-		console.log(id);
-		return Groups.find({ _id: {$in: id}});
+		return Groups.find({
+			$and:[ 
+				{ "owner.id": {$ne: Meteor.userId() } },
+				{"members.id": {$ne:  Meteor.userId() } }
+			]
+		});
 	}
 });

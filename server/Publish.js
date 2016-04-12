@@ -20,9 +20,9 @@ Meteor.publish("editingUsers",function(){
 });
 
 Meteor.publish("groups", function(){
-  return Groups.find({ });
+  return Groups.find({},{sort: {createdAt: -1}});
 });  
 
 Meteor.publish("tasks",function(){
-  return Tasks.find({ "owner.id":this.userId });
+  return Tasks.find({"owner.id":this.userId});
 });

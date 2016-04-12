@@ -49,11 +49,6 @@ Template.createReminder.events({
 		}
   });
 
-Template.task.helpers({
-	username: function(){
-		return username= this.userId;
-	}
-});
 
 Template.task.events({
 	"click .toggle-checked": function () {
