@@ -46,17 +46,6 @@ Template.singleGroup.helpers({
         	return member;
     }
 
-        console.log("Owner is: " +owner);
-        if(owner=== Meteor.user()._id)
-        	return owner;
-	},
-	member: function(){
-		var groupId = Session.get('groupId'); //instead of Router.current().params.gameId;
-        var group = Groups.findOne({_id: groupId});
-        var member= group.member.id;
-        console.log(member);
-        return member;
-	}
 
 });
 

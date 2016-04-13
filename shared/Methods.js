@@ -88,7 +88,7 @@ Meteor.methods({
 			});
 			
 			//console.log(Meteor.users.find());
-<<<<<<< HEAD
+
 			return id;
 		}
 	},
@@ -141,62 +141,12 @@ Meteor.methods({
 
 	//---------------Todo Function--------------------------------------------
 
-=======
-			return id;
-		}
-	},
-
-	deleteGroup : function(groupId){
-		var data = Groups.findOne(groupId);
-		var owner= data.owner.id;
-		console.log(owner);
-		if(owner !== this.userId){ // if not the owner of the group
-			throw new Meteor.Error("not-authorised");
-			alert("Not authorised to delete");
-		}
-		var id=Groups.remove(groupId);
-		Meteor.users.update(
-			{ _id: this.userId },
-			{ 
-				$pull: {
-					group_ids: groupId 
-				}
-			}
-		);
-		return id;
-	},
-
-	joinGroup : function(groupId){
-		var data= Groups.findOne(groupId);
-		//console.log("data: " +data);
-		var member=Groups.find({},{ "members_id":1, _id: 0 });
-		var id= data._id;
-		console.log("id: " +id);
-		console.log(member);
-		//member= data.members.id;
-		if(!this.userId){// NOt logged in
-			return;
-		}
-		else{
-			var id= Groups.update(
-				{"_id" : id},{
-					$addToSet: {
-						members:{ 
-							"id": this.userId,
-							 "name":Meteor.user().username 
-							}
-						}
-					});
-			return id;
-		}
-	},
 	Successfully:function(){
 		Router.go('User');
 	},
 
 	//---------------Todo Function--------------------------------------------
 
->>>>>>> 65e494e9a66787e1896c003f031d56c26a0fef87
 	createReminder : function(text){
 		var task;
 	    if(! this.userId){
@@ -247,8 +197,8 @@ Meteor.methods({
 			Tasks.update({_id: taskId},{$set: {checked:setChecked}});
 		}
     }
-<<<<<<< HEAD
+
 })
-=======
-})
->>>>>>> 65e494e9a66787e1896c003f031d56c26a0fef87
+
+
+
