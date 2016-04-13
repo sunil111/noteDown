@@ -1,29 +1,34 @@
 Meteor.subscribe("groups");
 
-Template.showGroup.helpers({
-	groups : function(){
-		return Groups.find({});
-	}
-});
-
 Template.newGroup.events({
 	"submit .form": function(event) {
-	  event.preventDefault();
+      	event.preventDefault();
+      	var privacy_flag;
+            // Get value from form element
+            var gtitle = event.target.gTitle.value;
+            var gdesc = event.target.gDescription.value;
 
-      // Get value from form element
-      var gtitle = event.target.gTitle.value;
-       var gdesc = event.target.gDescription.value;
+            // Insert a task into the collection
+            if(event.target.privacy.checked){
+            	privacy_flag = "private";
+            }
+            else{
+            	privacy_flag = "public";
+            }
 
-      // Insert a task into the collection
-      Meteor.call("addGroup", gtitle,gdesc,function(err, res){
-				if(!err){//all good
-					console.log("callback recieved: "+res);
-				};
-	  });
+            if(confirm("Are the details correct ?")== true){
+                  Meteor.call("addGroup", gtitle, gdesc, privacy_flag, function(err, res){
+            		if(!err){//all good
+            			//console.log("callback recieved: "+res);
+                              alert('Group created succesfully');
+                              Meteor.call('Successfully');
+            		}
+            	});
+            }
 
-      // Clear form
-      event.target.gTitle.value = "";
-      event.target.gDescription.value = "";
+            // Clear form
+            event.target.gTitle.value = "";
+            event.target.gDescription.value = "";
 	}  
 });
 
