@@ -5,10 +5,10 @@
 	</div>
 </template>
 
-<template name="otherGroup">
+<template name="allGroup">
 	<!-- Start Container -->
 	<div class="container"> 
-		<h2>Other Groups</h2>
+		<h2>All Groups</h2>
 		<div class="row">
 			{{#if Template.subscriptionsReady}}
 					{{#each groups}}
@@ -50,15 +50,17 @@
   						<h3 id="gdesc">{{group.gdesc}}</h3>
   						<!--{{group.owner}}-->
   						<hr class="divider">
+
   						{{#if owner}}
-  						<input type="submit" class="btn btn-danger" id="delete" value="Delete">
+  								<input type="submit" class="btn btn-danger" id="delete" value="Delete">
   						{{else}}
-  							<!--{{#if member}}-->
-  									<input type="submit" class="btn btn-success" id="join" value="Join">
-  							<!--{{else}}
-  									<input type="submit" class="btn btn-danger" id="leave" value="Leave">
-  								{{/if}}-->
+  							{{#if member}}
+  								<input type="submit" class="btn btn-primary" id="leave" value="Leave">
+  							{{else}}
+  								<input type="submit" class="btn btn-success" id="join" value="Join">	
+  							{{/if}}
   						{{/if}}
+
   						
 	           	</div>
           	</div>

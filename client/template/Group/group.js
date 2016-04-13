@@ -15,17 +15,20 @@ Template.singleGroup.helpers({
 		var groupId = Session.get('groupId'); //instead of Router.current().params.gameId;
         var group = Groups.findOne({_id: groupId});
         var owner= group.owner.id;
-        console.log("Owner is: " +owner);
+        //console.log("Owner is: " +owner);
         if(owner=== Meteor.user()._id)
         	return owner;
+        
 	},
 	member: function(){
+		var notMember;
 		var groupId = Session.get('groupId'); //instead of Router.current().params.gameId;
         var group = Groups.findOne({_id: groupId});
         var member= group.member.id;
-        console.log(member);
-        return member;
-	}
+        //console.log(member);
+        if(member != Meteor.user()._id)
+        	return member;
+    }
 });
 
 Template.singleGroup.events({
@@ -34,9 +37,10 @@ Template.singleGroup.events({
 			var groupId = Session.get('groupId');
 			Meteor.call('deleteGroup', groupId, function(err,res){
 				if(!err){//all good
-					console.log("group deleted: "+res);
+					//console.log("group deleted: "+res);
 	                alert('Group deleted succesfully');
 	                Meteor.call('Successfully');
+
 				}
 			});
 		}
@@ -48,7 +52,7 @@ Template.singleGroup.events({
 			console.log(groupId);
 			Meteor.call('joinGroup',groupId, function(err,res){
 				if(!err){//all good
-					console.log("group joined: "+res);
+					//console.log("group joined: "+res);
 	                alert('Group joined succesfully');
 	                Meteor.call('Successfully');
 				}
@@ -74,14 +78,14 @@ Template.yourGroup.helpers({
 	}
 });
 
-Template.otherGroup.onCreated(function(){
+Template.allGroup.onCreated(function(){
 	var self= this;
 	this.autorun( function() {
 		self.subscribe('groups');
 	});
 });
 
-Template.otherGroup.helpers({
+Template.allGroup.helpers({
 	groups : function(){
 		return Groups.find({
 			$and:[ 

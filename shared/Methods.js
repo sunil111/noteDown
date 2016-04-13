@@ -117,8 +117,8 @@ Meteor.methods({
 		//console.log("data: " +data);
 		var member=Groups.find({},{ "members_id":1, _id: 0 });
 		var id= data._id;
-		console.log("id: " +id);
-		console.log(member);
+		//console.log("id: " +id);
+		//console.log(member);
 		//member= data.members.id;
 		if(!this.userId){// NOt logged in
 			return;
@@ -136,9 +136,7 @@ Meteor.methods({
 			return id;
 		}
 	},
-	Successfully:function(){
-		Router.go('User');
-	},
+	
 
 	//---------------Todo Function--------------------------------------------
 
