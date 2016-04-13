@@ -16,12 +16,15 @@ Template.newGroup.events({
             	privacy_flag = "public";
             }
 
+
             if(confirm("Are the details correct ?")== true){
                   Meteor.call("addGroup", gtitle, gdesc, privacy_flag, function(err, res){
             		if(!err){//all good
             			//console.log("callback recieved: "+res);
                               alert('Group created succesfully');
                               Meteor.call('Successfully');
+
+
             		}
             	});
             }

@@ -1,14 +1,17 @@
 <template name="displayGroup">
 	<div class="container">  
-		<h2>Display Groups <a href="{{pathFor route='otherGroup'}}"><img src="images/add.png"  height="50" ></a></h2>
+		<h2>Display Groups <a href="{{pathFor route='allGroup'}}"><img src="images/add.png"  height="50" ></a></h2>
+
 		<hr class="divider">
 	</div>
 </template>
 
-<template name="allGroup">
+
+<template name="otherGroup">
 	<!-- Start Container -->
 	<div class="container"> 
-		<h2>All Groups</h2>
+		<h2>Other Groups</h2>
+
 		<div class="row">
 			{{#if Template.subscriptionsReady}}
 					{{#each groups}}
@@ -24,7 +27,11 @@
 		  				</div>
 		            {{/each}}
 	        	{{else}}
+
 	        		<p>Loading</p>
+
+	        		<p>Loading... {{> spinner}}</p>
+
 	        {{/if}}
       	</div>
     	<hr class="divider">
@@ -51,6 +58,7 @@
   						<!--{{group.owner}}-->
   						<hr class="divider">
 
+
   						{{#if owner}}
   								<input type="submit" class="btn btn-danger" id="delete" value="Delete">
   						{{else}}
@@ -61,11 +69,23 @@
   							{{/if}}
   						{{/if}}
 
+
+  						{{#if owner}}
+  						<input type="submit" class="btn btn-danger" id="delete" value="Delete">
+  						{{else}}
+  							<!--{{#if member}}-->
+  									<input type="submit" class="btn btn-success" id="join" value="Join">
+  							<!--{{else}}
+  									<input type="submit" class="btn btn-danger" id="leave" value="Leave">
+  								{{/if}}-->
+  						{{/if}}
+
   						
 	           	</div>
           	</div>
       	</div>
     	<hr class="divider">
+
    	</div>
 </template>
 
@@ -88,10 +108,47 @@
 		  				</div>
 		            {{/each}}
 	        	{{else}}
-	        		<p>Loading</p>
+	        		<p>Loading... {{> spinner}}</p>
+	        {{/if}}
+      	</div>
+      	<hr class="divider">
+
+   	</div>
+</template>
+
+
+<template name="allGroup">
+	<!-- Start Container -->
+	{{> Navbar}}
+	<div class="container">
+		<h2>Display All Groups</h2>
+		<hr class="divider">
+
+		<div class="row">
+			{{#if Template.subscriptionsReady}}
+					{{#each groups}}
+						<div class="col-sm-6 col-xs-3 col-md-3 col-lg-2">
+							<div class="thumbnail">
+								<div class="caption">
+									<h3 id="gname">{{gname}}</h3> 
+			                	</div>
+									<span style="float: right;" id="privacy"><i>{{privacy}}-group...</i></span>
+			  						<hr class="divider">
+			  						<a href="/group/{{_id}}">View Group</a>
+			  				</div>
+		  				</div>
+		            {{/each}}
+	        	{{else}}
+
+	        		<p>Loading... {{> spinner}}</p>
+
 	        {{/if}}
       	</div>
       	<hr class="divider">
    	</div>
 	<!-- End Container -->
+
 </template>
+
+
+
