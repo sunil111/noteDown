@@ -23,7 +23,6 @@ Meteor.publish("groups", function(){
   return Groups.find({},{sort: {createdAt: -1}});
 });  
 
-
 Meteor.publish("tasks",function(){
   return Tasks.find({"owner.id":this.userId},{sort: {createdAt: -1}});
 });  

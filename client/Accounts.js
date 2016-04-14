@@ -1,8 +1,5 @@
 Accounts.ui.config({
-
-
   requestPermissions: {
-
     facebook: ['email','']
   },
   requestOfflineToken: {

@@ -60,8 +60,6 @@ Meteor.methods({
 	},
 
 	//---------------Group Function--------------------------------------------
-
-
 	addGroup: function(gtitle,gdesc, privacy) {
 		var group;
 		if(!this.userId){// NOt logged in
@@ -80,15 +78,11 @@ Meteor.methods({
 				createdOn: new Date()
 			};
 			var id= Groups.insert(group);
-			//console.log(id);
 			var group_Id= Meteor.users.update({ _id: this.userId },{
 				$addToSet: {
 					group_ids: id
 				}
 			});
-			
-			//console.log(Meteor.users.find());
-
 			return id;
 		}
 	},
@@ -115,12 +109,16 @@ Meteor.methods({
 
 	joinGroup : function(groupId){
 		var data= Groups.findOne(groupId);
-		//console.log("data: " +data);
 		var member=Groups.find({},{ "members_id":1, _id: 0 });
 		var id= data._id;
-		//console.log("id: " +id);
-		//console.log(member);
-		//member= data.members.id;
+		var count= data.member_count;
+		var userId = Meteor.userId();
+
+		for (var i = 0; i < data.members.length; i++) {
+      		if (data.members[i].id == userId) {
+        		return false;
+      		}
+    	}
 		if(!this.userId){// NOt logged in
 			return;
 		}
@@ -130,7 +128,7 @@ Meteor.methods({
 					$addToSet: {
 						members:{ 
 							"id": this.userId,
-							 "name":Meteor.user().username 
+							"name":Meteor.user().username
 							}
 						}
 					});
@@ -138,28 +136,24 @@ Meteor.methods({
 		}
 	},
 	
-
 	//---------------Todo Function--------------------------------------------
 
-	Successfully:function(){
-		Router.go('User');
-	},
-
-	//---------------Todo Function--------------------------------------------
-
-	createReminder : function(text){
+	createReminder : function(text, desc){
+		check(text,String);
+		check(desc,String);
 		var task;
 	    if(! this.userId){
 	    	throw new Meteor.Error("non-authorized");
 	    }
 		else{
 			task={
-				text: text,
-		    createdAt : new Date(),
-		    owner:{
-				"id": this.userId,
-				"name": Meteor.user().username 
-			}
+				title: text,
+				desc: desc,
+			    createdAt : new Date(),
+			    owner:{
+					"id": this.userId,
+					"name": Meteor.user().username 
+				}
 			}
 		}
 		var id=Tasks.insert(task);
@@ -172,9 +166,8 @@ Meteor.methods({
     },
 
     deleteReminder : function(taskId){
-		//Tasks.remove(taskId);
 		var task = Tasks.findOne(taskId);
-		if(task.private && task.owner.id !== this.userId){
+		if(task.owner.id !== this.userId){
 			throw new Meteor.Error("not-authorized");
 		}
 		var id=Tasks.remove(taskId);
@@ -184,21 +177,18 @@ Meteor.methods({
 				}
 		});
 		return id;
-
     },
 
     setCheckedReminder : function(taskId, setChecked){
-		//Tasks.update(taskId, {$set : {checked:setChecked} });
 		var task = Tasks.findOne(taskId);
-		if(task.private && task.owner.id !== this.userId){
+		if(task.owner.id !== this.userId){
 			throw new Meteor.Error("not-authorized");
 		}
 		else{
 			Tasks.update({_id: taskId},{$set: {checked:setChecked}});
 		}
     }
-
-})
+});
 
 
 
