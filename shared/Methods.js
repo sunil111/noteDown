@@ -61,6 +61,8 @@ Meteor.methods({
 
 	//---------------Group Function--------------------------------------------
 	addGroup: function(gtitle,gdesc, privacy) {
+		check(gtitle,String);
+		check(gdesc,String);
 		var group;
 		if(!this.userId){// NOt logged in
 			return;
@@ -135,6 +137,34 @@ Meteor.methods({
 			return id;
 		}
 	},
+
+	leaveGroup: function(groupId) {
+	    check(groupId, String);
+	    var userId = Meteor.userId();
+
+	    var result = Groups.findOne({_id: groupId});
+	    if (!result) {
+	      return false;
+	    }
+	    if (result.owner.id === userId) {
+	      throw new Meteor.Error(403, 'You can\'t leave this group because you are owner');
+	      return false;
+	    } 
+	    else {
+	      return Groups.update(result._id, {
+	      	$pull: {
+				members:{
+					id: userId,
+					name: Meteor.user().username 
+				}
+			}
+			});
+	    }
+  	},
+
+  	editGroup: function(groupId){
+
+  	},
 	
 	//---------------Todo Function--------------------------------------------
 

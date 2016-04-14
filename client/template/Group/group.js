@@ -43,7 +43,6 @@ Template.singleGroup.events({
 					//console.log("group deleted: "+res);
 	                alert('Group deleted succesfully');
 	                Meteor.call('Successfully');
-
 				}
 			});
 		}
@@ -61,7 +60,53 @@ Template.singleGroup.events({
 				}
 			});	
 		}	
+	},
+
+	"click #leave": function(event) {
+		if(confirm("Are you sure you want to leave ?")== true){
+			var groupId = Session.get('groupId');
+			console.log(groupId);
+			Meteor.call('leaveGroup',groupId, function(err,res){
+				if(!err){//all good
+					//console.log("group joined: "+res);
+	                alert('Group left succesfully');
+	                Meteor.call('Successfully');
+				}
+			});	
+		}			
+	},
+
+	"click #edit": function(event) {
+		if(confirm("Are you sure you want to edit ?")== true){
+			var groupId = Session.get('groupId');
+			var group= Groups.findOne({ _id: groupId});
+			console.log(groupId);
+			// Converting H3 tag into textbox
+			var n= $("#gname").text();
+			var d= $("#gdesc").text();
+			var input= $('<input id ="name" type="text" value="' + n + '" />');
+			//var input = $("<input>",{  value: $("#gname").text() });
+			$("#gname").replaceWith(input);
+			var input2 = $('<input id ="desc" type="text" value="' + d + '" />');
+			$("#gdesc").replaceWith(input2);
+
+			
+			$("#edit").prop('value', 'Save');
+			$("#edit").prop('id', 'save');	
+			//$('#gname').prop('id','gname');
+			
+		}			
+	},
+	"click #save": function(event){
+		var groupId = Session.get('groupId');
+		var group= Groups.findOne({ _id: groupId});
+		console.log(groupId);
+		var gtitle= event.target.name.value;
+		var gdesc= event.target.desc.value;
+		console.log(gtitle);
+		console.log(gdesc);	
 	}
+
 });
 
 Template.yourGroup.onCreated(function(){

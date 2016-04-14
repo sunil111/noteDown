@@ -10,7 +10,6 @@ Template.createReminder.onCreated(function(){
 });
   
 Template.createReminder.helpers({
-
     tasks: function () {
       	if (Session.get("hideCompleted")) {
         	// If hide completed is checked, filter tasks
