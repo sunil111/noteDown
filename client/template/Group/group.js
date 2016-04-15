@@ -77,17 +77,17 @@ Template.singleGroup.events({
 	},
 
 	"click #edit": function(event) {
-		if(confirm("Are you sure you want to edit ?")== true){
+		//if(confirm("Are you sure you want to edit ?")== true){
 			var groupId = Session.get('groupId');
 			var group= Groups.findOne({ _id: groupId});
 			console.log(groupId);
 			// Converting H3 tag into textbox
 			var n= $("#gname").text();
 			var d= $("#gdesc").text();
-			var input= $('<input id ="name" type="text" value="' + n + '" />');
-			//var input = $("<input>",{  value: $("#gname").text() });
+
+			var input= $('<input id="name" type="text" value="' + n + '" />');
 			$("#gname").replaceWith(input);
-			var input2 = $('<input id ="desc" type="text" value="' + d + '" />');
+			var input2 = $('<input id="desc" type="text" value="' + d + '" />');
 			$("#gdesc").replaceWith(input2);
 
 			
@@ -95,16 +95,42 @@ Template.singleGroup.events({
 			$("#edit").prop('id', 'save');	
 			//$('#gname').prop('id','gname');
 			
-		}			
+		//}			
 	},
 	"click #save": function(event){
 		var groupId = Session.get('groupId');
 		var group= Groups.findOne({ _id: groupId});
 		console.log(groupId);
-		var gtitle= event.target.name.value;
-		var gdesc= event.target.desc.value;
-		console.log(gtitle);
-		console.log(gdesc);	
+		var gtitle=document.getElementById('name').value;
+		console.log("name" +gtitle);
+		var gdesc= document.getElementById('desc').value;
+		console.log("desc" +gdesc);	
+		//$('#name').replaceWith($('<h3 id="gname"/>',{value:gtitle}));
+
+		var h1= document.createElement('h3');
+		var lblname= $(h1).attr({
+			'id': "gname",
+			'value': gtitle
+		});
+		$('#name').replaceWith(lblname);
+		var h2= document.createElement('h3');
+		var lbldesc= $(h2).attr({
+			'id': "gdesc",
+			'value': gdesc
+		});
+		$('#desc').replaceWith(lbldesc);
+
+
+		Meteor.call('saveGroup',groupId,gtitle, gdesc, function(err,res){
+			if(!err){//all good
+				console.log("group saved: "+res);
+				$('#gname').text(gtitle);
+				$('#gdesc').text(gdesc);
+                $("#save").prop('value', 'Edit');
+				$("#save").prop('id', 'edit');
+                Meteor.call('Successfully');
+			}
+		});
 	}
 
 });
@@ -138,7 +164,8 @@ Template.allGroup.helpers({
 		return Groups.find({
 			$and:[ 
 				{ "owner.id": {$ne: Meteor.userId() } },
-				{"members.id": {$ne:  Meteor.userId() } }
+				{"members.id": {$ne:  Meteor.userId() } },
+				{ "privacy" : { $ne: "private"}}
 			]
 		});
 	}

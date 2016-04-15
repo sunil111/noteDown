@@ -1,6 +1,7 @@
 Meteor.methods({
-	addDoc:function(){
+	addDoc:function(loc){
 		var doc;
+		
 		if(!this.userId){// NOt logged in
 			return;
 		}else{
@@ -162,8 +163,22 @@ Meteor.methods({
 	    }
   	},
 
-  	editGroup: function(groupId){
-
+  	saveGroup: function(groupId,title, description){
+  		var data= Groups.findOne(groupId);
+  		check(title,String);
+  		check(description,String);
+  		if(!this.userId){// NOt logged in
+			return;
+		}
+		else {
+			var id= Groups.update({ _id: groupId },{
+				$set:{
+					gname: title,
+					gdesc: description
+				}
+			});
+			return id;
+		}
   	},
 	
 	//---------------Todo Function--------------------------------------------
