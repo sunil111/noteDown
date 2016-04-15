@@ -1,5 +1,5 @@
 Meteor.methods({
-	addDoc:function(loc){
+	addDoc:function(){
 		var doc;
 		
 		if(!this.userId){// NOt logged in
@@ -78,6 +78,7 @@ Meteor.methods({
 					    "name": Meteor.user().username 
 				},
 				members:[],
+				member_count: 1,
 				createdOn: new Date()
 			};
 			var id= Groups.insert(group);
@@ -122,12 +123,14 @@ Meteor.methods({
         		return false;
       		}
     	}
+    	count++;
 		if(!this.userId){// NOt logged in
 			return;
 		}
 		else{
 			var id= Groups.update(
 				{"_id" : id},{
+					$set:{ member_count: count},
 					$addToSet: {
 						members:{ 
 							"id": this.userId,
@@ -144,6 +147,7 @@ Meteor.methods({
 	    var userId = Meteor.userId();
 
 	    var result = Groups.findOne({_id: groupId});
+	    var count= result.member_count;
 	    if (!result) {
 	      return false;
 	    }
@@ -152,7 +156,9 @@ Meteor.methods({
 	      return false;
 	    } 
 	    else {
+	      count--;
 	      return Groups.update(result._id, {
+	      	$set: { member_count: count},
 	      	$pull: {
 				members:{
 					id: userId,

@@ -77,7 +77,7 @@ Template.singleGroup.events({
 	},
 
 	"click #edit": function(event) {
-		//if(confirm("Are you sure you want to edit ?")== true){
+		if(confirm("Are you sure you want to edit ?")== true){
 			var groupId = Session.get('groupId');
 			var group= Groups.findOne({ _id: groupId});
 			console.log(groupId);
@@ -95,7 +95,7 @@ Template.singleGroup.events({
 			$("#edit").prop('id', 'save');	
 			//$('#gname').prop('id','gname');
 			
-		//}			
+		}			
 	},
 	"click #save": function(event){
 		var groupId = Session.get('groupId');
