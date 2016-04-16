@@ -1,5 +1,5 @@
 Template.createReminder.onRendered(function() {
-	  //this.$('.datetimepicker').datetimepicker();
+	  this.$('.datetimepicker').datetimepicker();
 });
 	
 Template.createReminder.onCreated(function(){
@@ -35,11 +35,18 @@ Template.createReminder.events({
 		// Get value from form element
 		var text = event.target.text.value;
 		var desc = event.target.desc.value;
-		Meteor.call("createReminder",text, desc, function(err,res){
+		var date= event.target.date.value;
+		var currentDate= new Date();
+		if(date <= currentDate)
+		{
+			alert('cannot set past time');
+			return false;
+		}
+		/*Meteor.call("createReminder",text, desc, function(err,res){
 			if(!err){
 				console.log("callback recieved: "+res);
 			}
-		});
+		});**/
 		// Insert a task into the collection
 		// Clear form
 		event.target.text.value = "";
