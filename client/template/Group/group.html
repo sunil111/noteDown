@@ -1,31 +1,42 @@
 <template name="singleGroup">
 	{{> Navbar }}
-	<!-- Start Container -->
+	 <!--Start Container-->
 	<div class="container-fluid"><br><br><br> 
-		<hr class="divider">
+		<!--<a href="#" class="dropdown-toggle" data-toggle="dropdown-menu">Notifications
+	    	{{#if notificationCount}}
+	      		<span class="badge badge-inverse">{{notificationCount}}</span>
+	    	{{/if}}
+	    	<b class="caret"></b>
+	  	</a>
+	 	<ul class="dropdown-menu">-->
+	    	{{#if notificationCount}}
+	      		{{#each notification}}
+	        		{{title}}
+					<input type="submit" class="btn btn-primary" id="accept" value=" Accept request">
+					<input type="submit" class="btn btn-danger" id="decline" value="Decline request">	
+	      		{{/each}}
+	   		{{/if}}	
+	 	<!--</ul>-->
 		<div class="row">
-			<div class="col-sm-6 col-xs-3 col-md-3 col-lg-2 img-zoom">
-				<div class="thumbnail">
-					<div class="caption">
-						<h3 id="gname">{{group.gname}}</h3> 
-                		<span style="float: right;" id="privacy"><i>{{group.privacy}}-group...</i></span>
-					</div>
+					<h3 id="gname">{{group.gname}}</h3> 
+            		<span style="float: right;" id="privacy"><i>{{group.privacy}}-group...</i></span>
 					<hr class="divider">
 					<h3 id="gdesc">{{group.gdesc}}</h3>
-					<!--{{group.owner}}-->
 					<hr class="divider">
 					{{#if owner}}
-							<input type="submit" class="btn btn-danger" id="delete" value="Delete">
-							<input type="submit" class="btn btn-primary" id="edit" value="Edit">
+						<input type="submit" class="btn btn-primary" id="edit" value=" Edit ">
+						<input type="submit" class="btn btn-danger" id="delete" value="Delete">	
 					{{else}}
 						{{#if member}}
-							<input type="submit" class="btn btn-primary" id="leave" value="Leave">
+							<input type="submit" class="btn btn-danger" id="leave" value="Leave">
 						{{else}}
-							<input type="submit" class="btn btn-success" id="join" value="Join">
+							{{#if private}}
+								<input type="submit" class="btn btn-success" id="request" value="Send Request">
+							{{else}}
+								<input type="submit" class="btn btn-success" id="join" value="Join ">
+							{{/if}}
 						{{/if}}
 					{{/if}}	
-	           	</div>
-          	</div>
       	</div>
     	<hr class="divider">
    	</div>

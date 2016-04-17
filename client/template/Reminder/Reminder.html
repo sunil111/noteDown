@@ -22,7 +22,7 @@
 	         				<li>
 		         				<div class="input-group datetimepicker">
 								    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-								    <input class="set-due-date form-control" id="date" type="text"/>
+								    <input class="set-due-date form-control" id="date" type="text" placeholder="Select a date" required/>
 					  			</div>
 					  		</li>
 	         			</li>
@@ -47,7 +47,7 @@
 		<button class="delete">&times;</button>      
 	    <input type="checkbox" checked="{{checked}}" class="toggle-checked" />
 	    <span class="text">
-	    	<strong>{{title}}</strong> - {{desc}}
+	    	<strong>{{title}}</strong> - {{desc}} - <strong>{{date}}</strong>
 	    </span>
 	</li>
 </template>

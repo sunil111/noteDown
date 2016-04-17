@@ -7,7 +7,10 @@
       				<a class="navbar-gNote" href=""><i>note</i>Down</a>
     			</div>
     			<div class="collapse navbar-collapse">
-      				<ul id="slides" class="nav navbar-nav pull-right push-bottom">	
+      				<ul id="slides" class="nav navbar-nav pull-right push-bottom">
+              {{#if currentUser}}
+                {{> notifications}}
+              {{/if}}
 					<li><a class="Login" href="#" title="blank">{{> Login}}</a></li>
       				</ul>
     			</div><!--/.nav-collapse -->

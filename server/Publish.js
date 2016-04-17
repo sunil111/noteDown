@@ -27,6 +27,10 @@ Meteor.publish("tasks",function(){
   return Tasks.find({"owner.id":this.userId},{sort: {createdAt: -1}});
 });  
 
+Meteor.publish("notify",function(){
+  return Notify.find({});
+});  
+
 if (Meteor.isClient) {
   	Meteor.startup(function() {
     		GoogleMaps.load();

@@ -5,6 +5,7 @@ Template.singleGroup.onCreated(function(){
 	});
 });
 
+Meteor.subscribe('notify');
 Template.singleGroup.helpers({
 	group : function(){
 		var groupId = Session.get('groupId'); //instead of Router.current().params.gameId;
@@ -20,6 +21,13 @@ Template.singleGroup.helpers({
         	return owner;
         
 	},
+	private:function(){
+		var groupId = Session.get('groupId'); //instead of Router.current().params.gameId;
+        var group = Groups.findOne({_id: groupId});
+        var private= group.privacy;
+        	if(private === "private")
+        		return true;
+	},
 	member: function(){
 		var groupId = Session.get('groupId'); //instead of Router.current().params.gameId;
         var group = Groups.findOne({_id: groupId});
@@ -30,8 +38,16 @@ Template.singleGroup.helpers({
         		return true;
       		}
     	}
-    	
-    }
+    },
+    notification: function(){
+    	var groupId = Session.get('groupId');
+    	var notification= Notify.find({"owner.id": Meteor.user()._id});
+    	return notification;
+    },
+    notificationCount: function(){
+    	var groupId = Session.get('groupId');
+    	return Notify.find({"group.id": groupId}).count();
+  	}
 });
 
 Template.singleGroup.events({
@@ -52,7 +68,11 @@ Template.singleGroup.events({
 		if(confirm("Are you sure you want to join ?")== true){
 			var groupId = Session.get('groupId');
 			console.log(groupId);
-			Meteor.call('joinGroup',groupId, function(err,res){
+			var memberId= Meteor.user()._id;
+			console.log(memberId);
+			var memberName= Meteor.user().username;
+			console.log(memberName);
+			Meteor.call('joinGroup',groupId, memberId, memberName, function(err,res){
 				if(!err){//all good
 					//console.log("group joined: "+res);
 	                alert('Group joined succesfully');
@@ -90,10 +110,10 @@ Template.singleGroup.events({
 			var input2 = $('<input id="desc" type="text" value="' + d + '" />');
 			$("#gdesc").replaceWith(input2);
 
-			
+			//Change button text
 			$("#edit").prop('value', 'Save');
+			$("#edit").prop('class', 'btn btn-success');
 			$("#edit").prop('id', 'save');	
-			//$('#gname').prop('id','gname');
 			
 		}			
 	},
@@ -127,10 +147,62 @@ Template.singleGroup.events({
 				$('#gname').text(gtitle);
 				$('#gdesc').text(gdesc);
                 $("#save").prop('value', 'Edit');
+                $("#save").prop('class', 'btn btn-primary');
 				$("#save").prop('id', 'edit');
                 Meteor.call('Successfully');
 			}
 		});
+	},
+
+	"click #request": function(event){
+		var groupId = Session.get('groupId');
+		var group= Groups.findOne({ _id: groupId});
+		var owner= group.owner.id;
+		var ownerName=group.owner.name;
+		console.log("Owner :" +owner);
+		var currentUser= Meteor.user()._id;
+		var currentUserName= Meteor.user().username;
+		console.log("Current user :" +currentUser);
+		if(owner!== currentUser){
+			Meteor.call("requestJoin", groupId, owner,ownerName, currentUser, currentUserName, function(err,res){
+				if(!err){//all good)
+					console.log("Request sent succesfully");
+					Meteor.call('Successfully');
+				}
+			});
+		}
+	},
+
+	"click #accept": function(event){
+		var id= this._id;
+		console.log(id);
+		var data= Notify.findOne(id);
+		var userId= data.user.id;
+		var username= data.user.name;
+		var groupId= data.group.id;
+		var group=Groups.findOne(groupId);
+		var gname= group.gname;
+		console.log(userId);
+		console.log(username);
+		Meteor.call('joinGroup',groupId, userId, username, function(err,res){
+				if(!err){//all good
+					//console.log("group joined: "+res);
+	                alert('Added Successfully');
+	                Meteor.call('Successfully');
+	                Notify.insert({
+	                	title: "You have been added to group- " + gname,
+	                	user: userId,
+	                	read: false
+	                });
+	                var nid= Notify.remove(id);
+	                return nid;
+				}
+		});	
+	},
+	"click #decline": function(event){
+		var id= this._id;
+		var nid= Notify.remove(id);
+	    return nid;
 	}
 
 });
@@ -164,8 +236,8 @@ Template.allGroup.helpers({
 		return Groups.find({
 			$and:[ 
 				{ "owner.id": {$ne: Meteor.userId() } },
-				{"members.id": {$ne:  Meteor.userId() } },
-				{ "privacy" : { $ne: "private"}}
+				{"members.id": {$ne:  Meteor.userId() } }/*,
+				{ "privacy" : { $ne: "private"}}*/
 			]
 		});
 	}

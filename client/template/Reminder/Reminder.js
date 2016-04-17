@@ -36,21 +36,16 @@ Template.createReminder.events({
 		var text = event.target.text.value;
 		var desc = event.target.desc.value;
 		var date= event.target.date.value;
-		var currentDate= new Date();
-		if(date <= currentDate)
-		{
-			alert('cannot set past time');
-			return false;
-		}
-		/*Meteor.call("createReminder",text, desc, function(err,res){
+		Meteor.call("createReminder",text, desc, date ,function(err,res){
 			if(!err){
 				console.log("callback recieved: "+res);
 			}
-		});**/
+		});
 		// Insert a task into the collection
 		// Clear form
 		event.target.text.value = "";
 		event.target.desc.value = "";
+		event.target.date.value = "";
 		},
 		"change .hide-completed input": function (event) {
 			Session.set("hideCompleted", event.target.checked);

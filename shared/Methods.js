@@ -111,20 +111,20 @@ Meteor.methods({
 		return id;
 	},
 
-	joinGroup : function(groupId){
+	joinGroup : function(groupId, memberId, memberName){
 		var data= Groups.findOne(groupId);
 		var member=Groups.find({},{ "members_id":1, _id: 0 });
 		var id= data._id;
 		var count= data.member_count;
-		var userId = Meteor.userId();
+		
 
 		for (var i = 0; i < data.members.length; i++) {
-      		if (data.members[i].id == userId) {
+      		if (data.members[i].id == memberId) {
         		return false;
       		}
     	}
     	count++;
-		if(!this.userId){// NOt logged in
+		if(!memberId){// NOt logged in
 			return;
 		}
 		else{
@@ -133,8 +133,8 @@ Meteor.methods({
 					$set:{ member_count: count},
 					$addToSet: {
 						members:{ 
-							"id": this.userId,
-							"name":Meteor.user().username
+							"id": memberId,
+							"name":memberName
 							}
 						}
 					});
@@ -186,10 +186,34 @@ Meteor.methods({
 			return id;
 		}
   	},
+
+  	requestJoin: function(groupId, ownerId,ownerName, user, username){
+  		var data= Groups.findOne(groupId);
+  		var name= data.gname;
+  		var notification= {
+  			title: username + " wants to join your group- " + name,
+  			group:{
+  				id: groupId,
+  				name: name
+  			},
+  			owner:{
+  				id: ownerId,
+  				name: ownerName
+  			},
+  			user:{
+  				id: user,
+  				name: username
+  			},
+  			createdAt: new Date()
+  		};
+  		var id= Notify.insert(notification);
+  		console.log(id);
+  		return id;
+  	},
 	
 	//---------------Todo Function--------------------------------------------
 
-	createReminder : function(text, desc){
+	createReminder : function(text, desc, date){
 		check(text,String);
 		check(desc,String);
 		var task;
@@ -200,6 +224,7 @@ Meteor.methods({
 			task={
 				title: text,
 				desc: desc,
+				date: date,
 			    createdAt : new Date(),
 			    owner:{
 					"id": this.userId,

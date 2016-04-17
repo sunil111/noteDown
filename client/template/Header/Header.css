@@ -46,3 +46,6 @@
 		span#Weight{
 			font-weight:900;
 		}
+		ul.notifications {
+			position: fixed;
+		}
