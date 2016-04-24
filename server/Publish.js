@@ -27,8 +27,37 @@ Meteor.publish("tasks",function(){
   return Tasks.find({"owner.id":this.userId},{sort: {createdAt: -1}});
 });  
 
+Meteor.publish("notify",function(){
+  return Notify.find({});
+});
+
 if (Meteor.isClient) {
   	Meteor.startup(function() {
     		GoogleMaps.load();
   	});
 }
+
+
+//------------------------------get_loc-----------------------
+/*	return Location.find({},{sort: {createdAt: -1}});
+});*/
+
+
+
+
+Meteor.publish("images", function() {
+  return Collections.Images.find();
+});
+
+
+Meteor.publish("files", function() {
+  return Collections.Files.find();
+});
+
+Meteor.publish("audios",function(){
+  return Collections.Audios.find();
+});
+
+Meteor.publish("videos",function(){
+  return Collections.Videos.find();
+});
