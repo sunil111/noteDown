@@ -10,9 +10,11 @@ Template.getLocation.helpers({
 	reverseGeocode.getLocation(a, b, function(location){	 
 		//location is straight output from Google
 		//or you can now access it from reverseGeocode object
-		Session.set('location', reverseGeocode.getAddrStr());
+		//Session.set('location', reverseGeocode.getAddrStr());
 		var c = reverseGeocode.getAddrStr();
-		document.getElementById("textbox1").value = "Your current Loaction : "+ c;
+		document.getElementById("txtlocation").value =c;
+    Session.set('location', c);
+
 	});
 
 		
@@ -21,7 +23,7 @@ Template.getLocation.helpers({
 		// Map initialization options
 			return {
 				center: new google.maps.LatLng( a , b ),
-				zoom: 20 
+				zoom: 18 
       			};
 		}
     	},
@@ -102,3 +104,27 @@ Template.getLocation.onCreated(function() {
 Template.getLocation.onRendered(function() {
   	GoogleMaps.load();
 });
+
+//---------------------------------------------------------------
+/*Meteor.subscribe("location");
+
+Template.getLocation.events({
+	"submit .form": function(event) {
+      	event.preventDefault();
+            // Get value from form element
+            var currentLoc = event.target.txtlocation.value;
+            
+            // Insert a task into the collection
+
+            if(confirm("Are the details correct ?")== true){
+                  Meteor.call("addLocation", currentLoc, function(err, res){
+            		if(!err){//all good
+            			console.log("callback recieved: "+res);
+                              alert('Store location succesfully');
+            		}
+            	});
+            }
+            // Clear form
+            event.target.txtlocation.value = "";
+	}  
+});*/
