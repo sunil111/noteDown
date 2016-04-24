@@ -1,13 +1,17 @@
 <template name="Main">
-	<div class="top">
+
+	<header class="top">
 		{{> yield region="header"}}
-	</div>
+	</header>
+
 	<div id="body">
 		{{> yield }}
 	</div>
-	<div class="bottom">
+
+	<footer class="bottom">
 		{{> yield region="footer"}}
-	</div>
+	</footer>
+	
 </template>
 
 
