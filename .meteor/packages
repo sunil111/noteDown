@@ -43,3 +43,24 @@ jaymc:google-reverse-geocode
 #aldeed:geocoder
 
 sacha:spin
+
+meteor-platform
+cfs:standard-packages
+cfs:gridfs
+cfs:filesystem
+cfs:s3
+cfs:ui
+raix:ui-dropped-event
+mrt:jquery-easing
+mrt:numeral
+cfs:autoform
+reactive-var
+cfs:graphicsmagick
+
+check
+tsega:bootstrap3-datetimepicker
+gfk:notifications	
+
+#arkham:comments-ui
+
+
