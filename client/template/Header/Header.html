@@ -1,21 +1,36 @@
 <template name="Header">
-<!--Start Header-->
-	<header id="Space">
-		<nav id="headernav" class="navbar navbar-inverse navbar-fixed-top" style="border-radius:0px !important; margin-bottom:0px;">
-  		<div class="container-fluid">
-    			<div class="navbar-header">
-      				<a class="navbar-gNote" href=""><i>note</i>Down</a>
-    			</div>
-    			<div class="collapse navbar-collapse">
-      				<ul id="slides" class="nav navbar-nav pull-right push-bottom">
-              {{#if currentUser}}
-                {{> notifications}}
-              {{/if}}
-					<li><a class="Login" href="#" title="blank">{{> Login}}</a></li>
-      				</ul>
-    			</div><!--/.nav-collapse -->
-		</div>
-		</nav>
-	</header>
-<!-- End Header-->
+  <!--Start Header-->
+  <header id="Space">
+    <nav id="headernav" class="navbar navbar-inverse navbar-fixed-top" style="border-radius:0px !important; margin-bottom:0px;">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-gNote" href=""><i>note</i>Down</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          
+          <ul id="slides" class="nav navbar-nav pull-right push-bottom">
+          {{#if currentUser}}
+            <!--<li>{{> Search}}</li>-->
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Notification"><span class="glyphicon glyphicon-envelope pull-right"><span class="badge badge-inverse">{{notificationCount}}</span></span></a>
+              <ul class="dropdown-menu">
+
+                  {{#if notificationCount}}
+                    {{#each notification}}
+                      {{title}}
+                      <input type="submit" class="btn" id="read" value="Read">
+                    {{/each}}
+                  {{/if}} 
+                
+              </ul>
+            </li>
+          {{/if}}
+            <li><a class="Login" href="#" title="">{{> Login}}</a></li>
+          </ul>
+
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+  </header>
+  <!-- End Header-->
 </template>

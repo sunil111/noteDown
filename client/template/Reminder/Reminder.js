@@ -1,5 +1,7 @@
 Template.createReminder.onRendered(function() {
-	  this.$('.datetimepicker').datetimepicker();
+	  this.$('.datetimepicker').datetimepicker({
+	  	useCurrent: true
+	  });
 });
 	
 Template.createReminder.onCreated(function(){

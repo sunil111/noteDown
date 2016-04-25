@@ -3,7 +3,6 @@ accounts-facebook@1.0.8
 accounts-google@1.0.8
 accounts-oauth@1.1.11
 accounts-password@1.1.7
-accounts-twitter@1.0.8
 accounts-ui@1.1.8
 accounts-ui-unstyled@1.1.11
 aldeed:collection2@2.9.1
@@ -95,12 +94,12 @@ msavin:mongol@1.6.2
 npm-bcrypt@0.7.8_2
 npm-mongo@1.4.42
 oauth@1.1.9
-oauth1@1.1.8
 oauth2@1.1.8
 observe-sequence@1.0.10
 ordered-dict@1.0.6
 promise@0.6.6
 raix:eventemitter@0.1.3
+raix:rssfeed@0.0.5
 random@1.0.8
 rate-limit@1.0.3
 reactive-dict@1.1.6
@@ -119,7 +118,6 @@ templating@1.1.8
 templating-tools@1.0.3
 tracker@1.0.12
 tsega:bootstrap3-datetimepicker@4.17.37_1
-twitter@1.1.8
 ui@1.0.10
 underscore@1.0.7
 url@1.0.8

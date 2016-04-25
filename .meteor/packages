@@ -16,7 +16,6 @@ ecmascript              # Enable ECMAScript2015+ syntax in app code
 accounts-ui
 accounts-password
 accounts-facebook
-accounts-twitter
 accounts-google
 iron:router
 mrt:bootstrap-3
@@ -34,4 +33,5 @@ jaymc:google-reverse-geocode
 sacha:spin
 check
 tsega:bootstrap3-datetimepicker
-gfk:notifications		
+gfk:notifications	
+raix:rssfeed	

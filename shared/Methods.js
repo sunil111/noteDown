@@ -75,7 +75,7 @@ Meteor.methods({
 				privacy: privacy,
 				owner:{
 						"id": this.userId,
-					    "name": Meteor.user().username 
+					    "name": Meteor.user().profile.name 
 				},
 				members:[],
 				member_count: 1,
@@ -145,7 +145,7 @@ Meteor.methods({
 	leaveGroup: function(groupId) {
 	    check(groupId, String);
 	    var userId = Meteor.userId();
-
+	    var name= Meteor.user().profile.name;
 	    var result = Groups.findOne({_id: groupId});
 	    var count= result.member_count;
 	    if (!result) {
@@ -162,7 +162,7 @@ Meteor.methods({
 	      	$pull: {
 				members:{
 					id: userId,
-					name: Meteor.user().username 
+					name: name 
 				}
 			}
 			});
@@ -228,7 +228,7 @@ Meteor.methods({
 			    createdAt : new Date(),
 			    owner:{
 					"id": this.userId,
-					"name": Meteor.user().username 
+					"name": Meteor.user().profile.name 
 				}
 			}
 		}

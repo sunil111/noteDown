@@ -67,14 +67,10 @@ Template.singleGroup.events({
 	"click #join": function(event) {
 		if(confirm("Are you sure you want to join ?")== true){
 			var groupId = Session.get('groupId');
-			console.log(groupId);
 			var memberId= Meteor.user()._id;
-			console.log(memberId);
-			var memberName= Meteor.user().username;
-			console.log(memberName);
+			var memberName= Meteor.user().profile.name;
 			Meteor.call('joinGroup',groupId, memberId, memberName, function(err,res){
 				if(!err){//all good
-					//console.log("group joined: "+res);
 	                alert('Group joined succesfully');
 	                Meteor.call('Successfully');
 				}
@@ -86,10 +82,20 @@ Template.singleGroup.events({
 		if(confirm("Are you sure you want to leave ?")== true){
 			var groupId = Session.get('groupId');
 			console.log(groupId);
+			var data= Groups.findOne(groupId);
+			var user= Meteor.user().profile.name;
+			var name= data.gname;
 			Meteor.call('leaveGroup',groupId, function(err,res){
 				if(!err){//all good
-					//console.log("group joined: "+res);
+					
 	                alert('Group left succesfully');
+	               	/*Notify.insert({
+				    title: user + " has left the group " + name,
+				    group:{ 
+				    		id: groupId,
+				    		name: name
+				    }
+	    			});*/
 	                Meteor.call('Successfully');
 				}
 			});	
@@ -120,24 +126,26 @@ Template.singleGroup.events({
 	"click #save": function(event){
 		var groupId = Session.get('groupId');
 		var group= Groups.findOne({ _id: groupId});
-		console.log(groupId);
+		
 		var gtitle=document.getElementById('name').value;
-		console.log("name" +gtitle);
+		
 		var gdesc= document.getElementById('desc').value;
-		console.log("desc" +gdesc);	
-		//$('#name').replaceWith($('<h3 id="gname"/>',{value:gtitle}));
+		
+		
 
 		var h1= document.createElement('h3');
 		var lblname= $(h1).attr({
 			'id': "gname",
 			'value': gtitle
 		});
+
 		$('#name').replaceWith(lblname);
 		var h2= document.createElement('h3');
 		var lbldesc= $(h2).attr({
 			'id': "gdesc",
 			'value': gdesc
 		});
+
 		$('#desc').replaceWith(lbldesc);
 
 
@@ -159,10 +167,8 @@ Template.singleGroup.events({
 		var group= Groups.findOne({ _id: groupId});
 		var owner= group.owner.id;
 		var ownerName=group.owner.name;
-		console.log("Owner :" +owner);
 		var currentUser= Meteor.user()._id;
-		var currentUserName= Meteor.user().username;
-		console.log("Current user :" +currentUser);
+		var currentUserName= Meteor.user().profile.name;
 		if(owner!== currentUser){
 			Meteor.call("requestJoin", groupId, owner,ownerName, currentUser, currentUserName, function(err,res){
 				if(!err){//all good)
@@ -182,8 +188,6 @@ Template.singleGroup.events({
 		var groupId= data.group.id;
 		var group=Groups.findOne(groupId);
 		var gname= group.gname;
-		console.log(userId);
-		console.log(username);
 		Meteor.call('joinGroup',groupId, userId, username, function(err,res){
 				if(!err){//all good
 					//console.log("group joined: "+res);
@@ -191,7 +195,10 @@ Template.singleGroup.events({
 	                Meteor.call('Successfully');
 	                Notify.insert({
 	                	title: "You have been added to group- " + gname,
-	                	user: userId,
+	                	user:{
+	                		id: userId,
+	                		name: username
+	                	},
 	                	read: false
 	                });
 	                var nid= Notify.remove(id);
@@ -242,5 +249,3 @@ Template.allGroup.helpers({
 		});
 	}
 });
-
-
