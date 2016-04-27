@@ -37,6 +37,10 @@ if (Meteor.isClient) {
   	});
 }
 
+Meteor.publish("threads",function(){
+  return Thread.find({});
+});
+
 
 //------------------------------get_loc-----------------------
 /*	return Location.find({},{sort: {createdAt: -1}});
