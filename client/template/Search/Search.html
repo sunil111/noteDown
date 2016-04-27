@@ -1,0 +1,41 @@
+<template name="searchPage">
+	<div class="Container-fluid">
+		{{> search }}
+	</div>
+</template>
+
+<template name="search">
+	<div class="form-group">
+	    <label for="search-query">Search:</label>
+		<input type="text" class="form-control search-query" id="search-query">
+	</div>
+  	<h1>People</h1>
+  	{{> people}}
+</template>
+
+<template name = "people">
+	<!-- Start Container -->
+	<div class="container"> 
+		<h2>All Groups</h2>
+		<div class="row">
+			{{#if Template.subscriptionsReady}}
+					{{#each groups}}
+						<div class="col-sm-6 col-xs-3 col-md-3 col-lg-2">
+							<div class="thumbnail">
+								<div class="caption">
+									<h3 id="gname">{{gname}}</h3> 
+			                	</div>
+									<span style="float: right;" id="privacy"><i>{{privacy}}-group...</i></span>
+			  						<hr class="divider">
+			  						<a href="/group/{{_id}}">View Group</a>
+			  				</div>
+		  				</div>
+		            {{/each}}
+	        	{{else}}
+	        		<p>Loading</p>
+	        {{/if}}
+      	</div>
+    	<hr class="divider">
+   	</div>
+	<!-- End Container -->
+</template>
