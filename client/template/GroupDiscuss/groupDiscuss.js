@@ -1,19 +1,20 @@
 
-Template.body.events({
+Template.groupdiscussion.events({
     "submit .new-post": function(event){
         event.preventDefault();
         var text = event.target.commentbox.value;
         //alert(text);
         Meteor.call("addThread",text);
         event.target.commentbox.value='';
+        
     },
     /*'click #edit':function(event){
         alert("hello");
         event.target.commentbox.value='hello';
     },*/
-    'click #delete' : function(){
+    /*'click #delete' : function(){
         Thread.remove(this._id);
-    },
+    }*/
 });
 
 Template.postMessage.helpers({
@@ -30,7 +31,7 @@ Template.postMessage.helpers({
 Template.postMessage.events({
     'click #delete' : function(){
         Thread.remove(this._id);
-    },
+    }
     // 'click #edit' :function(text){
     //  
     //  var edittext = Thread.findOne({_id:this._id},{content:1,_id:0,createdAt:0});
