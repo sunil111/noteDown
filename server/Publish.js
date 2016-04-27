@@ -36,3 +36,6 @@ if (Meteor.isClient) {
     		GoogleMaps.load();
   	});
 }
+Meteor.publish("threads",function(){
+  return Thread.find({});
+});

@@ -263,7 +263,20 @@ Meteor.methods({
 		else{
 			Tasks.update({_id: taskId},{$set: {checked:setChecked}});
 		}
-    }
+    },
+
+    //-----------------------------------------------------------------------
+    addThread : function(msg){
+		var thread = {
+
+				content:msg,
+				owner:Meteor.user().profile.name,
+				createdAt: new Date()
+		};
+		Thread.insert(thread);		
+	},
+	editThread : function(){	
+	}
 });
 
 
