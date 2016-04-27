@@ -3,6 +3,14 @@ Template.audio.created = function(){
 };
 
 
+Template.audio.onCreated(function(){
+	var self= this;
+	this.autorun( function() {
+		self.subscribe('audios');
+	});
+});
+
+
 Meteor.startup(function() {
 
 	Template.audio.events({
