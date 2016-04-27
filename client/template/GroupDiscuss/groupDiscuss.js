@@ -17,6 +17,13 @@ Template.groupdiscussion.events({
     }*/
 });
 
+Template.groupdiscussion.onCreated(function(){
+    var self= this;
+    this.autorun( function() {
+        self.subscribe('threads');
+    });
+});
+
 Template.postMessage.helpers({
     'message':function(){
         
