@@ -274,7 +274,9 @@ Meteor.methods({
 
 	addThread : function(msg){
 		var thread = {
+
 				content:msg,
+				owner:Meteor.user().username,
 				createdAt: new Date()
 		};
 		Thread.insert(thread);		
