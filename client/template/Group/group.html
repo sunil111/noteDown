@@ -2,60 +2,93 @@
 	{{> Navbar }}
 	 <!--Start Container-->
 	<div class="container-fluid "><br>
-	{{#if owner}}
-	 	{{#if notificationCount}}
- 		<div class="dropdown">
-  			<button class="btn btn-danger pull-right dropdown-toggle" type="button" data-toggle="dropdown">
-	  			<span class="glyphicon glyphicon-bell"></span>&nbsp;
-	  				Notifications
-	  			<span class="caret"></span>
-  			</button>
-  			<ul class="dropdown-menu dropdown-menu-right">
-  			{{#each notification}}
-			    <li>
-			    	{{title}}&nbsp;&nbsp;&nbsp;&nbsp;
-			    	<input type="submit" class="btn btn-primary" id="accept" value=" Accept request">
-					<input type="submit" class="btn btn-danger" id="decline" value="Decline request">
-			    </li>
-			{{/each}}
-  			</ul>
-		</div>
-		{{else}}
-		<div class="dropdown">
-  			<button class="btn btn-primary pull-right dropdown-toggle" type="button" data-toggle="dropdown">Notifications
-  			<span class="caret"></span></button>
-  			<ul class="dropdown-menu dropdown-menu-right">
-			    <li><a href="#">No notifications</a></li>
-  			</ul>
-		</div>
-		{{/if}}
-	{{else}}
-
-	{{/if}}
-
-		<br><br>
 		<div class="row">
-			<hr class="divider">
+		{{#if owner}}
+			<input type="submit" class="btn btn-primary pull-right" id="edit" value=" Edit " style="margin-right: 20px;">
+			<input type="submit" class="btn btn-danger pull-right" id="delete" value="Delete">	
+			{{#if notificationCount}}
+ 				<div class="dropdown">
+  					<button class="btn btn-danger pull-right dropdown-toggle" type="button" data-toggle="dropdown">
+	  					<span class="glyphicon glyphicon-bell"></span>&nbsp;
+	  						Notifications
+	  					<span class="caret"></span>
+  					</button>
+  					<ul class="dropdown-menu dropdown-menu-right">
+  						{{#each notification}}
+				    	<li>
+				    		{{title}}&nbsp;&nbsp;&nbsp;&nbsp;
+				    		<input type="submit" class="btn btn-primary" id="accept" value=" Accept request">
+							<input type="submit" class="btn btn-danger" id="decline" value="Decline request">
+				    	</li>
+						{{/each}}
+  					</ul>
+				</div>
+			{{else}}
+				<div class="dropdown">
+			  		<button class="btn btn-primary pull-right dropdown-toggle" type="button" data-toggle="dropdown">Notifications
+			  			<span class="caret"></span></button>
+			  			<ul class="dropdown-menu dropdown-menu-right">
+						    <li><a href="#">No notifications</a></li>
+			  			</ul>
+				</div>
+			{{/if}}
+			
+			{{#if notificationCount}}
+ 				<div class="dropdown">
+  					<button class="btn btn-danger pull-right dropdown-toggle" type="button" data-toggle="dropdown">
+	  					<span class="glyphicon glyphicon-bell"></span>&nbsp;
+	  						Notifications
+	  					<span class="caret"></span>
+  					</button>
+  					<ul class="dropdown-menu dropdown-menu-right">
+  						{{#each notification}}
+				    	<li>
+				    		{{title}}&nbsp;&nbsp;&nbsp;&nbsp;
+				    		<input type="submit" class="btn btn-primary" id="accept" value=" Accept request">
+							<input type="submit" class="btn btn-danger" id="decline" value="Decline request">
+				    	</li>
+						{{/each}}
+  					</ul>
+				</div>
+			{{else}}
+				<div class="dropdown">
+			  		<button class="btn btn-primary pull-right dropdown-toggle" type="button" data-toggle="dropdown">Notifications
+			  			<span class="caret"></span></button>
+			  			<ul class="dropdown-menu dropdown-menu-right">
+						    <li><a href="#">No notifications</a></li>
+			  			</ul>
+				</div>
+			{{/if}}
+		{{else}}
+			{{#if member}}
+				<input type="submit" class="btn btn-danger pull-right" id="leave" value="Leave" style="margin-right: 20px;">
+			{{else}}
+				{{#if private}}
+					<input type="submit" class="btn btn-success pull-right" id="request" value="Send Request" style="margin-right:20px;">
+				{{else}}
+					<input type="submit" class="btn btn-success pull-right" id="join" value="Join" style="margin-right:20px;">
+				{{/if}}
+			{{/if}}
+		{{/if}}	
+		</div>
+		<div class="row">
+				<hr class="divider">
 				<h3 id="gname" style="margin-left:20px;">{{group.gname}}</h3> 
             	<span style="float: right;" id="privacy"><i>{{group.privacy}}-group...</i></span>
 				<hr class="divider">
 				<h3 id="gdesc" style="margin-left: 20px;">{{group.gdesc}}</h3>
 				<hr class="divider">
-				{{#if owner}}
-					<input type="submit" class="btn btn-primary" id="edit" value=" Edit " style="margin-left: 20px;">
-					<input type="submit" class="btn btn-danger" id="delete" value="Delete">	
+		</div>
+
+		<div class="container-fluid">
+			{{#if owner}}
+				{{> groupDiscuss}}
+			{{else}}
+				{{# if member}}
+					{{> groupDiscuss}}
 				{{else}}
-					{{#if member}}
-						<input type="submit" class="btn btn-danger" id="leave" value="Leave" style="margin-left: 20px;">
-					{{else}}
-						{{#if private}}
-							<input type="submit" class="btn btn-success" id="request" value="Send Request" style="margin-left:20px;">
-						{{else}}
-							<input type="submit" class="btn btn-success" id="join" value="Join" style="margin-left:20px;">
-						{{/if}}
-					{{/if}}
-				{{/if}}	
-			<hr class="divider">
+				{{/if}}
+			{{/if}}
 		</div>
    	</div>
 </template>
