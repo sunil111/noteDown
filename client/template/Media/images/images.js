@@ -37,3 +37,11 @@ Template.images.onCreated(function(){
     self.subscribe('images');
   });
 });
+
+Template.images.events({
+  'submit #preview':function(events){
+    event.preventDefault();
+
+    alert('Preview');
+  }
+});
