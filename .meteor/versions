@@ -6,6 +6,7 @@ accounts-password@1.1.4
 accounts-twitter@1.0.6
 accounts-ui@1.1.6
 accounts-ui-unstyled@1.1.8
+alanning:roles@1.2.15
 aldeed:autoform@4.2.2
 aldeed:collection2@2.9.1
 aldeed:collection2-core@1.1.1
@@ -66,6 +67,7 @@ email@1.0.8
 es5-shim@4.1.14
 facebook@1.2.2
 fastclick@1.0.7
+fortawesome:fontawesome@4.5.0
 geojson-utils@1.0.4
 gfk:notifications@1.1.4
 google@1.1.7
@@ -140,10 +142,12 @@ spacebars@1.0.7
 spacebars-compiler@1.0.7
 srp@1.0.4
 standard-minifiers@1.0.2
+summernote:summernote@0.8.1
 templating@1.1.5
 templating-tools@1.0.0
 tracker@1.0.9
 tsega:bootstrap3-datetimepicker@4.17.37_1
+twbs:bootstrap@3.3.6
 twitter@1.1.5
 ui@1.0.8
 underscore@1.0.4
