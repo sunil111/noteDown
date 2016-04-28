@@ -29,3 +29,7 @@ h3#gdesc{
 	    		-o-transform:scale(1.25); /* Opera */
 	     		transform:scale(1.25);
 		}
+
+.btn-save{
+	margin-right: 20px;
+}
