@@ -216,6 +216,31 @@ Meteor.methods({
   		console.log(id);
   		return id;
   	},
+
+  	removeMember: function(groupId, memberId, memberName){
+  		
+  		var data= Groups.findOne(groupId);
+  		var count= data.member_count;
+  		if (!data) {
+	      return false;
+	    }
+	    if (data.owner.id === memberId) {
+	      throw new Meteor.Error(403, 'You can\'t remove yourseld because you are owner');
+	      return false;
+	    } 
+	    else {
+	      count--;
+	      return Groups.update({_id: groupId}, {
+		      	$set: { member_count: count},
+		      	$pull: {
+					members:{
+						id: memberId,
+						name: memberName 
+					}
+				}
+			});
+	    }
+  	},
 	
 	//---------------Todo Function--------------------------------------------
 
@@ -276,14 +301,16 @@ Meteor.methods({
 		var thread = {
 
 				content:msg,
-				owner:Meteor.user().profile.name,
+				owner:{
+					"id":this.userId,
+					"name":Meteor.user().profile.name
+				},
 				createdAt: new Date()
 		};
 		Thread.insert(thread);		
 	},
-	editThread : function(){
-		
-	}   
+	editThread : function(){	
+	}
 });
 
 
