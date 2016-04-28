@@ -1,3 +1,9 @@
+Template.groupdiscussion.onCreated(function(){
+    var self= this;
+    this.autorun( function() {
+        self.subscribe('threads');
+    });
+});
 
 Template.groupdiscussion.events({
     "submit .new-post": function(event){
@@ -17,21 +23,16 @@ Template.groupdiscussion.events({
     }*/
 });
 
-Template.groupdiscussion.onCreated(function(){
-    var self= this;
-    this.autorun( function() {
-        self.subscribe('threads');
-    });
-});
-
 Template.postMessage.helpers({
     'message':function(){
-        
         //return Thread.find({},{sort : {createdAt:-1} }); 
         return Thread.find();
     },
     'count':function(){
         return Thread.find().count();
+    },
+    'admin': function(){
+        return Thread.find({ "owner.id" : Meteor.user()._id });
     }
 });
 
@@ -47,4 +48,3 @@ Template.postMessage.events({
     //  //event.target.commentbox.value = "hello";
     // }
 });
-
