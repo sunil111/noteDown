@@ -112,7 +112,6 @@ momentjs:moment@2.8.4
 mongo@1.1.3
 mongo-id@1.0.1
 mongo-livedata@1.0.9
-mrt:bootstrap-3@0.3.8
 mrt:jquery-easing@1.3.0
 mrt:numeral@1.5.3
 msavin:mongol@1.6.2
