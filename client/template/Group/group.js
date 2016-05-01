@@ -127,7 +127,7 @@ Template.singleGroup.events({
 			$("#edit").prop('value', 'Save');
 			$("#edit").prop('class', 'btn btn-success bth-save');
 			$("#edit").prop('id', 'save');	
-			$("#edit").prop('margin-right','30px');
+			//$("#edit").prop('margin-right','30px');
 			//$('#edit').prop({'margin-right': '25x'})
 			//$('#save').css({ 'marginRight': '20px' });
 			//document.getElementById("save").style.marginRight = '20px';
@@ -275,3 +275,4 @@ Template.allGroup.helpers({
 		});
 	}
 });
+
