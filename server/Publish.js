@@ -41,13 +41,7 @@ Meteor.publish("threads",function(){
   return Thread.find({});
 });
 
-
-//------------------------------get_loc-----------------------
-/*	return Location.find({},{sort: {createdAt: -1}});
-});*/
-
-
-
+//-----------------------------Media-----------------------------
 
 Meteor.publish("images", function() {
   return Collections.Images.find();
@@ -64,4 +58,10 @@ Meteor.publish("audios",function(){
 
 Meteor.publish("videos",function(){
   return Collections.Videos.find();
+});
+
+//----------------------------SmNote------------------------
+
+Meteor.publish("posts",function(){
+  return Posts.find({});
 });
