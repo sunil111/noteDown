@@ -5,37 +5,35 @@
 </template>
 
 <template name="search">
-	<div class="form-group">
-	    <label for="search-query">Search:</label>
-		<input type="text" class="form-control search-query" id="search-query">
-	</div>
-  	<h1>People</h1>
-  	{{> people}}
+	<div class="input-group">
+      	<div class="input-group-btn search-panel">
+	          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+	            <span id="search_concept">Filter by</span> <span class="caret"></span>
+	          </button>
+	          <ul class="dropdown-menu" role="menu">
+		            <li><a href="#Notes">Note</a>
+			              <ol><a href="#Tags">By tags</a></ol>
+			              <ol><a href="#Location">By location</a></ol>
+			              <ol><a href="#Notes-Date">By date</a></ol>
+		            </li>
+		            <li><a href="#Groups">Groups</a>
+			              <ol><a href="#Public">By public groups</a></ol>
+			              <ol><a href="#Private">By private groups</a></ol>
+			              <ol><a href="#Posts">By posts</a></ol>
+			              <ol><a href="#Groups-Date">By date</a></ol>
+		            </li>
+		            <li><a href="#Files">Files</a>
+			              <ol><a href="#Images">By images</a></ol>
+			              <ol><a href="#Videos">By videos</a></ol>
+			              <ol><a href="#Audios">By audios</a></ol>
+		            </li>
+		            <li><a href="#All">All</a></li>
+	          </ul>
+    	</div>
+      	<input type="hidden" name="search_param" value="all" id="search_param"><input type="text" class="form-control" name="x" placeholder="Search term...">
+	      <span class="input-group-btn">
+	          	<button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
+	      </span>
+  	</div>  
 </template>
 
-<template name = "people">
-	<!-- Start Container -->
-	<div class="container"> 
-		<h2>All Groups</h2>
-		<div class="row">
-			{{#if Template.subscriptionsReady}}
-					{{#each groups}}
-						<div class="col-sm-6 col-xs-3 col-md-3 col-lg-2">
-							<div class="thumbnail">
-								<div class="caption">
-									<h3 id="gname">{{gname}}</h3> 
-			                	</div>
-									<span style="float: right;" id="privacy"><i>{{privacy}}-group...</i></span>
-			  						<hr class="divider">
-			  						<a href="/group/{{_id}}">View Group</a>
-			  				</div>
-		  				</div>
-		            {{/each}}
-	        	{{else}}
-	        		<p>Loading</p>
-	        {{/if}}
-      	</div>
-    	<hr class="divider">
-   	</div>
-	<!-- End Container -->
-</template>
