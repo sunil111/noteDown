@@ -310,8 +310,46 @@ Meteor.methods({
 		Thread.insert(thread);		
 	},
 	editThread : function(){	
-	}
+	},
+
+	//-----------------------SmNote---------------------------
+	addPost: function (title, message, postBody) {
+		var doc;
+		
+		if(!this.userId){// NOt logged in
+			return;
+		}else{
+			doc={
+				owner:this.userId, 
+				Title: title,
+				Message: message,
+				Body: postBody,
+				createdOn:new Date(), 
+			};
+			var id = Posts.insert(doc);
+			return id; //return was missing. caused problem in method call.
+		}  
+		
+	},
+
+	editPost: function (postID, title, message, postBody) {
+				var id =Posts.update(postID,{
+						$set:{
+						Title: title,
+						Message: message,
+						Body: postBody	
+						}
+					});
+
+				return id;
+	},
+	
+	deletePost: function (postID) {
+		Posts.remove(postID);
+			
+	}		  
 });
+
 
 
 
