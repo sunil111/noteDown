@@ -18,7 +18,6 @@ Template.Tags.events({
 
 		$('<div class="btn-group" style="margin-top:20px;"><input type="button" class="btn-group " id="tag'+ uniqueNum + uniquevar +'" value="'+ tagsVar + '" style=" border-right:none; border-radius:0px; border: 3px solid #008CBA; height:34px" readonly disabled><button class="glyphicon glyphicon-remove btn btn-group btn-danger" id="tag'+uniqueNum +'" style="border-radius:0px; height:34px;"></button>&nbsp;&nbsp;&nbsp;&nbsp;</input></div>').insertAfter("h3");
 
-
     	var c = document.getElementById('tag'+ uniqueNum + uniquevar +'').value;
     	arr.push(c);
 
@@ -28,10 +27,8 @@ Template.Tags.events({
 		uniqueNum ++;
    	
     	event.target.tagsTxt.value="";
-	}
-})
+	},
 
-Template.Tags.events({
 	"click .btn-danger": function(event){
 		event.preventDefault();
 
