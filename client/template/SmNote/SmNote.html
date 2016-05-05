@@ -1,18 +1,18 @@
 <template name="SmNote">
 {{> Navbar}}
-<br><br><br>
+<br><br>
 <div class="container-fluid">
 	<div class="col-xs-12">
 		<form class="form-horizontal" role="form" id ="addPost">
 			<div class="form-group container-fluid">
 				<!--label for="postTitle">Post Title: </label-->
-				<input type="text" value={{Title}} name="postTitle" id="postTitle" class="from-control" placeholder="Enter your post title here..."  style="width: 100%;">
+				<input type="text" value={{Title}} name="postTitle" id="postTitle" class="from-control" placeholder="Enter your post title here..."  style="width: 100%; border-radius: 0px; border: 1px solid #BFBFBF; height: 40px; font-size :18px;" required/>
 
 			</div>
 
 			<div class="form-group container-fluid">
 				<!--label for="postMessage">Post Message: </label-->
-				<textarea class="form-contol" id="postMessage" value={{Message}} name="postMessage" rows="4" placeholder="Enter your post message here..."  style="width: 100%;"></textarea>
+				<textarea class="form-contol" id="postMessage" value={{Message}} name="postMessage" rows="4" placeholder="Enter your post message here..."  style="width: 100%; border-radius:0px; border: 1px solid #BFBFBF; height: 80px; font-size :16px;" required></textarea>
 			</div>
 
 			<div id="summernote" class="form-group">
@@ -20,7 +20,15 @@
 			</div>
 
 			<div class="form-group">
-				<button type="submit" class="form-control btn btn-success">Edit/Save Post</button>
+				{{> Tags}}
+			</div>
+
+			<div class="form-group">
+				<button type="submit" class="form-control btn btn-success" style="border-radius: 0px;">Edit/Save Post</button>
+			</div>
+
+			<div class="form-group" style="margin-top: 20px;">
+				{{> getLocation}}
 			</div>
 		</form>
 	</div>
@@ -43,49 +51,59 @@
 <template name="ShowNote">
 		<div class="col-xs-12 col-md-6 col-lg-4">
 			<div class="thumbnail">
-				<h2  id="showTitle" class="text-center text-capitalize">{{Title}}</h2><br>
-				<p id="showMsg" class="text-center">{{Message}}</p><br><br>
-				<a class="btn btn-success" href="/posts/{{_id}}"><span class="glyphicon glyphicon-file"></span> Read More!</a>
-					<button class="btn btn-danger pull-right" id="deletePost"><span class="glyphicon glyphicon-remove"></span> Delete</button>
+
+				<h2 id="showTitle" class="text-capitalize text-center">{{Title}}</h2><br>
+
+				<center><p id="showMsg">{{Message}}</p></center><br>
+
+				<center><a class="" href="/posts/{{_id}}" style="font-size:14px;"><span class="glyphicon glyphicon-file"></span> Read More!</a></center><br>
 			</div>		
 		</div>
 </template>
 
 <template name="SinglePost">
 {{> Navbar}}
+<div class="container-fluid">
 	<div class="col-xs-12">
 		<div class="panel-group">
 			{{#if post}}
-			<div class="panel panel-title">
-				<h2 class="text-capitalize text-center">Title : {{post.Title}}</h2>
-			</div>
-			<div class="panel panel-body">
-				<p class="text-center">Body : {{{post.Body}}}</p>
-			</div>
-			<a href="{{pathFor route='EditPosts'}}"> <button type="submit" class="form-control btn btn-success">Edit Post</button></a>
+				{{#if owner}}
+					<div class="panel panel-title" style="margin-top:20px; margin-bottom: 20px;">
+						<a href="{{pathFor route='EditPosts'}}"> <button type="submit" class="pull-right glyphicon glyphicon-pencil btn btn-success" title="Edit Post"> Edit</button></a>
+
+						<button class="btn btn-danger pull-right deletePost" id="deletePost" title="Delete Post" style="margin-right: 10px;"><span class="glyphicon glyphicon-remove"></span> Delete</button>
+					</div>
+				{{/if}}
+				<div class="panel panel-title">
+					<h2 class="text-capitalize text-center">Title : {{post.Title}}</h2>
+				</div>
+
+				<div class="panel panel-body">
+					<p class="text-center">{{{post.Body}}}</p>
+				</div>
 			{{else}}
 				No post
 			{{/if}}
 		</div>
 	</div>
-	<br><br><br><br><br><br><br><br><br>
+</div>
 </template>
 
 <template name="EditPosts">
-	{{> Navbar}}
-		<div class="col-xs-12">
-		<form role="form" id ="editPost">
-			<div class="form-group">
+{{> Navbar}}
+<br><br>
+<div class="container-fluid">
+	<div class="col-xs-12">
+		<form class="form-horizontal" role="form" id ="editPost">
+			<div class="form-group container-fluid">
 				<!--label for="postTitle">Post Title: </label-->
-				
-				<input type="text" value={{edit.Title}} name="postTitle" id="postTitle" class="from-control" placeholder="Enter your post title here..." style="width:100%">
+				<input type="text" value={{edit.Title}} name="postTitle" id="postTitle" class="from-control" placeholder="Enter your post title here..."  style="width: 100%; border-radius: 0px; border: 1px solid #BFBFBF; height: 40px; font-size :18px;" required>
 
 			</div>
 
-			<div class="form-group">
+			<div class="form-group container-fluid">
 				<!--label for="postMessage">Post Message: </label-->
-
-				<textarea class="form-contol" id="postMessage" value={{edit.Message}} name="postMessage" rows="4" placeholder="Enter your post message here..." style="width:100%"></textarea>
+				<textarea class="form-contol" id="postMessage" value={{edit.Message}} name="postMessage" rows="4" placeholder="Enter your post message here..."  style="width: 100%; border-radius:0px; border: 1px solid #BFBFBF; height: 80px; font-size :16px;" required></textarea>
 			</div>
 
 			<div id="summernote" class="form-group">
@@ -93,9 +111,18 @@
 			</div>
 
 			<div class="form-group">
+				<h4 class="pull-right" style="margin-right: 20px; margin-left: 20px;"><b> {{edit.Tags}} </b></h4>
+				{{> Tags}}
+			</div>
+
+			<div class="form-group">
 				<button type="submit" class="form-control btn btn-success">Save Post</button>
+			</div>
+
+			<div class="form-group" style="margin-top: 20px;">
+				{{> getLocation}}
 			</div>
 		</form>
 	</div>
-	<br><br><br><br><br><br><br><br><br>
+</div>
 </template>
