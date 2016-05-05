@@ -93,6 +93,13 @@ Meteor.methods({
 					group_ids: id
 				}
 			});
+			Rss.insert({
+                rss_title: user + "has created a new group " + gtitle,
+                user: user,
+                createdAt: new Date(),
+                action: "Group",
+                id: id
+          	});
 			return id;
 		}
 	},
@@ -297,10 +304,11 @@ Meteor.methods({
     },
     //--------------------------------group Discussion--------------------------
 
-	addThread : function(msg){
+	addThread : function(msg, groupId){
 		var thread = {
 
 				content:msg,
+				groupID:groupId,
 				owner:{
 					"id":this.userId,
 					"name":Meteor.user().profile.name
@@ -313,31 +321,45 @@ Meteor.methods({
 	},
 
 	//-----------------------SmNote---------------------------
-	addPost: function (title, message, postBody) {
+	addPost: function (title, message, postBody, loc, tags ) {
 		var doc;
 		
 		if(!this.userId){// NOt logged in
 			return;
 		}else{
 			doc={
-				owner:this.userId, 
+				owner:{
+					"id":this.userId,
+					"name":Meteor.user().profile.name
+				}, 
 				Title: title,
 				Message: message,
 				Body: postBody,
+				Location:loc,
+				Tags:tags,
 				createdOn:new Date(), 
 			};
 			var id = Posts.insert(doc);
+			Rss.insert({
+				rss_title: user + "has created a new note " + title,
+				user: user,
+				createdAt: new Date(),
+				action: "Post",
+				id: id
+			});
 			return id; //return was missing. caused problem in method call.
 		}  
 		
 	},
 
-	editPost: function (postID, title, message, postBody) {
+	editPost: function (postID, title, message, postBody, loc , tags) {
 				var id =Posts.update(postID,{
 						$set:{
 						Title: title,
 						Message: message,
-						Body: postBody	
+						Body: postBody,
+						Location:loc,
+						Tags:tags	
 						}
 					});
 
@@ -346,7 +368,6 @@ Meteor.methods({
 	
 	deletePost: function (postID) {
 		Posts.remove(postID);
-			
 	}		  
 });
 
