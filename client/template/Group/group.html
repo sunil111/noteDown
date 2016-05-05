@@ -4,12 +4,12 @@
 	<div class="container-fluid "><br>
 		<div class="row">
 			{{#if owner}}
-				<input type="submit" class="btn btn-primary pull-right" id="edit" value=" Edit " style="margin-right: 20px;">
-				<input type="submit" class="btn btn-danger pull-right" id="delete" value="Delete" style="margin-right: 25px; ">	
-				{{#if members}}
+				<button class="btn btn-success pull-right glyphicon glyphicon-pencil" id="edit" style="margin-right: 5px;"> Edit</button>
+				<button class="btn btn-danger pull-right glyphicon glyphicon-remove" id="delete" style="margin-right: 5px;"> Delete</button>
+				{{#if membes}}
 	 				<div class="dropdown">
-	  					<button class="btn btn-default pull-right dropdown-toggle" type="button" data-toggle="dropdown" style="margin-right: 28px;">
-		  					<span class="glyphicon glyphicon-user"></span>&nbsp;
+	  					<button class="btn btn-default pull-right dropdown-toggle" type="button" data-toggle="dropdown" style="margin-right: 5px;">
+		  					<span class="glyphicon glyphicon-user caret"></span>&nbsp;
 		  						Members
 		  					<span class="caret"></span>
 	  					</button>
@@ -23,8 +23,8 @@
 					</div>
 				{{else}}
 					<div class="dropdown">
-				  		<button class="btn btn-primary pull-right dropdown-toggle" type="button" data-toggle="dropdown" style="margin-right: 28px;">Members
-				  			<span class="caret"></span></button>
+				  		<button class="btn btn-primary pull-right dropdown-toggle" type="button" data-toggle="dropdown" style="margin-right: 5px;">
+				  			<span class="glyphicon glyphicon-user"></span> Members <span class="caret"></span></button>
 				  			<ul class="dropdown-menu dropdown-menu-right">
 							    <li><a href="#">No members</a></li>
 				  			</ul>
@@ -33,12 +33,12 @@
 				
 				{{#if notificationCount}}
 	 				<div class="dropdown">
-	  					<button class="btn btn-danger pull-right dropdown-toggle" type="button" data-toggle="dropdown" style="margin-right: 30px;">
+	  					<button class="btn btn-danger pull-right dropdown-toggle" type="button" data-toggle="dropdown" style="margin-right: 5px;">
 		  					<span class="glyphicon glyphicon-bell"></span>&nbsp;
 		  						Notifications
 		  					<span class="caret"></span>
 	  					</button>
-	  					<ul class="dropdown-menu dropdown-menu-right">
+	  					<ul class="dropdown-menu dropdown-menu">
 	  						{{#each notification}}
 					    	<li>
 					    		{{title}}&nbsp;&nbsp;&nbsp;&nbsp;
@@ -50,9 +50,9 @@
 					</div>
 				{{else}}
 					<div class="dropdown">
-				  		<button class="btn btn-primary pull-right dropdown-toggle" type="button" data-toggle="dropdown" style="margin-right: 30px;">Notifications
-				  			<span class="caret"></span></button>
-				  			<ul class="dropdown-menu dropdown-menu-right">
+				  		<button class="btn btn-primary pull-right dropdown-toggle" type="button" data-toggle="dropdown" style="margin-right: 5px;">
+				  			<span class="glyphicon glyphicon-bell"></span> Notifications <span class="caret"></span></button>
+				  			<ul class="dropdown-menu dropdown-menu">
 							    <li><a href="#">No notifications</a></li>
 				  			</ul>
 					</div>
@@ -72,17 +72,19 @@
 
 		<div class="row">
 			<hr class="divider">
-			<h3 id="gname" style="margin-left:20px;">{{group.gname}}</h3> 
-			<span style="float: right;" id="privacy"><i>{{group.privacy}}-group...</i></span>
+			<h2 id="gname" style="margin-left:20px;" title="Group Name"><b><i>{{group.gname}}</i></b></h2> 
+			<span style="float: right; font-size: 14px;" id="privacy"><i>{{group.privacy}}-group...</i></span>
 			<hr class="divider">
-			<h3 id="gdesc" style="margin-left: 20px;">{{group.gdesc}}</h3>
+			<h3 id="gdesc" style="margin-left: 20px; font-size: 16px;" title="Group Descripton">{{group.gdesc}}</h3>
 			<hr class="divider">		
 		</div>
 
 		{{#if owner}}
+			{{> Media}}
 			{{> groupDiscuss}}
 		{{else}}
 			{{#if member}}
+				{{> Media}}
 				{{> groupDiscuss}}
 			{{/if}}
 		{{/if}}
@@ -100,7 +102,7 @@
 					<div class="col-sm-3 col-xs-6 col-md-3 col-lg-2">
 						<div class="thumbnail">
 							<div class="caption">
-								<h3 id="gname">{{gname}}</h3> 
+								<marquee behavior="scroll" direction="left"><h3 id="gname">{{gname}}</h3></marquee>
 		                	</div>
 								<span style="float: right;" id="privacy"><i>{{privacy}}-group...</i></span>
 		  						<hr class="divider">
@@ -124,10 +126,10 @@
 		<div class="row">
 			{{#if Template.subscriptionsReady}}
 					{{#each groups}}
-						<div class="col-sm-6 col-xs-3 col-md-3 col-lg-2">
+						<div class="col-sm-3 col-xs-6 col-md-3 col-lg-2">
 							<div class="thumbnail">
 								<div class="caption">
-									<h3 id="gname">{{gname}}</h3> 
+									<marquee behavior="scroll" direction="left"><h3 id="gname">{{gname}}</h3></marquee> 
 			                	</div>
 									<span style="float: right;" id="privacy"><i>{{privacy}}-group...</i></span>
 			  						<hr class="divider">
@@ -144,3 +146,5 @@
 	<!-- End Container -->
 </template>
 
+<!--div style="border:1px solid black;width:150px;height:100px;overflow-y:hidden;overflow-x:scroll;">
+<p style="width:250%;"-->
