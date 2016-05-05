@@ -6,6 +6,7 @@ Template.singleGroup.onCreated(function(){
 });
 
 Meteor.subscribe('notify');
+
 Template.singleGroup.helpers({
 	group : function(){
 		var groupId = Session.get('groupId'); //instead of Router.current().params.gameId;
@@ -63,8 +64,9 @@ Template.singleGroup.events({
 			Meteor.call('deleteGroup', groupId, function(err,res){
 				if(!err){//all good
 					//console.log("group deleted: "+res);
-	                alert('Group deleted succesfully');
-	                Meteor.call('Successfully');
+	                //alert('Group deleted succesfully');
+	                //Meteor.call('Successfully');
+	                Router.go('/user');
 				}
 			});
 		}
@@ -125,7 +127,7 @@ Template.singleGroup.events({
 
 			//Change button text
 			$("#edit").prop('value', 'Save');
-			$("#edit").prop('class', 'btn btn-success bth-save');
+			$("#edit").prop('class', 'btn btn-success pull-right');
 			$("#edit").prop('id', 'save');	
 			//$("#edit").prop('margin-right','30px');
 			//$('#edit').prop({'margin-right': '25x'})
@@ -253,7 +255,7 @@ Template.yourGroup.helpers({
 				{"owner.id": Meteor.userId()},
 				{"members.id": Meteor.userId()}
 			]
-		});
+		},{sort: {createdAt: 1}},{limit: 6});
 	}
 });
 
@@ -272,7 +274,7 @@ Template.allGroup.helpers({
 				{"members.id": {$ne:  Meteor.userId() } }/*,
 				{ "privacy" : { $ne: "private"}}*/
 			]
-		});
+		},{sort: {createdAt: 1}},{limit: 6});
 	}
 });
 
