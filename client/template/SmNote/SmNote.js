@@ -13,13 +13,17 @@ Template.SmNote.events({
 		var title = event.target.postTitle.value;
 		var message = event.target.postMessage.value;
 		var postBody = $('#summernote').summernote('code');
+		var loc = Session.get('location');
+		var tags = Session.get('tag');
 		//console.log(postBody);
-		Meteor.call('addPost', title, message, postBody, function (error) {
+		Meteor.call('addPost', title, message, postBody, loc , tags , function (error) {
 			if(!error){
 			Router.go('/showNotes');	
 			//alert("No Error");
 			}
 		});
+		//location.reload();
+		Router.go('/showNotes');
 	}
 });
 
@@ -36,13 +40,18 @@ Template.ShowNotes.helpers({
 	}
 });
 
-Template.ShowNotes.events({
-	'click #deletePost': function () {
-		Meteor.call('deletePost', this._id);
-	}
+Template.ShowNotes.onCreated(function(){
+	var self= this;
+	this.autorun( function() {
+		self.subscribe('posts');
+	});
 });
 
-Template.ShowNotes.onCreated(function(){
+Template.ShowNote.helpers({
+
+});
+
+Template.ShowNote.onCreated(function(){
 	var self= this;
 	this.autorun( function() {
 		self.subscribe('posts');
@@ -54,6 +63,13 @@ Template.SinglePost.helpers({
 		var id = Session.get('postId');
 		var post=Posts.findOne({_id: id});
 		return post;
+	},
+	owner: function(){
+		var id = Session.get('postId');
+		var post=Posts.findOne({_id: id});
+		var owner= post.owner.id;
+		if(owner=== Meteor.userId())
+			return owner;
 	}
 });
 
@@ -64,6 +80,22 @@ Template.SinglePost.onCreated(function(){
 	});
 });
 
+Template.SinglePost.events({
+	'click .deletePost': function () {
+		var id = Session.get('postId');
+		console.log(id);
+		Meteor.call('deletePost', id, function(error){
+			Router.go('/showNotes');
+		});
+	}
+});
+
+/*Template.SinglePost.helpers({
+  owners: function() {
+    return Thread.find({owner: Meteor.userId()});
+  }
+});*/
+
 
 Template.EditPosts.events({
 	'submit #editPost' : function (event) {
@@ -72,7 +104,9 @@ Template.EditPosts.events({
 		var title = event.target.postTitle.value;
 		var message = event.target.postMessage.value;
 		var postBody = $('#summernote').summernote('code');
-		Meteor.call('editPost',id, title, message, postBody, function (error) {
+		var loc = Session.get('location');
+		var tags = Session.get('tag');
+		Meteor.call('editPost',id, title, message, postBody, loc , tags , function (error) {
 			if(!error){
 				console.log('Successfully');
 				Router.go('ShowNotes');
