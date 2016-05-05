@@ -8,11 +8,11 @@
 <template name="groupdiscussion"> 
   <div class="container">    
     <div class="row">    
-    <div class="col-md-6">
+    <div class="col-md-12">
         <div class="widget-area no-padding blank">
           <div class="status-upload">
             <form class="new-post">
-              <textarea placeholder="Write here to create thread" name="commentbox" id="commentbox" required></textarea>
+              <textarea placeholder="Comment here..." name="commentbox" id="commentbox" style="border-radius: 0px; border: 1px solid #BFBFBF; color:#000000;" required></textarea>
               <ul>
                 <!--<li><a title="" data-toggle="tooltip" data-placement="bottom" data-original-title="Picture"><i class="fa fa-picture-o"></i></a></li>-->
               </ul>
@@ -26,23 +26,23 @@
 </template>
 
 <template name = "postMessage">
-  <div class="container">
-    <h4 style="margin: 20px ;width: 700px">Threads :
+  <div class="container-fluid">
+    <h4 style="margin: 20px ;width:100%"><b>Comments :</b>
       <span class="badge" style="float: right;">Total : {{count}}</span>
     </h4> 
     <br>
-    {{#each message}}
-      <div class="well well-lg" style="width: 700px;margin-left: 20px;display: inline-block;">
-        <ul>
-            <li><span><b>{{owner.name}} : </b></span></li>
-            <li><span>{{content}}</span></li>
-            <span style="float: right">{{createdAt}}</span>
-        </ul>
+    {{#each gdPost}}
+      <div class="well well-lg" style="width:100%;display: inline-block;">
+            <li>
+              <span style="font-size:16px;"><b><u>{{owner.name}}</u> : </b></span>
+              {{#if admin}}
+                <span class="glyphicon glyphicon-trash pull-right" id="deletePost" style="cursor: pointer;" title="Delete"></span>
+                <span class="glyphicon glyphicon-pencil pull-right" id="editGd" style="margin-right:10px; cursor: pointer;" title="Edit"></span>
+              {{/if}}
+            </li>
+            <li><span style="font-size:16px;">{{content}}</span></li>
+            <span style="float: right; font-size:12px;">{{createdAt}}</span>
       </div>
-      {{#if admin}}
-        <span class="glyphicon glyphicon-trash" id="delete" style="cursor: pointer;"></span>
-        <span class="glyphicon glyphicon-pencil" id="edit" style="margin-left: 5px; cursor: pointer;"></span>
-      {{/if}}
-    {{/each}} 
+  {{/each}}
   </div>
 </template>
