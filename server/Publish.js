@@ -41,6 +41,10 @@ Meteor.publish("threads",function(){
   return Thread.find({});
 });
 
+Meteor.publish("rss",function(){
+  return Rss.find({});
+});
+
 //-----------------------------Media-----------------------------
 
 Meteor.publish("images", function() {
