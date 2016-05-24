@@ -28,8 +28,8 @@ babrahams:editable-text
 mizzao:sharejs-codemirror
 gwendall:auth-client-callbacks
 service-configuration
-aldeed:collection2
-aldeed:simple-schema
+#aldeed:collection2
+#aldeed:simple-schema
 msavin:mongol
 matb33:bootstrap-glyphicons
 dburles:google-maps
@@ -56,3 +56,5 @@ summernote:summernote
 alanning:roles
 fortawesome:fontawesome
 twbs:bootstrap
+dangrossman:bootstrap-daterangepicker
+easy:search
