@@ -1,4 +1,9 @@
-Meteor.subscribe("groups");
+Template.newGroup.onCreated(function(){
+      var self= this;
+      this.autorun( function() {
+            self.subscribe('groups');
+      });
+});
 
 Template.newGroup.helpers({
       group_name: function(){
@@ -7,38 +12,39 @@ Template.newGroup.helpers({
 });
 
 Template.newGroup.events({
-      "submit .form": function(event) {
-            event.preventDefault();
-            var privacy_flag;
+	"submit .form": function(event) {
+      	event.preventDefault();
+      	var privacy_flag;
             // Get value from form element
-            var gtitle = event.target.gTitle.value;
-            var gdesc = event.target.gDescription.value;
-            var result = Groups.findOne({gname: gtitle});
+            var gtitle = event.target.Title.value;
+            var gdesc = event.target.Description.value;
+            var result = Groups.findOne({ gname: gtitle });
             if (result) {
                   alert("Group name already exists");
-                  event.target.gTitle.value = "";
+                  event.target.Title.value = "";
                   return false;
             }
             // Insert a task into the collection
-            if(event.target.privacy.checked){
-                  privacy_flag = "private";
+            if(event.target.Privacy.checked){
+            	privacy_flag = "private";
             }
             else{
-                  privacy_flag = "public";
+            	privacy_flag = "public";
             }
             if(confirm("Are the details correct ?")== true){
                   Meteor.call("addGroup", gtitle, gdesc, privacy_flag, function(err, res){
-                        if(!err){//all good
-                              //console.log("callback recieved: "+res);
+            		if(!err){//all good
                               alert('Group created succesfully');
-                              Meteor.call('Successfully');
-                        }
-                  });
+                              var group = Groups.findOne({ gname: gtitle });
+                              var id= group._id;
+                              Router.go('/group/'+id);
+            		}
+            	});
             }
-
             // Clear form
-            event.target.gTitle.value = "";
-            event.target.gDescription.value = "";
-      }  
+            event.target.Title.value = "";
+            event.target.Description.value = "";
+            event.target.Privacy.checked = false;
+	}  
 });
 
