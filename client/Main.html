@@ -1,16 +1,20 @@
+<head>  
+  <title>noteDown</title>
+  <link rel="stylesheet" href="http://fontawesome.io/assets/font-awesome/css/font-awesome.css">
+</head>
+
 <template name="Main">
-
-	<header class="top">
-		{{> yield region="header"}}
-	</header>
-
 	<div id="body">
-		{{> yield }}
-	</div>
+		<div class="top">
+			{{> yield region="header"}}
+		</div>
 
-	<footer class="bottom">
-		{{> yield region="footer"}}
-	</footer>
+		{{> yield }}
+
+		<div class="bottom">
+			{{> yield region="footer"}}
+		</div>
+	</div>
 	
 </template>
 
