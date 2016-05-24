@@ -3,70 +3,68 @@ Template.groupdiscussion.onCreated(function(){
     this.autorun( function() {
         self.subscribe('threads');
         self.subscribe('groups');
+        self.subscribe('groups');
     });
 });
 
 Template.groupdiscussion.events({
     "submit .new-post": function(event){
         event.preventDefault();
+        var post_id= this._id;
         var text = event.target.commentbox.value;
-
         var groupId = Session.get('groupId'); //instead of Router.current().params.gameId;
-        //var group = Groups.findOne({_id: groupId});
-        //var owner= group._id;
-        //alert(owner);
-
-        Meteor.call("addThread",text, groupId);
-        event.target.commentbox.value='';
-        
-    },
-    /*'click #edit':function(event){
-        alert("hello");
-        event.target.commentbox.value='hello';
-    },*/
-    /*'click #delete' : function(){
-        Thread.remove(this._id);
-    }*/
-});
-
-Template.postMessage.helpers({
-    'message':function(){
-        //return Thread.find({},{sort : {createdAt:-1} }); 
-        return Thread.find();
-    },
-    'count':function(){
-        var groupId = Session.get('groupId'); //instead of Router.current().params.gameId;
-        var group = Thread.findOne({groupID: groupId});
-        return Thread.find({groupID:groupId}).count();
-    },
-    'admin': function(){
-        return Thread.find({owner: Meteor.userId()});
-    },
-    gdPost: function(){   
-        var groupId = Session.get('groupId'); //instead of Router.current().params.gameId;
-        var group = Thread.findOne({groupID: groupId});
-        return Thread.find({groupID:groupId});
+        Meteor.call("addThread",text, groupId,post_id);
+        event.target.commentbox.value='';  
     }
 });
 
+Template.postMessage.helpers({
+    'count':function(){
+        var postid= this._id;
+         return Thread.find({ postId:postid}).count();
+    },
+    'gdPost': function(){   
+        var postid= this._id;
+        return Thread.find({ postId:postid});
+    },
+    admin: function(){
+       var owner= this.owner.id;
+       if(owner === Meteor.userId())
+        return true;
+    }
+});
+ 
 Template.postMessage.onCreated(function(){
     var self= this;
     this.autorun( function() {
         self.subscribe('threads');
         self.subscribe('groups');
+        self.subscribe('posts');
     });
 });
 
 Template.postMessage.events({
     'click #deletePost' : function(){
-        Thread.remove(this._id);
+        var thread_id= this._id;
+        var note=Posts.findOne({ threads: thread_id},{ _id:1});
+        var note_id= note._id;
+        Meteor.call('deleteThread',thread_id, note_id);
+    },
+    'click #likePost' :function(text){
+        var owner=this.owner.id;
+        var thread= Thread.findOne({_id: this._id});
+        var likedBy= thread.likedBy;
+        var like = thread.like;;
+        var content=this.content
+        var user= Meteor.user().profile.name;
+        var group_id= Session.get('groupId');
+        for(var i=0;i<likedBy.length;i++){
+            //console.log(likedBy[i]);
+            if(likedBy[i]===Meteor.user().profile.name){
+                return false;
+            }
+        }
+        like++;
+        Meteor.call('likeThread',this._id,like,owner,group_id,content);
     }
-    // 'click #edit' :function(text){
-    //  
-    //  var edittext = Thread.findOne({_id:this._id},{content:1,_id:0,createdAt:0});
-    //  Meteor.call("editThread",edittext);
-    //  console.log(edittext);
-    //  //event.target.commentbox.value = "hello";
-    // }
 });
-
