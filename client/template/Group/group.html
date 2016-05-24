@@ -1,62 +1,72 @@
 <template name="singleGroup">
-	{{> Navbar }}
+	{{> navbarGroup }}
 	<!--Start Container-->
 	<div class="container-fluid "><br>
+		{{#if group}}
 		<div class="row">
 			{{#if owner}}
-				<button class="btn btn-success pull-right glyphicon glyphicon-pencil" id="edit" style="margin-right: 5px;"> Edit</button>
-				<button class="btn btn-danger pull-right glyphicon glyphicon-remove" id="delete" style="margin-right: 5px;"> Delete</button>
-				{{#if membes}}
-	 				<div class="dropdown">
-	  					<button class="btn btn-default pull-right dropdown-toggle" type="button" data-toggle="dropdown" style="margin-right: 5px;">
-		  					<span class="glyphicon glyphicon-user caret"></span>&nbsp;
-		  						Members
-		  					<span class="caret"></span>
-	  					</button>
-	  					<ul class="dropdown-menu dropdown-menu-right">
-	  						{{#each members}}
-						    	<li>
-						    		{{name}} <button class="delete">&times;</button>&nbsp;&nbsp;&nbsp;&nbsp;
-						    	</li>
-							{{/each}}
-	  					</ul>
-					</div>
-				{{else}}
-					<div class="dropdown">
-				  		<button class="btn btn-primary pull-right dropdown-toggle" type="button" data-toggle="dropdown" style="margin-right: 5px;">
-				  			<span class="glyphicon glyphicon-user"></span> Members <span class="caret"></span></button>
-				  			<ul class="dropdown-menu dropdown-menu-right">
-							    <li><a href="#">No members</a></li>
-				  			</ul>
-					</div>
+				<button class="btn btn-success pull-right glyphicon glyphicon-pencil" id="edit" style="margin-right: 5px;" title="Edit"></button>
+				<button class="btn btn-danger pull-right glyphicon glyphicon-remove" id="delete" style="margin-right: 5px;" title="Delete"></button>
+
+				{{#if members}}
+		 				<div class="dropdown">
+		  					<button class="btn btn-default pull-right dropdown-toggle" type="button" data-toggle="dropdown" style="margin-right: 5px;">
+			  					<span class="glyphicon glyphicon-user"></span>&nbsp;
+			  						Members
+			  					<span class="caret"></span>
+		  					</button>
+		  					<ul class="dropdown-menu dropdown-menu-right">
+		  						{{#each members}}
+							    	<li>
+							    	{{name}}<button class="delete">&times;</button>&nbsp;&nbsp;&nbsp;&nbsp;
+							    	</li>
+								{{/each}}
+		  					</ul>
+						</div>
+					{{else}}
+						<div class="dropdown">
+					  		<button class="btn btn-primary pull-right dropdown-toggle" type="button" data-toggle="dropdown" style="margin-right: 5px;"><span class="glyphicon glyphicon-user"></span>&nbsp; Members
+					  			<span class="caret"></span></button>
+					  			<ul class="dropdown-menu dropdown-menu-right">
+								    <li><a href="#">No members</a></li>
+							</ul>
+						</div>
 				{{/if}}
-				
-				{{#if notificationCount}}
-	 				<div class="dropdown">
-	  					<button class="btn btn-danger pull-right dropdown-toggle" type="button" data-toggle="dropdown" style="margin-right: 5px;">
-		  					<span class="glyphicon glyphicon-bell"></span>&nbsp;
-		  						Notifications
-		  					<span class="caret"></span>
-	  					</button>
-	  					<ul class="dropdown-menu dropdown-menu">
-	  						{{#each notification}}
-					    	<li>
-					    		{{title}}&nbsp;&nbsp;&nbsp;&nbsp;
-					    		<input type="submit" class="btn btn-primary" id="accept" value=" Accept request">
-								<input type="submit" class="btn btn-danger" id="decline" value="Decline request">
-					    	</li>
-							{{/each}}
-	  					</ul>
-					</div>
+
+
+				{{#if private}}
+
+					{{#if notificationCount}}
+			 				<div class="dropdown">
+			  					<button class="btn btn-danger pull-right dropdown-toggle" type="button" data-toggle="dropdown" style="margin-right: 5px;">
+				  					<span class="glyphicon glyphicon-bell"></span>&nbsp;
+				  						Notifications
+				  					<span class="caret"></span>
+			  					</button>
+			  					<ul class="dropdown-menu notify">
+			  						{{#each notification}}
+							    	<li>
+							    		{{title}}&nbsp;&nbsp;&nbsp;&nbsp;
+							    		<input type="submit" class="btn btn-primary" id="accept" value=" Accept request">
+										<input type="submit" class="btn btn-danger" id="decline" value="Decline request">
+							    	</li>
+									{{/each}}
+			  					</ul>
+							</div>
+						{{else}}
+							<div class="dropdown">
+						  		<button class="btn btn-primary pull-right dropdown-toggle" type="button" data-toggle="dropdown" style="margin-right: 5px;">
+						  			<span class="glyphicon glyphicon-bell"></span>&nbsp;
+						  			Notifications
+						  			<span class="caret"></span></button>
+						  			<ul class="dropdown-menu notify">
+									    <li><a href="#">No notifications</a></li>
+						  			</ul>
+							</div>
+					{{/if}}
+
 				{{else}}
-					<div class="dropdown">
-				  		<button class="btn btn-primary pull-right dropdown-toggle" type="button" data-toggle="dropdown" style="margin-right: 5px;">
-				  			<span class="glyphicon glyphicon-bell"></span> Notifications <span class="caret"></span></button>
-				  			<ul class="dropdown-menu dropdown-menu">
-							    <li><a href="#">No notifications</a></li>
-				  			</ul>
-					</div>
-				{{/if}}	
+				{{/if}}
 			{{else}}
 				{{#if member}}
 					<input type="submit" class="btn btn-danger pull-right" id="leave" value="Leave" style="margin-right: 20px;">
@@ -68,41 +78,54 @@
 					{{/if}}
 				{{/if}}
 			{{/if}}
+			
 		</div>
 
 		<div class="row">
-			<hr class="divider">
-			<h2 id="gname" style="margin-left:20px;" title="Group Name"><b><i>{{group.gname}}</i></b></h2> 
-			<span style="float: right; font-size: 14px;" id="privacy"><i>{{group.privacy}}-group...</i></span>
-			<hr class="divider">
-			<h3 id="gdesc" style="margin-left: 20px; font-size: 16px;" title="Group Descripton">{{group.gdesc}}</h3>
-			<hr class="divider">		
+			<div class="container-fluid">
+				<hr class="divider">
+				<h2 id="gname" style="margin-left:20px;" title="Group Name"><b><i>{{group.gname}}</i></b></h2> 
+				<span style="float: right; font-size: 14px;" id="privacy"><i>{{group.privacy}}-group...</i></span>
+				<hr class="divider">
+				<h3 id="gdesc" style="margin-left: 20px; font-size: 16px;" title="Group Descripton">{{group.gdesc}}</h3>
+				<hr class="divider">
+				{{> Media}}
+				<hr class="divider">
+			</div>		
 		</div>
 
 		{{#if owner}}
-			{{> Media}}
-			{{> groupDiscuss}}
+		<br>
+			{{> ShareNotes}}
+			
+			{{> SharedNotes}}	
 		{{else}}
 			{{#if member}}
-				{{> Media}}
-				{{> groupDiscuss}}
+				{{> ShareNotes}}
+		
+				{{> SharedNotes}}
 			{{/if}}
 		{{/if}}
-
+	{{else}}
+		<h2>No Such Group</h2>
+		<a href="{{pathFor route='newGroup'}}">Create Group</a>
+	{{/if}}
 	</div>
+	
 </template>
 
 <template name="yourGroup">
 	<!-- Start Container -->
 	<div class="container">
 		<h2>Your Groups</h2>
+		<div style="width:100%;height:150px;line-height:3em;overflow-x:hidden;overflow-y:scroll;padding:5px;">
 		<div class="row">
 			{{#if Template.subscriptionsReady}}
 				{{#each groups}}
 					<div class="col-sm-3 col-xs-6 col-md-3 col-lg-2">
 						<div class="thumbnail">
 							<div class="caption">
-								<marquee behavior="scroll" direction="left"><h3 id="gname">{{gname}}</h3></marquee>
+								<a href="/group/{{_id}}"><marquee behavior="scroll" direction="left"><h3 id="gname">{{gname}}</h3></marquee></a>
 		                	</div>
 								<span style="float: right;" id="privacy"><i>{{privacy}}-group...</i></span>
 		  						<hr class="divider">
@@ -114,22 +137,24 @@
 	        	<p>Loading... {{> spinner}}</p>
 	        {{/if}}
       	</div>
+      	</div>
       	<hr class="divider">
    	</div>
+   	<!-- End Container -->
 </template>
-
 
 <template name="allGroup">
 	<!-- Start Container -->
 	<div class="container"> 
 		<h2>All Groups</h2>
+		<div style="width:100%;height:150px;line-height:3em;overflow-x:hidden;overflow-y:scroll;padding:5px;">
 		<div class="row">
 			{{#if Template.subscriptionsReady}}
 					{{#each groups}}
 						<div class="col-sm-3 col-xs-6 col-md-3 col-lg-2">
 							<div class="thumbnail">
 								<div class="caption">
-									<marquee behavior="scroll" direction="left"><h3 id="gname">{{gname}}</h3></marquee> 
+									<a href="/group/{{_id}}"><marquee behavior="scroll" direction="left"><h3 id="gname">{{gname}}</h3></marquee></a>
 			                	</div>
 									<span style="float: right;" id="privacy"><i>{{privacy}}-group...</i></span>
 			  						<hr class="divider">
@@ -138,13 +163,17 @@
 		  				</div>
 		            {{/each}}
 	        	{{else}}
-	        		<p>Loading</p>
+	        		<p>Loading... {{> spinner}}</p>
 	        {{/if}}
+      	</div>
       	</div>
     	<hr class="divider">
    	</div>
 	<!-- End Container -->
 </template>
 
-<!--div style="border:1px solid black;width:150px;height:100px;overflow-y:hidden;overflow-x:scroll;">
-<p style="width:250%;"-->
+
+
+
+
+
