@@ -16,3 +16,7 @@ li#navli{
 	padding-top: 0px;
 	padding-bottom: 0px;
 }
+
+.navbar-toggle{
+	background:rgb(62, 62, 62);
+}
