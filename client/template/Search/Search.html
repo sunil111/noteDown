@@ -1,39 +1,25 @@
-<template name="searchPage">
-	<div class="Container-fluid">
-		{{> search }}
-	</div>
-</template>
+<template name="Search">
+  {{> Navbar}}
+  <br>
+  <div class="container">
+    <div class="dropdown">
+      <h3>Search:</h3> 
+      <pre>{{> EasySearch.Input indexes=searchIndexes}}</pre>
+      {{#EasySearch.IfNoResults indexes=searchIndexes logic="AND" }}
+              <div>No search results found</div>
+            {{/EasySearch.IfNoResults}}
 
-<template name="search">
-	<div class="input-group">
-      	<div class="input-group-btn search-panel">
-	          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-	            <span id="search_concept">Filter by</span> <span class="caret"></span>
-	          </button>
-	          <ul class="dropdown-menu" role="menu">
-		            <li><a href="#Notes" style="background-color:#D2D7D3">Note</a>
-			              <ol><a href="#Tags">By tags</a></ol>
-			              <ol><a href="#Location">By location</a></ol>
-			              <ol><a href="#Notes-Date">By date</a></ol>
-		            </li>
-		            <li><a href="#Groups" style="background-color:#D2D7D3">Groups</a>
-			              <ol><a href="#Public">By public groups</a></ol>
-			              <ol><a href="#Private">By private groups</a></ol>
-			              <ol><a href="#Posts">By posts</a></ol>
-			              <ol><a href="#Groups-Date">By date</a></ol>
-		            </li>
-		            <li><a href="#Files" style="background-color:#D2D7D3">Files</a>
-			              <ol><a href="#Images">By images</a></ol>
-			              <ol><a href="#Videos">By videos</a></ol>
-			              <ol><a href="#Audios">By audios</a></ol>
-		            </li>
-		            <li><a href="#All" style="background-color:#D2D7D3">All</a></li>
-	          </ul>
-    	</div>
-      	<input type="hidden" name="search_param" value="all" id="search_param"><input type="text" class="form-control" name="x" placeholder="Search term..." style="border:1x solid #555555; height:35px;">
-	      <span class="input-group-btn">
-	          	<button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
-	      </span>
-  	</div>  
-</template>
+            {{#EasySearch.IfSearching indexes=searchIndexes logic="OR" }}
+              <div>Indexes are searching...</div>
+            {{/EasySearch.IfSearching}}
 
+            {{#EasySearch.Each index=groupIndex }}
+              <h4>Group name: <a href="/group/{{__originalId}}"><u>{{gname}}</u></a></h4>
+            {{/EasySearch.Each}}
+
+            {{#EasySearch.Each index=postIndex }}
+              <h4>Note name: <a href="/posts/{{__originalId}}">{{Title}}</a></h4>
+            {{/EasySearch.Each}}
+    </div>
+  </div>
+</template>
