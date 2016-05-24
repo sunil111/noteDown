@@ -1,4 +1,4 @@
-Meteor.startup(function () {
+/*Meteor.startup(function () {
   // code to run on server at startup
   if(!Documents.findOne()){
   	//No Docs yet
@@ -14,7 +14,7 @@ Meteor.publish("documents", function(){
 		]
 	});
 })
-
+*/
 Meteor.publish("editingUsers",function(){
 	return EditingUsers.find({});
 });
@@ -29,23 +29,25 @@ Meteor.publish("tasks",function(){
 
 Meteor.publish("notify",function(){
   return Notify.find({});
-});
+});  
+
 
 if (Meteor.isClient) {
   	Meteor.startup(function() {
     		GoogleMaps.load();
   	});
 }
-
 Meteor.publish("threads",function(){
   return Thread.find({});
+});
+
+Meteor.publish("posts",function(){
+  return Posts.find({});
 });
 
 Meteor.publish("rss",function(){
   return Rss.find({});
 });
-
-//-----------------------------Media-----------------------------
 
 Meteor.publish("images", function() {
   return Collections.Images.find();
@@ -64,8 +66,3 @@ Meteor.publish("videos",function(){
   return Collections.Videos.find();
 });
 
-//----------------------------SmNote------------------------
-
-Meteor.publish("posts",function(){
-  return Posts.find({});
-});
