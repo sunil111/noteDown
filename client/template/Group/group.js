@@ -6,7 +6,6 @@ Template.singleGroup.onCreated(function(){
 });
 
 Meteor.subscribe('notify');
-
 Template.singleGroup.helpers({
 	group : function(){
 		var groupId = Session.get('groupId'); //instead of Router.current().params.gameId;
@@ -48,7 +47,7 @@ Template.singleGroup.helpers({
     },
     notification: function(){
     	var groupId = Session.get('groupId');
-    	var notification= Notify.find({"owner.id": Meteor.user()._id});
+    	var notification= Notify.find({"owner.id": Meteor.user()._id},{sort : {createdAt:-1} });
     	return notification;
     },
     notificationCount: function(){
@@ -64,9 +63,8 @@ Template.singleGroup.events({
 			Meteor.call('deleteGroup', groupId, function(err,res){
 				if(!err){//all good
 					//console.log("group deleted: "+res);
-	                //alert('Group deleted succesfully');
-	                //Meteor.call('Successfully');
-	                Router.go('/user');
+	                alert('Group deleted succesfully');
+	                Router.go('User');
 				}
 			});
 		}
@@ -75,12 +73,15 @@ Template.singleGroup.events({
 	"click #join": function(event) {
 		if(confirm("Are you sure you want to join ?")== true){
 			var groupId = Session.get('groupId');
+			var group= Groups.findOne(groupId);
+			var name= group.gname;
 			var memberId= Meteor.user()._id;
 			var memberName= Meteor.user().profile.name;
+			var ownerId= group.owner.id;
+			var ownerName= group.owner.name;
+			var msg;
 			Meteor.call('joinGroup',groupId, memberId, memberName, function(err,res){
 				if(!err){//all good
-	                alert('Group joined succesfully');
-	                Meteor.call('Successfully');
 				}
 			});	
 		}	
@@ -95,17 +96,7 @@ Template.singleGroup.events({
 			var name= data.gname;
 			Meteor.call('leaveGroup',groupId, function(err,res){
 				if(!err){//all good
-					
-	                alert('Group left succesfully');
-	               	/*Notify.insert({
-				    title: user + " has left the group " + name,
-				    group:{ 
-				    		id: groupId,
-				    		name: name
-				    },
-				    user: data.owner.id
-	    			});*/
-	                //Meteor.call('Successfully');
+	               Router.go('User');
 				}
 			});	
 		}			
@@ -122,17 +113,14 @@ Template.singleGroup.events({
 
 			var input= $('<input id="name" type="text" value="' + n + '" />');
 			$("#gname").replaceWith(input);
-			var input2 = $('<textarea id="desc" rows="5">'+ d +'</textarea>');
+			var input2 = $('<textarea id="desc" rows="3">'+ d +'</textarea>');
 			$("#gdesc").replaceWith(input2);
 
 			//Change button text
 			$("#edit").prop('value', 'Save');
-			$("#edit").prop('class', 'btn btn-success pull-right');
+			$("#edit").prop('class', 'btn btn-success pull-right glyphicon glyphicon-file');
 			$("#edit").prop('id', 'save');	
-			//$("#edit").prop('margin-right','30px');
-			//$('#edit').prop({'margin-right': '25x'})
-			//$('#save').css({ 'marginRight': '20px' });
-			//document.getElementById("save").style.marginRight = '20px';
+			$("#edit").prop('title', 'Save');
 			
 		}			
 	},
@@ -147,16 +135,14 @@ Template.singleGroup.events({
 			'id': "gname",
 			'value': gtitle
 		});
-
 		$('#name').replaceWith(lblname);
+
 		var h2= document.createElement('h3');
 		var lbldesc= $(h2).attr({
 			'id': "gdesc",
 			'value': gdesc
 		});
-
 		$('#desc').replaceWith(lbldesc);
-
 
 		Meteor.call('saveGroup',groupId,gtitle, gdesc, function(err,res){
 			if(!err){//all good
@@ -164,9 +150,9 @@ Template.singleGroup.events({
 				$('#gname').text(gtitle);
 				$('#gdesc').text(gdesc);
                 $("#save").prop('value', 'Edit');
-                $("#save").prop('class', 'btn btn-primary');
+                $("#save").prop('class', 'btn btn-primary pull-right glyphicon glyphicon-pencil');
 				$("#save").prop('id', 'edit');
-                Meteor.call('Successfully');
+				$("#save").prop('title', 'Edit');
 			}
 		});
 	},
@@ -181,8 +167,8 @@ Template.singleGroup.events({
 		if(owner!== currentUser){
 			Meteor.call("requestJoin", groupId, owner,ownerName, currentUser, currentUserName, function(err,res){
 				if(!err){//all good)
-					console.log("Request sent succesfully");
-					Meteor.call('Successfully');
+					alert("Request sent succesfully");
+					Router.go('User');
 				}
 			});
 		}
@@ -199,18 +185,7 @@ Template.singleGroup.events({
 		var gname= group.gname;
 		Meteor.call('joinGroup',groupId, userId, username, function(err,res){
 				if(!err){//all good
-					//console.log("group joined: "+res);
-	                alert('Added Successfully');
-	                Meteor.call('Successfully');
-	                Notify.insert({
-	                	title: "You have been added to group- " + gname,
-	                	user:{
-	                		id: userId,
-	                		name: username
-	                	},
-	                	read: false
-	                });
-	                var nid= Notify.remove(id);
+					var nid= Notify.remove(id);
 	                return nid;
 				}
 		});	
@@ -228,14 +203,6 @@ Template.singleGroup.events({
 		console.log(memberName);
 		Meteor.call('removeMember',groupId, memberId, memberName, function(err,res){
 			if(!err){
-				Notify.insert({
-	                	title: "You have been removed to group- " + group.gname,
-	                	user:{
-	                		id: memberId,
-	                		name: memberName
-	                	},
-	                	read: false
-	                });
 			}
 		});
 	}
@@ -247,7 +214,9 @@ Template.yourGroup.onCreated(function(){
 	this.autorun( function() {
 		self.subscribe('groups');
 	});
+	
 });
+
 
 Template.yourGroup.helpers({
 	groups : function(){
@@ -277,4 +246,3 @@ Template.allGroup.helpers({
 		},{sort: {createdAt: 1}},{limit: 6});
 	}
 });
-
