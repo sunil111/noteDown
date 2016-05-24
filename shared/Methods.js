@@ -1,7 +1,6 @@
 Meteor.methods({
-	addDoc:function(loc,tags){		//, tags
+/*	addDoc:function(loc,tags){		//, tags
 		var doc;
-		
 		if(!this.userId){// NOt logged in
 			return;
 		}else{
@@ -14,13 +13,9 @@ Meteor.methods({
 			};
 			var id = Documents.insert(doc);
 			return id; //return was missing. caused problem in method call.
-			//console.log(doc);
-			//Meteor._reload.reload();
-			//Meteor.reload();
 		}
 	},
 	delDoc:function(doc){
-		
 		if(!this.userId){// NOt logged in
 			return;
 		}else{
@@ -31,11 +26,9 @@ Meteor.methods({
 			}
 			
 		}
-	},
+	},*/
 	updateDocPrivacy:function(doc){
 		console.log("updateDocPrivacy Method");
-		console.log(doc);
-
 		var realDoc=Documents.findOne({_id:doc._id, owner:this.userId});
 		if(realDoc){
 			realDoc.isPrivate=doc.isPrivate;
@@ -47,13 +40,14 @@ Meteor.methods({
 	addEditingUser:function(docid){
 		var doc, user, eusers;
 
-		doc = Documents.findOne({_id:docid});
+		doc = Posts.findOne({_id:docid});
 		if(!doc){return;} //No Doc Give up.
+		
 		if(!this.userId){return;}// No Loggen in user Give up.
 		//NOw i have a doc anf possibly a user.
 
 		user=Meteor.user().profile;
-		eusers=EditingUsers.findOne({docid:doc._id});
+		eusers=EditingUsers.findOne({ docid:doc._id});
 		if(!eusers){
 			eusers={
 				docid:doc._id,
@@ -66,11 +60,11 @@ Meteor.methods({
 	},
 
 	//---------------Group Function--------------------------------------------
-
 	addGroup: function(gtitle,gdesc, privacy) {
 		check(gtitle,String);
 		check(gdesc,String);
 		var group;
+		var user=Meteor.user().profile.name;
 		if(!this.userId){// NOt logged in
 			return;
 		}
@@ -94,10 +88,11 @@ Meteor.methods({
 				}
 			});
 			Rss.insert({
-                rss_title: user + "has created a new group " + gtitle,
+                rss_title: "'" +user+ "' has created a new group",
+                title:gtitle,
                 user: user,
                 createdAt: new Date(),
-                action: "Group",
+                action: "/group/"+id,
                 id: id
           	});
 			return id;
@@ -127,7 +122,7 @@ Meteor.methods({
 	joinGroup : function(groupId, memberId, memberName){
 		var data= Groups.findOne(groupId);
 		var member=Groups.find({},{ "members_id":1, _id: 0 });
-		var id= data._id;
+		var id= data._id;	
 		var count= data.member_count;
 		
 
@@ -224,8 +219,7 @@ Meteor.methods({
   		return id;
   	},
 
-  	removeMember: function(groupId, memberId, memberName){
-  		
+  	removeMember: function(groupId, memberId, memberName){  
   		var data= Groups.findOne(groupId);
   		var count= data.member_count;
   		if (!data) {
@@ -302,75 +296,148 @@ Meteor.methods({
 			Tasks.update({_id: taskId},{$set: {checked:setChecked}});
 		}
     },
-    //--------------------------------group Discussion--------------------------
-
-	addThread : function(msg, groupId){
+     //--------------------------------group Discussion--------------------------
+	addThread : function(msg, groupId,post_id){
+		var user= Meteor.user().profile.name;
+		var group= Groups.findOne({_id: groupId});
+		var group_name= group.gname;
 		var thread = {
-
 				content:msg,
-				groupID:groupId,
 				owner:{
 					"id":this.userId,
 					"name":Meteor.user().profile.name
 				},
-				createdAt: new Date()
+				like: 0,
+				likedBy: [],
+				publishedAt: new Date(),
+				postId: post_id
+
 		};
-		Thread.insert(thread);		
-	},
-	editThread : function(){	
+		var id=Thread.insert(thread);
+		Posts.update({ _id: post_id},{
+			$addToSet: {
+				threads: id
+			}
+		});
+		Rss.insert({
+			rss_title: user + " has posted a comment",
+			title:msg,
+			user: user,
+			createdAt: new Date(),
+			action: "/group/"+groupId,
+			id: groupId
+		});
+		return id;
 	},
 
-	//-----------------------SmNote---------------------------
-	addPost: function (title, message, postBody, loc, tags ) {
-		var doc;
+	likeThread : function(nid,like,owner,group_id,content){
+		var user= Meteor.user().profile.name;
+		var id= Thread.update({ _id: nid},
+		{
+			$set:{ like:like, likedAt: new Date()},
+			$addToSet:{ 
+				likedBy: Meteor.user().profile.name
+			}
+		});
+		Rss.insert({
+			rss_title: user + " has liked your post",
+			title:content,
+			user: user,
+			owner: owner,
+			createdAt: new Date(),
+			action: "/group/"+group_id,
+			id: group_id
+		});
+		return id;
 		
+	},
+
+	deleteThread: function(thread_id,note_id){
+		var did=Thread.remove(thread_id);
+		Posts.update({_id: note_id},{
+			$pull: {
+				threads: thread_id
+			}
+		});
+		return did;
+	},
+
+	//SummerNote------------------------------------
+	addPost: function (title, message, postBody, loc, tags) {
+		var doc;
+		var user= Meteor.user().profile.name;
 		if(!this.userId){// NOt logged in
 			return;
-		}else{
+		}
+		else{
 			doc={
-				owner:{
-					"id":this.userId,
-					"name":Meteor.user().profile.name
-				}, 
+				
 				Title: title,
 				Message: message,
 				Body: postBody,
-				Location:loc,
-				Tags:tags,
+				owner:{
+					id:this.userId, 
+					name:Meteor.user().profile.name
+				},
+				getLocation:loc,
+				tagsName:tags,
 				createdOn:new Date(), 
 			};
 			var id = Posts.insert(doc);
 			Rss.insert({
-				rss_title: user + "has created a new note " + title,
+				rss_title: user + " has created a note",
+				title:title,
 				user: user,
 				createdAt: new Date(),
-				action: "Post",
+				action: "/posts/"+id,
 				id: id
 			});
-			return id; //return was missing. caused problem in method call.
+			var postId= Meteor.users.update({ _id: this.userId },{
+				$addToSet: {
+					post_ids: id
+				}
+			});
+			return id;
 		}  
 		
 	},
 
-	editPost: function (postID, title, message, postBody, loc , tags) {
-				var id =Posts.update(postID,{
-						$set:{
-						Title: title,
-						Message: message,
-						Body: postBody,
-						Location:loc,
-						Tags:tags	
-						}
-					});
-
-				return id;
+	editPost: function (postID, title, message, postBody, owner, loc, tags) {
+		var user=Meteor.user().profile.name;
+		var id =Posts.update(postID,{
+			$set:{
+				Title: title,
+				Message: message,
+				Body: postBody,
+				Location: loc,
+				Tags:tags,
+				updatedAt: new Date()
+			}
+		});
+		return id;
 	},
 	
 	deletePost: function (postID) {
 		Posts.remove(postID);
-	}		  
+		Meteor.users.update({ _id: this.userId },{ 
+				$pull: {
+					post_ids: postID 
+				}
+		});
+	},
+  	shareNotes:function(note_id,group_id){
+  		Groups.update({ _id: group_id},{
+  				$addToSet:{
+  	  				notes: note_id
+  				}
+  			});
+  		return Posts.update({ _id: note_id},{
+  				$set:{
+  	  				groupid: group_id
+  				}
+  			});
+  	}
 });
-
 
 
 
