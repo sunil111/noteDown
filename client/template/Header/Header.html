@@ -1,52 +1,29 @@
 <template name="Header">
-<!--Start Header-->
-	<header id="Space">
-		<nav id="headernav" class="navbar navbar-inverse navbar-fixed-top" style="border-radius:0px !important; margin-bottom:0px;">
-  		<div class="container-fluid">
-    			<div class="navbar-header">
-              {{#if currentUser}}
-      				  <a class="navbar-gNote" href="{{pathFor route='User'}}"><i>note</i>Down</a>
-              {{else}}
-                <a class="navbar-gNote" href=""><i>note</i>Down</a>
-              {{/if}}
-    			</div>
-    			<div class="collapse navbar-collapse">
-      				<ul id="slides" class="nav navbar-nav pull-right push-bottom">	
-                {{#if currentUser}}
-                  <li>
-                  {{#if feedCount}}
-                    <div class="dropdown">
-                      <button class="btn btn-primary pull-right dropdown-toggle" type="button" data-toggle="dropdown">
-                        <span class="glyphicon glyphicon-globe"></span>&nbsp;
-                          Updates
-                        <span class="caret"></span>
-                      </button>
-                      <ul class="dropdown-menu dropdown-menu-right">
-                        {{#each feed}}
-                        <li>
-                          {{rss_title}}<button id="check" type="submit">Check</button>&nbsp;&nbsp;&nbsp;&nbsp;
-                        </li>
-                      {{/each}}
-                      </ul>
-                    </div>
-                  {{else}}
-                    <div class="dropdown">
-                      <button class="btn btn-primary pull-right dropdown-toggle" type="button" data-toggle="dropdown">
-                        <span class="glyphicon glyphicon-globe"></span>&nbsp;
-                        Updates
-                        <span class="caret"></span></button>
-                        <ul class="dropdown-menu dropdown-menu-right">
-                          <li><a href="#">No updates</a></li>
-                        </ul>
-                    </div>
-                  {{/if}}
-                  </li>
-                {{/if}}
-                <li><a class="Login" href="#" title="blank">{{> Login}}</a></li>
-      				</ul>
-    			</div><!--/.nav-collapse -->
-		</div>
-		</nav>
-	</header>
-<!-- End Header-->
+  <!--Start Header-->
+  <header id="Space">
+  <nav class="navbar navbar-inverse navbar-fixed-top" style="border-radius:0px !important; margin-top:0px; background:rgb(62, 62, 62);">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button aria-expanded="true" type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        {{#if currentUser}}
+            <a class="navbar-noteDown" style="color:rgb(236, 236, 236);" href="{{pathFor route='User'}}"><i>note</i>Down</a>
+        {{else}}
+            <a class="navbar-noteDown" style="color:rgb(236, 236, 236);" href=""><i>note</i>Down</a>
+        {{/if}}
+      </div>
+
+      <div style="" aria-expanded="true" class="navbar-collapse collapse in" id="navbar-collapse-1">
+        <ul class="nav navbar-nav pull-right push-bottom">
+            <li><a class="Login" href="#" title=""><i class="fi-key"></i> {{> Login}}</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  </header>
+  <!-- End Header-->
 </template>
