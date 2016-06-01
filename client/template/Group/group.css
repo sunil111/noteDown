@@ -49,3 +49,7 @@ h3#gdesc{
 .dropdown:hover .notify {
     display: block;
 }
+
+h3#gname{
+	overflow: hidden;
+}
