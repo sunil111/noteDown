@@ -1,13 +1,3 @@
-/*.navbar-item{
-	height:45px;
-	width:100%;
-	background:#FF5540;
-	-webkit-transition:0.2s;
-	-moz-transition:0.2s;
-	-o-transition:0.2s;
-	transition:0.2s;
-}*/
-
 a#list{
 	color:rgb(34, 34, 34);
 }
@@ -18,5 +8,9 @@ li#navli{
 }
 
 .navbar-toggle{
-	background:rgb(62, 62, 62);
+	background: #000000;
+}
+
+.dropdown{
+	position: relative;
 }
