@@ -10,6 +10,18 @@ Template.updown.events({
   }
 });
 
+Template.updown1.events({
+  'click .pauseUploads': function(event, template) {
+    FS.HTTP.uploadQueue.pause();
+  },
+  'click .resumeUploads': function(event, template) {
+    FS.HTTP.uploadQueue.resume();
+  },
+  'click .cancelUploads': function(event, template) {
+    FS.HTTP.uploadQueue.cancel();
+  }
+});
+
 $(document).on('click', '.panel-heading span.clickable', function (e) {
     var $this = $(this);
     if (!$this.hasClass('panel-collapsed')) {
@@ -44,20 +56,36 @@ $(document).ready(function () {
 Template.SharedMediaInGroup.helpers({
     images: function() {
         var group_id= Session.get('groupId');
-        return Collections.Images.find({groupID: group_id});
+        return Collections.Images.find({groupID: group_id,privacy:"public", private: {$ne: "private"}});
+    },
+    image: function() {
+        var group_id= Session.get('groupId');
+        return Collections.Images.find({groupID: group_id,privacy:"public", private: {$ne: "private"}}).count();
     },
     videos: function() {
         var group_id= Session.get('groupId');
-        return Collections.Videos.find({groupID: group_id});
+        return Collections.Videos.find({groupID: group_id,privacy:"public", private: {$ne: "private"}});
+    },
+    video: function() {
+         var group_id= Session.get('groupId');
+        return Collections.Videos.find({groupID: group_id,privacy:"public", private: {$ne: "private"}}).count();
     },
     audios: function() {
          var group_id= Session.get('groupId');
-        return Collections.Audios.find({groupID: group_id});
+        return Collections.Audios.find({groupID: group_id,privacy:"public", private: {$ne: "private"}});
+    },
+    audio: function() {
+         var group_id= Session.get('groupId');
+        return Collections.Audios.find({groupID: group_id,privacy:"public", private: {$ne: "private"}}).count();
     },
     files: function() {
          var group_id= Session.get('groupId');
-        return Collections.Files.find({groupID: group_id});
+        return Collections.Files.find({groupID: group_id,privacy:"public", private: {$ne: "private"}});
     },
+    file: function() {
+         var group_id= Session.get('groupId');
+        return Collections.Files.find({groupID: group_id,privacy:"public", private: {$ne: "private"}}).count();
+    }
 });
 
 Template.SharedMediaInGroup.onCreated(function(){
@@ -68,4 +96,42 @@ Template.SharedMediaInGroup.onCreated(function(){
         self.subscribe('files');
         self.subscribe('videos');
     });
+});
+
+Template.YourMedia.helpers({
+    images: function() {
+        return Collections.Images.find({"owner.id":Meteor.userId(),privacy:"private", private: {$ne: "public"}});
+    },
+    image: function() {
+        return Collections.Images.find({"owner.id":Meteor.userId(),privacy:"private", private: {$ne: "public"}}).count();
+    },
+    videos: function() {
+        return Collections.Videos.find({"owner.id":Meteor.userId(),privacy:"private", private: {$ne: "public"}});
+    },
+    video: function() {
+        return Collections.Videos.find({"owner.id":Meteor.userId(),privacy:"private", private: {$ne: "public"}}).count();
+    },
+    audios: function() {
+        return Collections.Audios.find({"owner.id":Meteor.userId(),privacy:"private", private: {$ne: "public"}});
+    },
+    audio: function() {
+        return Collections.Audios.find({"owner.id":Meteor.userId(),privacy:"private", private: {$ne: "public"}}).count();
+    },
+    files: function() {
+        return Collections.Files.find({"owner.id":Meteor.userId(),privacy:"private", private: {$ne: "public"}});
+    },
+    file: function() {
+        return Collections.Files.find({"owner.id":Meteor.userId(),privacy:"private", private: {$ne: "public"}}).count();
+    }
+});
+
+Template.YourMedia.onCreated(function(){
+    var self= this;
+    this.autorun( function() {
+        self.subscribe('images');
+        self.subscribe('audios');
+        self.subscribe('files');
+        self.subscribe('videos');
+    });
+    Session.set('groupId'," ");
 });
