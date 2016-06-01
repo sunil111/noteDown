@@ -3,7 +3,6 @@ Template.groupdiscussion.onCreated(function(){
     this.autorun( function() {
         self.subscribe('threads');
         self.subscribe('groups');
-        self.subscribe('groups');
     });
 });
 
@@ -50,7 +49,7 @@ Template.postMessage.events({
         var note_id= note._id;
         Meteor.call('deleteThread',thread_id, note_id);
     },
-    'click #likePost' :function(text){
+    'click #likePost':function(text){
         var owner=this.owner.id;
         var thread= Thread.findOne({_id: this._id});
         var likedBy= thread.likedBy;
@@ -58,6 +57,7 @@ Template.postMessage.events({
         var content=this.content
         var user= Meteor.user().profile.name;
         var group_id= Session.get('groupId');
+        var owner_name= this.owner.name;
         for(var i=0;i<likedBy.length;i++){
             //console.log(likedBy[i]);
             if(likedBy[i]===Meteor.user().profile.name){
@@ -65,6 +65,6 @@ Template.postMessage.events({
             }
         }
         like++;
-        Meteor.call('likeThread',this._id,like,owner,group_id,content);
+        Meteor.call('likeThread',this._id,like,owner,owner_name,group_id,content);
     }
 });
