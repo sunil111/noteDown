@@ -1,11 +1,10 @@
 /*Meteor.startup(function () {
   // code to run on server at startup
-  if(!Documents.findOne()){
+if(!Documents.findOne()){
   	//No Docs yet
-  	Documents.insert({title:"Untitled Document"});
   }
 });
-
+/*
 Meteor.publish("documents", function(){
 	return Documents.find({
 		$or:[
@@ -15,6 +14,11 @@ Meteor.publish("documents", function(){
 	});
 })
 */
+
+Meteor.publish("user",function(){
+  return Meteor.users.find({ },{fields: { _id:1, profile: 1}});
+});
+
 Meteor.publish("editingUsers",function(){
 	return EditingUsers.find({});
 });
@@ -30,13 +34,12 @@ Meteor.publish("tasks",function(){
 Meteor.publish("notify",function(){
   return Notify.find({});
 });  
-
-
 if (Meteor.isClient) {
   	Meteor.startup(function() {
     		GoogleMaps.load();
   	});
 }
+
 Meteor.publish("threads",function(){
   return Thread.find({});
 });
@@ -65,4 +68,3 @@ Meteor.publish("audios",function(){
 Meteor.publish("videos",function(){
   return Collections.Videos.find();
 });
-
