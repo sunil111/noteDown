@@ -1,7 +1,9 @@
+
 Template.Search.helpers({
 	searchIndexes: () => [groupsIndex, postsIndex],
   		groupIndex: () => groupsIndex,
-  		postIndex: () => postsIndex
+  		postIndex: () => postsIndex,
+  		userIndex: () => usersIndex
 });
 
 Template.Search.onCreated(function(){
@@ -9,5 +11,6 @@ Template.Search.onCreated(function(){
 	this.autorun( function() {
 		self.subscribe('groups');
 		self.subscribe('posts');
+		self.subscribe('user');
 	});
 });
