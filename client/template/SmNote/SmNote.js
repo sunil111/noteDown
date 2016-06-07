@@ -23,12 +23,12 @@ Template.CreateNote.events({
 		var created_date = new Date().toLocaleString();
 		Meteor.call('addPost', title, /*message,*/ postBody,loc, tags, privacy, created_date, function(err, res){
 				if(!err){//all good
-	                  var note= Posts.findOne({ Title: title });
-	                  var id= note._id;
-	                  Router.go('/posts/'+id);
+					var note= Posts.findOne({ Title: title });
+					var id= note._id;
+					Router.go('/posts/'+id);
 				}
 			});
-		//location.reload();
+		location.reload();
 	}
 });
 
@@ -152,11 +152,11 @@ Template.ShareNotes.events({
 Template.SharedNotes.helpers({
 	posts: function() {
 		var group_id= Session.get('groupId');
-		return Posts.find({groupID: group_id});
+		return Posts.find({groupID: group_id, privacy: "public"}, { sort: {createdOn: -1}});
 	},
 	post:function(){
 		var group_id= Session.get('groupId');
-		return Posts.find({groupID: group_id}).count();
+		return Posts.find({groupID: group_id, privacy: "public"}).count();
 	}
 });
 
@@ -213,15 +213,17 @@ Template.CreateNoteInGroup.events({
 		var tags = Session.get('tag');
 		var privacy= "public";
 		var groupID= Session.get('groupId');
-		var created_date = new Date().toLocaleString();
-		Meteor.call('addGroupNote', title, /*message,*/ postBody,loc, tags, privacy, groupID, created_date, function(err, res){
+		var group= Groups.findOne({ _id: groupID});
+		var group_name = group.gname;
+		Meteor.call('addGroupNote', title, /*message,*/ postBody,loc, tags, privacy, groupID, group_name, function(err, res){
 				if(!err){//all good
 	                  var note= Posts.findOne({ Title: title });
 	                  var id= note._id;
 	                  Router.go('/group_notes/'+id);
+	                  //location.reload();
 				}
 			});
-		//location.reload();
+		
 	}
 });
 
