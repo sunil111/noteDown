@@ -51,14 +51,14 @@
 						{{/if}}
 					<br><br><br>
 					<div class="panel panel-title">
-						<h1 class="text-capitalize text-center">{{post.Title}}</h1>
+						<h1 class="text-capitalize ">{{post.Title}}</h1>
 					</div>
 					<div class="panel panel-body">
-						<p class="text-center">{{{post.Body}}}</p>
+						<p class="">{{{post.Body}}}</p>
 						{{#if tags }}
-							<p class="text-center">Tags: <b>{{post.Tags}}</b></p>
+							<p class=""	>Tags: <b>{{post.Tags}}</b></p>
 						{{/if}}
-						<p class="text-center">{{post.createdOn}}</p>
+						<p class="">{{post.createdOn}}</p>
 					</div>
 				{{else}}
 					<h2>No Such Note</h2>
@@ -112,7 +112,7 @@
 	{{> Navbar}}
 	<div class="container">
 		{{#if Template.subscriptionsReady}}
-			<h2>Notes &nbsp;<a href="{{pathFor route='CreateNote'}}"><img src="/images/add.png"  height="50" title="Create note"></a></h2>
+			<h2>Notes ({{post}}) &nbsp;<a href="{{pathFor route='CreateNote'}}"><img src="/images/add.png"  height="50" title="Create note"></a></h2>
 			<hr class="divider"><br>
 			{{#if post}}
 				<div class="row">
@@ -166,11 +166,12 @@
 				{{#each posts}}
 					<div class="thumbnail" >
 						<div class="caption" style="margin-left:30px;">
-							<a class="s" href="/posts/{{_id}}">
-								<h2 title="{{Body}}">{{Title}}</h2>
-							</a>
+							<h2 title="{{Body}}">{{Title}}</h2>
+							<br>
+							{{{Body}}}
+							{{Tags}}
 							<h4>Created by......<i>{{owner.name}}</i></h4>
-							{{> groupDiscuss}}	
+							<h5>{{createdOn}}</h5>	
 						</div>
 					</div>
 				{{/each}}
@@ -185,7 +186,7 @@
 	{{> navbarGroup}}
 	<div class="container" >
 	{{#if Template.subscriptionsReady}}
-		<h3>Note &nbsp;&nbsp;<a href="{{pathFor route='CreateNoteInGroup'}}"><img src="/images/add.png"  height="50" title="Create note"></a></h3>
+		<h3>Note ({{post}}) &nbsp;&nbsp;<a href="{{pathFor route='CreateNoteInGroup'}}"><img src="/images/add.png"  height="50" title="Create note"></a></h3>
 		<hr class="divider"><br>
 		{{#if post}}
 		<div class="row">
@@ -256,14 +257,15 @@
 						{{/if}}
 					<br><br><br>
 					<div class="panel panel-title">
-						<h1 class="text-capitalize text-center">{{post.Title}}</h1>
+						<h1 class="text-capitalize ">{{post.Title}}</h1>
 					</div>
 					<div class="panel panel-body">
-						<p class="text-center">{{{post.Body}}}</p>
+						<p class="">{{{post.Body}}}</p>
 						{{#if tags }}
-							<p class="text-center">Tags: <b>{{post.Tags}}</b></p>
+							<p class="">Tags: <b>{{post.Tags}}</b></p>
 						{{/if}}
-						<p class="text-center">{{post.createdOn}}</p>
+						<p class="">{{post.createdOn}}</p>
+						{{> groupDiscuss}}
 					</div>
 				{{else}}
 					<h2>No Such Note</h2>
