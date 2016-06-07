@@ -11,20 +11,15 @@ blaze-html-templates    # Compile .html files into Meteor Blaze views
 session                 # Client-side reactive dictionary for your app
 jquery                  # Helpful client-side library
 tracker                 # Meteor's client-side reactive programming library
-standard-minifiers      # JS/CSS minifiers run for production mode
 es5-shim                # ECMAScript 5 compatibility for older browsers.
 ecmascript              # Enable ECMAScript2015+ syntax in app code
-
-#autopublish             # Publish all data to the clients (for prototyping)
-#insecure                # Allow all DB writes from clients (for prototyping)
-
 accounts-ui
 accounts-password
 accounts-facebook
 accounts-google
 accounts-twitter
 iron:router
-#mrt:bootstrap-3
+twbs:bootstrap
 babrahams:editable-text
 mizzao:sharejs-codemirror
 gwendall:auth-client-callbacks
@@ -37,6 +32,9 @@ dburles:google-maps
 jeffrey:easy-map
 jaymc:google-reverse-geocode
 sacha:spin
+check
+hujhax:bootstrap3-datetimepicker
+gfk:notifications	
 meteor-platform
 cfs:standard-packages
 cfs:gridfs
@@ -49,14 +47,21 @@ mrt:numeral
 cfs:autoform
 reactive-var
 cfs:graphicsmagick
-check
-#tsega:bootstrap3-datetimepicker
-hujhax:bootstrap3-datetimepicker
-gfk:notifications	
 summernote:summernote
-alanning:roles
 fortawesome:fontawesome
-twbs:bootstrap
 dangrossman:bootstrap-daterangepicker
 easy:search
-ground:db
+
+yong:meteor-videojs
+
+
+
+#ground:db
+
+
+
+#flavien:md5
+#jparker:crypto-md5
+aramix:social-share
+
+
