@@ -1,15 +1,13 @@
 Meteor.methods({
 //------------------User--------------
-	editUser:function(user_id,/* name, */first_name, last_name, email, age, gender,/* img*/){
+	editUser:function(user_id,/* name, */first_name, last_name, email,/* img*/){
 		return Meteor.users.update({ _id: user_id },{
 			$set:{
 				//"profile.name": name,
 				"profile.first_name": first_name,
 				"profile.last_name": last_name,
-				"profile.emails": email,
-				"profile.age": age,
-				"profile.gender": gender/*,
-				"profile.image":img*/
+				"profile.emails": email
+				/*"profile.image":img*/
 			}
 		})
 	},
@@ -291,7 +289,7 @@ Meteor.methods({
 		return id;
     },
 
-    createTask : function(text, desc, date, assign, group_id){
+    createTask : function(text, desc, date, assign, group_id, group_name){
 		check(text,String);
 		check(desc,String);
 		var task;
@@ -314,6 +312,16 @@ Meteor.methods({
 				}			
 		}
 		var id=Tasks.insert(task);
+		Rss.insert({
+				rss_title: "has created a task",
+				title: text,
+				user_action: "/user_dashboard/"+ this.userId,
+				user_name: Meteor.user().profile.name,
+				group_name: group_name,
+				createdAt: new Date().toLocaleString(),
+				action: "/group/"+group_id,
+				id: id
+		});
 		var reminderId= Meteor.users.update({ _id: this.userId },{
 				$addToSet: {
 					reminder_ids: id
@@ -488,7 +496,7 @@ Meteor.methods({
   				}
   			});
   	},
-  	addGroupNote: function (title, /*message,*/ postBody, loc, tags, privacy, group_id, created_date) {
+  	addGroupNote: function (title, /*message,*/ postBody, loc, tags, privacy, group_id, group_name) {
 		var doc;
 		var user= Meteor.user().profile.name;
 		if(!this.userId){// NOt logged in
@@ -508,17 +516,19 @@ Meteor.methods({
 				Tags:tags,
 				privacy: privacy,
 				groupID:group_id,
-				createdOn:created_date, 
+				createdOn:new Date().toLocaleString(), 
 			};
 			var id = Posts.insert(doc);
-			/*Rss.insert({
-				rss_title: "'" +user + "' has created a note",
-				title:title,
-				user: user,
-				createdAt: created_date,
-				action: "/posts/"+id,
+			Rss.insert({
+				rss_title: "has created a note",
+				title: title,
+				user_action: "/user_dashboard/"+ this.userId,
+				user_name: user,
+				group_name: group_name,
+				createdAt: new Date().toLocaleString(),
+				action: "/group/"+group_id,
 				id: id
-			});*/
+			});
 			var postId= Meteor.users.update({ _id: this.userId },{
 				$addToSet: {
 					post_ids: id
