@@ -1,6 +1,7 @@
 h3#gname{
 	font-size:20px;
 	color:black;
+	overflow: hidden;
 }
 h3#gdesc{
 	font-size:15px;
@@ -48,8 +49,4 @@ h3#gdesc{
 }
 .dropdown:hover .notify {
     display: block;
-}
-
-h3#gname{
-	overflow: hidden;
 }
