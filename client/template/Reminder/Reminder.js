@@ -48,7 +48,7 @@ Template.CreateTodo.events({
 				console.log("callback recieved: "+res);
 			}
 		});
-		
+		Router.go('/user/showTodo/');
 		// Insert a task into the collection
 		// Clear form
 		event.target.text.value = "";
@@ -207,11 +207,15 @@ Template.CreateTask.events({
 		var date= event.target.datefilter.value;
 		var assign = event.target.assign.value;
 		var groupID= Session.get('groupId');
-		Meteor.call("createTask",text, desc, date, assign, groupID, function(err,res){
+		var group= Groups.findOne({ _id: groupID});
+		var group_name = group.gname;
+		Meteor.call("createTask",text, desc, date, assign, groupID, group_name, function(err,res){
 			if(!err){
 				console.log("callback recieved: "+res);
 			}
 		});
+
+		Router.go('/group_task/');
 		
 		// Insert a task into the collection
 		// Clear form
