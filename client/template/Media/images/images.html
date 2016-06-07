@@ -3,6 +3,8 @@
   <div class="well">
     <input type="file" multiple class="images">
   </div>
+
+
 </template>
 
 <template name="uploadedImage">
@@ -29,8 +31,24 @@
           Uploading: {{this.uploadProgress}}%
             <p>{{> FS.UploadProgressBar}}</p>
           {{/if}}
+          <button type="button" class="btn btn-primary btn-xs btn-imgs" data-toggle="modal" data-target="#{{_id}}">Preview</button>
+                  <!-- Modal -->
+          <div id="{{_id}}" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+            <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">{{name}}</h4>
+                </div>
+                <div class="modal-body">
+                  <img id="imgLoad" src="{{this.url}}" class="img-rounded" alt="Cinque Terre" width="565" height="400">
+                </div>
+              </div>
+            </div>
+          </div> 
          {{> FS.DeleteButton class="btn btn-danger btn-xs"}}
-    </div>
+      </div>
   </div>
 </template>
 
