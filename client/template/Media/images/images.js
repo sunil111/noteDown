@@ -15,7 +15,7 @@ Meteor.startup(function () {
       },
       after: function (error, fileObj) {
         if (!error) {
-          alert('done');
+          Router.go('/user/showMedia/');
         }
       }
     })
@@ -42,7 +42,18 @@ Meteor.startup(function () {
   Template.images_group.events({
     'change input.images': FS.EventHandlers.insertFiles(Collections.Images, {
       metadata: function (fileObj) {
-        var groupId = Session.get('groupId');
+      var groupId = Session.get('groupId');
+      var group= Groups.findOne({ _id: groupId});
+      var group_name = group.gname;
+      Rss.insert({
+        rss_title: "has added a new image",
+        title: $('.filename').val(),
+        user_action: "/user_dashboard/"+ Meteor.userId(),
+        user_name: Meteor.user().profile.name,
+        group_name: group_name,
+        createdAt: new Date().toLocaleString(),
+        action: "/group/"+groupId
+      });
           return {
             owner:{
               id: Meteor.userId(),
@@ -55,7 +66,7 @@ Meteor.startup(function () {
       },
       after: function (error, fileObj) {
         if (!error) {
-          alert('done');
+          Router.go('/shared_media/');
         }
       }
     }),
@@ -80,3 +91,11 @@ Template.images_group.onCreated(function(){
     self.subscribe('images');
   });
 });
+
+
+
+
+
+
+
+
