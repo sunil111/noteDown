@@ -1,9 +1,8 @@
 Meteor.methods({
 //------------------User--------------
-	editUser:function(user_id,/* name, */first_name, last_name, email,/* img*/){
+	editUser:function(user_id,first_name, last_name, email,/* img*/){
 		return Meteor.users.update({ _id: user_id },{
 			$set:{
-				//"profile.name": name,
 				"profile.first_name": first_name,
 				"profile.last_name": last_name,
 				"profile.emails": email
@@ -210,7 +209,7 @@ Meteor.methods({
 		}
   	},
 
-  	requestJoin: function(groupId, ownerId,ownerName, user, username){
+  	/*requestJoin: function(groupId, ownerId,ownerName, user, username){
   		var data= Groups.findOne(groupId);
   		var name= data.gname;
   		var notification= {
@@ -233,7 +232,7 @@ Meteor.methods({
   		console.log(id);
   		return id;
   	},
-
+	*/
   	removeMember: function(groupId, memberId, memberName){  
   		var data= Groups.findOne(groupId);
   		var count= data.member_count;
@@ -319,8 +318,19 @@ Meteor.methods({
 				user_name: Meteor.user().profile.name,
 				group_name: group_name,
 				createdAt: new Date().toLocaleString(),
-				action: "/group/"+group_id,
-				id: id
+				group_action: "/group/"+group_id+"/",
+				action:"/group/"+group_id+"/group_task/"
+		});
+		Rss.insert({
+				rss_title: "has assigned you a task",
+				title: text,
+				user_action: "/user_dashboard/"+ this.userId,
+				user_name: Meteor.user().profile.name,
+				group_name: group_name,
+				createdAt: new Date().toLocaleString(),
+				group_action: "/group/"+group_id+"/",
+				action:"/group/"+group_id+"/group_task/",
+				user: assign
 		});
 		var reminderId= Meteor.users.update({ _id: this.userId },{
 				$addToSet: {
@@ -441,14 +451,6 @@ Meteor.methods({
 				createdOn: created_date, 
 			};
 			var id = Posts.insert(doc);
-			/*Rss.insert({
-				rss_title: "'" +user + "' has created a note",
-				title:title,
-				user: user,
-				createdAt: created_date,
-				action: "/posts/"+id,
-				id: id
-			});*/
 			var postId= Meteor.users.update({ _id: this.userId },{
 				$addToSet: {
 					post_ids: id
@@ -526,8 +528,8 @@ Meteor.methods({
 				user_name: user,
 				group_name: group_name,
 				createdAt: new Date().toLocaleString(),
-				action: "/group/"+group_id,
-				id: id
+				group_action: "/group/"+group_id+"/",
+				action: "/group_notes/"+id+"/"
 			});
 			var postId= Meteor.users.update({ _id: this.userId },{
 				$addToSet: {
