@@ -110,13 +110,13 @@
 	<div class="container">
 		{{#if Template.subscriptionsReady}}
 			<h2>Task ({{incompleteCount}}) <a href="{{pathFor route='CreateTask'}}"><img src="/images/add.png"  height="50" title="Create task"></a></h2>
+			<label class="hide-completed" id="hide">
+			<input type="checkbox" checked= "{{hideCompleted}}" />
+		          Hide Completed Tasks
+		    </label>
 			<hr class="divider">
 			<br>
 			{{#if task}}
-		       	<label class="hide-completed" id="hide">
-		        <input type="checkbox" checked= "{{hideCompleted}}" />
-		          Hide Completed Tasks
-		       	</label>
 				<div class="row">
 					<div class="jumbotron" id="container">
 						  <ul>	
@@ -141,7 +141,7 @@
 		<button class="delete">&times;</button>      
 	    <input type="checkbox" checked="{{checked}}" class="toggle-checked" />
 	    <span class="text">
-	    	<strong>{{title}}</strong> - {{desc}} - {{assignedTo}} - <strong>{{date}}</strong>
+	    	<strong>{{title}}</strong> - {{desc}} - assigned to "{{assignedTo}}" - at <strong>[{{date}}]</strong>
 	    </span>
 	</li>
 </template>
