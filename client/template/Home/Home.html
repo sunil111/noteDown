@@ -2,15 +2,18 @@
 <!-- Start Container-->
 	<div id="body">
 	{{#if currentUser}}
-		{{> User}}
+		{{#if currentUser.emails.[0].verified}}
+    		{{> User}}
+  		{{else}}
+    		{{> VerifyUser}}
+  		{{/if}}
 	{{else}}
 		{{> getLocation}}
 	{{/if}}
-	<br><br>
-	<br>
 	</div>
 <!-- End Container-->
 </template>
+
 
 
 
