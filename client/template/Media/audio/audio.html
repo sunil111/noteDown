@@ -5,17 +5,11 @@
     <div class="well">
     <input type="file" multiple class="audioFile">
     </div>
-
-    <!--<div class="imageArea clearfix">
-    {{#each uploadedAudios}}
-    {{> uploadedAudio}}
-    {{/each}}
-  </div>-->
 </template>
 
 
 <template name="uploadedAudio">
-  <h4>
+    <h4>
   {{#with this.url}}
     <a href="{{this}}" target="_blank">{{../name}}</a>
   {{else}}
@@ -41,11 +35,31 @@
               <audio controls style="width: 565px;">
                 <source id="audioSrc" src="{{this.url}}" type="audio/mp3">
               </audio>
-
             </div>
           </div>
         </div>
       </div> 
+
+      <button type="button" class="btn btn-share btn-info btn-xs" data-toggle="modal" data-target="#A{{_id}}">Share</button>
+      <!-- Modal -->
+      <div id="A{{_id}}" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">{{name}}</h4>
+            </div>
+            <div class="modal-body">
+              <input type="text" id="urlTxt" value="{{this.url}}" />
+              {{> amxSocialShare opts=opts}}
+            </div>
+          </div>
+        </div>
+      </div> 
+      <input type="text" id="urlTxt" value="{{this.url}}" />
+     {{> amxSocialShare opts=opts}}
+
     {{> FS.DeleteButton class="btn btn-danger btn-xs"}}
     <br><br>
   {{else}}
