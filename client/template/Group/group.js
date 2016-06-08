@@ -149,7 +149,7 @@ Template.SingleGroup.events({
 				$("#save").prop('title', 'Edit');
 			}
 		});
-	},
+	}/*,
 
 	"click #request": function(event){
 		var groupId = Session.get('groupId');
@@ -187,7 +187,7 @@ Template.SingleGroup.events({
 		var id= this._id;
 		var nid= Notify.remove(id);
 	    return nid;
-	}
+	}*/
 });
 
 Template.Members.onCreated(function(){
@@ -228,6 +228,13 @@ Template.Members.helpers({
 	groupCount : function(){
 		var groupId = Session.get('groupId'); 
 		return Groups.find({_id: groupId}).count();
+	},
+	private:function(){
+		var groupId = Session.get('groupId'); 
+        var group = Groups.findOne({_id: groupId});
+        var private= group.privacy;
+        	if(private === "private")
+        		return true;
 	}
 });
 
@@ -260,14 +267,30 @@ Template.Invite.helpers({
   		userIndex: () => usersIndex
 });
 
+Template.Invite.events({
+	'click #invite': function(){
+		var group_id = Session.get('groupId');
+		var group = Groups.findOne({_id: group_id});
+		var group_name = group.gname;
+		Rss.insert({
+			rss_title: "has invited you to join group",
+			user_action: "/user_dashboard/"+ Meteor.userId(),
+			user_name: Meteor.user().profile.name,
+			group_name: group_name,
+			user: this.profile.name,
+			createdAt: new Date().toLocaleString(),
+			group_action: "/group/"+group_id+'/'	
+		});
+		Router.go('/group/'+group_id+"/");
+	}
+});
+
 Template.YourGroup.onCreated(function(){
 	var self= this;
 	this.autorun( function() {
 		self.subscribe('groups');
 	});
-	
 });
-
 
 Template.YourGroup.helpers({
 	owner: function(){
