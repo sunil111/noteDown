@@ -2,8 +2,6 @@ var uniqueNum =0;
 var uniquevar ='A';
 var arr = [];
 
-
-
 Template.Tags.events({
 	"submit .form": function(event,tag){		
 		event.preventDefault();
