@@ -20,12 +20,9 @@ Template.UserDashboard.helpers({
 
 Template.UserDashboard.events({
 	'click #edit':function(){
-		//var name = $("#nametxt").text();
 		var first_name = $("#firsttxt").text();
 		var last_name = $("#lasttxt").text();
 		var email = $("#emailtxt").text();
-		//var input1 = $('<input id="nametxt" type="text" value="' + name + '" />');
-		//$("#nametxt").replaceWith(input1);
 		var input2 = $('<input id="firsttxt" type="text" value="' + first_name + '" />');
 		$("#firsttxt").replaceWith(input2);
 		var input3 = $('<input id="lasttxt" type="text" value="' + last_name + '" />');
@@ -37,17 +34,13 @@ Template.UserDashboard.events({
 		document.getElementById('edit').disabled = true;
 	},
 	'click #save':function(){
-		//var name = document.getElementById('nametxt').value;
 		var first_name = document.getElementById('firsttxt').value;
 		var last_name = document.getElementById('lasttxt').value;
 		var email = document.getElementById('emailtxt').value;
 		var img= document.getElementById('myFile').innerHTML;
 		var user_id = Meteor.userId();
-		Meteor.call('editUser', user_id,/* name,*/ first_name, last_name, email /*, img*/, function(err,res){
+		Meteor.call('editUser', user_id, first_name, last_name, email /*, img*/, function(err,res){
 			if(!err){
-
-				//var input1 = $('<h2 id="nametxt">' + name + '</h2>');
-				//$("#nametxt").replaceWith(input1);
 				var input2 = $('<h3 id="firsttxt">' + first_name + '</h3>');
 				$("#firsttxt").replaceWith(input2);
 				var input3 = $('<h3 id="lasttxt">' + last_name + '</h3>');
@@ -65,16 +58,6 @@ Template.UserDashboard.events({
 	}
 });
 
-facebook = new GraphAPI();
-var profilePicture = facebook.getProfilePicture(fbUserId);
-
-if (profilePicture)
-    console.log(profilePicture.url);
-
-GraphAPI.prototype.getProfilePicture = function (userId) {
-    var response = this.get([userId, 'picture'], {
-        redirect: false
-    });
-
-    return response.ok() ? response.data.data : false;
-};
+Template.VerifyUser.onCreated(function() {
+	alert('Please verify your email id');
+});
