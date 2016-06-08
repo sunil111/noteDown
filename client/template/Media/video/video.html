@@ -7,8 +7,7 @@
 
 
 <template name="uploadedVideo">
-
-   <h4>{{#with this.url}}<a href="{{this}}" target="_blank">{{../name}}</a>
+<h4>{{#with this.url}}<a href="{{this}}" target="_blank">{{../name}}</a>
    {{else}}
    {{this.name}}{{/with}} ({{this.formattedSize}})</h4>
   {{#if this.isUploaded}}
@@ -27,12 +26,6 @@
         </div>
         <div class="modal-body">
           <div>
-            <!--video controls = "controls" height = "565" width = "400">
-              <Source src = "{{this.url}}" type = "video/webm" />
-              <Source src = "{{this.url}}" type = "video/mp4" />
-              <Source src = "{{this.url}}" type = "video/ogg" />
-            </video-->
-
             <video id="example_video_1" class="video-js vjs-default-skin"
               controls preload="auto" width="565" height="400"
               poster="http://video-js.zencoder.com/oceans-clip.png"
