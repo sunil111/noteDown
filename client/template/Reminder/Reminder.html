@@ -1,38 +1,41 @@
-<template name="Todo">
+<!--template name="Todo">
 	<div class="container">  
 		<h2>Todo   &nbsp;&nbsp;&nbsp;<a href="{{pathFor route='CreateTodo'}}"><img src="/images/add.png"  height="50" title="Create todo"></a></h2>
 		<hr class="divider">
 	</div>
-</template>
+</template>-->
 
 <template name="CreateTodo">
 	{{> Navbar}}
 	<div class="container">
-		<h1>Todo</h1>
-	    <form  class="new-task" id="form">
-     		<ul>
-     			<input type="text" name="text" placeholder="Type to add new tasks" required />
-     			<li>
-     				<input type="text" name="desc" placeholder="Type to add a description" required/>
-     				<li>
-         				<div class="input-group datetimepicker">
-						    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-						    <input class="set-due-date form-control" name="datefilter" type="text" placeholder="Select a date" required/>
-			  			</div>
-			  		</li>
-     			</li>
-     			<li>
-     				<input type="submit" class="btn btn-primary" value="Create">
-     			</li>
-     		</ul>
-   		</form>
+		<div class="thumbnail">
+			<h1>Todo</h1>
+		    <form  class="new-task" id="form">
+	     		<ul>
+	     			<li>
+	     				<input type="text" name="text" placeholder="Type to add new tasks" class="form-control" required />
+	     				<br>
+	     				<input type="text" name="desc" placeholder="Type to add a description" class="form-control" required/>
+		     			<li>
+		         		<div class="input-group datetimepicker">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+							<input class="set-due-date form-control" name="datefilter" type="text" placeholder="Select a date" required/>
+					  		</div>
+					  	</li>
+	     			</li>
+	     			<li>
+	     				<input type="submit" class="btn btn-primary" value="Create">
+	     			</li>
+	     		</ul>
+	   		</form>
+	   	</div>	
 	 </div>	
 </template>
 
 <template name="Task">
 	<li class="{{#if checked}}checked{{/if}} {{#if private}}private{{/if}}">
 		<button class="delete">&times;</button>      
-	    <input type="checkbox" checked="{{checked}}" class="toggle-checked" />
+	    <input type="checkbox" checked="{{checked}}" class="toggle-checked " />
 	    <span class="text">
 	    	<strong>{{title}}</strong> - {{desc}} - <strong>{{date}}</strong>
 	    </span>
@@ -78,9 +81,9 @@
 		<h1>Task</h1>
 	    <form  class="new-task" id="form">
      		<ul>
-     			<input type="text" name="text" placeholder="Type to add new tasks" required />
+     			<input type="text" name="text" placeholder="Type to add new tasks" class="form-control" required />
      			<li>
-     				<input type="text" name="desc" placeholder="Type to add a description" required/>
+     				<input type="text" name="desc" placeholder="Type to add a description" class="form-control" required/>
      				<li>
          				<div class="input-group datetimepicker">
 						    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
