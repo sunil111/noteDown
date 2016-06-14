@@ -9,21 +9,23 @@
 
 
 <template name="uploadedAudio">
-    <h4>
-  {{#with this.url}}
-    <a href="{{this}}" target="_blank">{{../name}}</a>
-  {{else}}
-    {{this.name}}
-  {{/with}}
-  ({{this.formattedSize}})
-  </h4>
-  {{#if this.isUploaded}}
-    {{#with this.url download=true}}
-      <a href="{{this}}" class="btn btn-default btn-xs" role="button">Download</a>
-    {{/with}}
-      <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#{{_id}}">Open Audio</button>
+  <div class="media well pull-left">
+    <div class="media-body">
+      <h4 class="media-heading">{{this.name}}</h4>
+      <p>
+        <em>
+          Original size: {{this.formattedSize}}<br>
+          Type: {{this.type store="audios"}}<br>Owner: {{this.owner.name}}<br>
+          Added At: {{this.createdAt}}
+        </em>
+      </p>
+      {{#if this.isUploaded}}
+        {{#with this.url download=true}}
+          <a href="{{this}}" class="btn btn-default btn-xs" role="button">Download</a>
+        {{/with}}
+          <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#A{{_id}}">Preview</button>
       <!-- Modal -->
-      <div id="{{_id}}" class="modal fade" role="dialog">
+      <div id="A{{_id}}" class="modal fade" role="dialog">
         <div class="modal-dialog">
           <!-- Modal content-->
           <div class="modal-content">
@@ -40,9 +42,9 @@
         </div>
       </div> 
 
-      <button type="button" class="btn btn-share btn-info btn-xs" data-toggle="modal" data-target="#A{{_id}}">Share</button>
+    <button type="button" id="{{_id}}" class="btn btn-share btn-success btn-xs" data-toggle="modal" data-target="#D{{_id}}" value="{{this.url}}">Share</button>
       <!-- Modal -->
-      <div id="A{{_id}}" class="modal fade" role="dialog">
+      <div id="D{{_id}}" class="modal fade" role="dialog">
         <div class="modal-dialog">
           <!-- Modal content-->
           <div class="modal-content">
@@ -50,21 +52,19 @@
               <button type="button" class="close" data-dismiss="modal">&times;</button>
               <h4 class="modal-title">{{name}}</h4>
             </div>
-            <div class="modal-body">
-              <input type="text" id="urlTxt" value="{{this.url}}" />
-              {{> amxSocialShare opts=opts}}
+            <div class="modal-body">                  
+                <center>{{> amxSocialShare opts=opts}}</center>
             </div>
           </div>
         </div>
       </div> 
-      <input type="text" id="urlTxt" value="{{this.url}}" />
-     {{> amxSocialShare opts=opts}}
-
-    {{> FS.DeleteButton class="btn btn-danger btn-xs"}}
-    <br><br>
-  {{else}}
-    <p>{{> FS.UploadProgressBar semantic=true}} Uploading...</p>
-  {{/if}}
+        {{> FS.DeleteButton class="btn btn-danger btn-xs"}}
+        <br><br>
+      {{else}}
+        <p>{{> FS.UploadProgressBar semantic=true}} Uploading...</p>
+      {{/if}}
+    </div>
+  </div>
 </template>
 
 <template name="audio_group">

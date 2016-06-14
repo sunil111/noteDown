@@ -1,19 +1,19 @@
-/*Meteor.startup(function () {
-  // code to run on server at startup
-if(!Documents.findOne()){
-  	//No Docs yet
-  }
-});
-/*
-Meteor.publish("documents", function(){
-	return Documents.find({
-		$or:[
-  		{isPrivate:{$ne:true}},
-  		{owner:this.userId}
-		]
-	});
-})
-*/
+  Meteor.publish("documents", function(){
+    return Documents.find({
+      $or:[
+        {isPrivate:{$ne:true}},
+        {owner:this.userId}
+      ]
+    });
+  })
+
+  Meteor.startup(function () {
+    // code to run on server at startup
+    if(!Documents.findOne()){
+      //No Docs yet
+      Documents.insert({title:"Untitled Discussion"});
+    }
+  });
 
 Meteor.publish("user",function(){
   return Meteor.users.find({ },{fields: { _id:1, profile: 1}});
@@ -24,16 +24,13 @@ Meteor.publish("editingUsers",function(){
 });
 
 Meteor.publish("groups", function(){
-  return Groups.find({},{sort: {createdAt: -1}});
+  return Groups.find({});
 });  
 
 Meteor.publish("tasks",function(){
-  return Tasks.find({},{sort: {createdAt: -1}});
+  return Tasks.find({});
 });  
 
-Meteor.publish("notify",function(){
-  return Notify.find({});
-});  
 if (Meteor.isClient) {
   	Meteor.startup(function() {
     		GoogleMaps.load();

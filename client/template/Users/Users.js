@@ -47,17 +47,21 @@ Template.UserDashboard.events({
 				$("#lasttxt").replaceWith(input3);
 				var input4 = $('<h3 id="emailtxt">' + email + '</h3>');
 				$("#emailtxt").replaceWith(input4);
-
+				Toast.success('Successfull');
 				document.getElementById('save').disabled = true; 
 				document.getElementById('edit').disabled = false;
 			}
 			else{ 
 				console.log('error');
+				Toast.error('Unsuccessfull');
 			}
 		});
-	}
+	},
+	'change #myFile': function(event){
+	    
+  	}
 });
 
 Template.VerifyUser.onCreated(function() {
-	alert('Please verify your email id');
+	//alert('Please verify your email id');
 });

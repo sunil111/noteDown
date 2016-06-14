@@ -12,50 +12,50 @@ Meteor.methods({
 	},
 
 //-------------------note---------------
-/*	addDoc:function(loc,tags){		//, tags
+	addDoc:function(group){		//, tags
 		var doc;
-		if(!this.userId){// NOt logged in
-			return;
-		}else{
-			doc={
-				owner:this.userId, 
-				getLocation:loc,
-				tagsName:tags,
-				createdOn:new Date().toLocaleString(), 
-				title:"Untitled Document"
-			};
-			var id = Documents.insert(doc);
-			return id; //return was missing. caused problem in method call.
-		}
-	},
-	delDoc:function(doc){
-		if(!this.userId){// NOt logged in
-			return;
-		}else{
-			var realDoc=Documents.findOne({_id:doc._id, owner:this.userId});
-			if(realDoc){
-				//realDoc.isPrivate=doc.isPrivate;
-				Documents.remove({_id:doc._id}, realDoc);
+		doc={
+			owner:this.userId, 
+			createdAt:new Date().toLocaleString(), 
+			title:"Untitled Discussion",
+			groupID: group
+		};
+		var id = Documents.insert(doc);
+		var group = Groups.findOne({ _id : group });
+		var name = group.gname;
+		var gid = group._id;
+		var members = group.members;
+		for (var i = 0; i <members.length; i++){
+			if(members[i].id !== this.userId){
+				Rss.insert({
+					rss_title: "has opened a new",
+					title: "discussion",
+					user_action: "/user_dashboard/"+ this.userId,
+					user_name: Meteor.user().profile.name,
+					group_name: name,
+					createdAt: new Date().toLocaleString(),
+					group_action: "/group/"+gid+"/",
+					action: "/group/"+gid+"/discuss/",
+					user: members[i].name
+				});
 			}
-			
 		}
-	}
-	updateDocPrivacy:function(doc){
-		console.log("updateDocPrivacy Method");
+		return id; //return was missing. caused problem in method call.
+	},
+
+	delDoc:function(doc){
 		var realDoc=Documents.findOne({_id:doc._id, owner:this.userId});
 		if(realDoc){
-			realDoc.isPrivate=doc.isPrivate;
-			Documents.update({_id:doc._id}, realDoc);
+			//realDoc.isPrivate=doc.isPrivate;
+			Documents.remove({_id:doc._id}, realDoc);
 		}
-
 	},
-	*/
+	
 	addEditingUser:function(docid){
 		var doc, user, eusers;
 
-		doc = Posts.findOne({_id:docid});
+		doc = Documents.findOne({_id:docid});
 		if(!doc){return;} //No Doc Give up.
-		
 		if(!this.userId){return;}// No Loggen in user Give up.
 		//NOw i have a doc anf possibly a user.
 
@@ -90,7 +90,11 @@ Meteor.methods({
 					"id": this.userId,
 				    "name": Meteor.user().profile.name 
 				},
-				members:[],
+				members:[{
+					"id": this.userId,
+				    "name": Meteor.user().profile.name,
+				    "joinedAt": new Date().toLocaleString()
+				}],
 				member_count: 1,
 				createdOn: new Date().toLocaleString()
 			};
@@ -100,14 +104,6 @@ Meteor.methods({
 					group_ids: id
 				}
 			});
-			/*Rss.insert({
-                rss_title: "'" +user+ "' has created a new group",
-                title:gtitle,
-                user: user,
-                createdAt: new Date().toLocaleString(),
-                action: "/group/"+id,
-                id: id
-          	});*/
 			return id;
 		}
 	},
@@ -152,14 +148,19 @@ Meteor.methods({
 			var id= Groups.update(
 				{"_id" : id},{
 					$set:{ member_count: count},
-					$addToSet: {
-						members:{ 
-							"id": memberId,
-							"name":memberName,
-							"joinedAt": new Date().toLocaleString()
-							}
-						}
-					});
+				$addToSet: {
+					members:{ 
+						"id": memberId,
+						"name":memberName,
+						"joinedAt": new Date().toLocaleString()
+					}
+				}
+			});
+			var group_Id= Meteor.users.update({ _id: this.userId },{
+				$addToSet: {
+					group_ids: data._id
+				}
+			});
 			return id;
 		}
 	},
@@ -178,15 +179,23 @@ Meteor.methods({
 	      return false;
 	    } 
 	    else {
-	      count--;
-	      return Groups.update(result._id, {
-	      	$set: { member_count: count},
-	      	$pull: {
-				members:{
-					id: userId,
-					name: name 
+	      	count--;
+	      	Meteor.users.update(
+				{ _id: this.userId },
+				{ 
+					$pull: {
+						group_ids: groupId 
+					}
 				}
-			}
+			);
+	      	return Groups.update(result._id, {
+		      	$set: { member_count: count},
+		      	$pull: {
+					members:{
+						id: userId,
+						name: name 
+					}
+				}
 			});
 	    }
   	},
@@ -208,31 +217,6 @@ Meteor.methods({
 			return id;
 		}
   	},
-
-  	/*requestJoin: function(groupId, ownerId,ownerName, user, username){
-  		var data= Groups.findOne(groupId);
-  		var name= data.gname;
-  		var notification= {
-  			title: username + " wants to join your group- " + name,
-  			group:{
-  				id: groupId,
-  				name: name
-  			},
-  			owner:{
-  				id: ownerId,
-  				name: ownerName
-  			},
-  			user:{
-  				id: user,
-  				name: username
-  			},
-  			createdAt: new Date().toLocaleString()
-  		};
-  		var id= Notify.insert(notification);
-  		console.log(id);
-  		return id;
-  	},
-	*/
   	removeMember: function(groupId, memberId, memberName){  
   		var data= Groups.findOne(groupId);
   		var count= data.member_count;
@@ -244,8 +228,16 @@ Meteor.methods({
 	      return false;
 	    } 
 	    else {
-	      count--;
-	      return Groups.update({_id: groupId}, {
+	      	count--;
+	      	Meteor.users.update(
+				{ _id: memberId },
+				{ 
+					$pull: {
+						group_ids: groupId 
+					}
+				}
+			);
+	      	return Groups.update({_id: groupId}, {
 		      	$set: { member_count: count},
 		      	$pull: {
 					members:{
@@ -311,16 +303,7 @@ Meteor.methods({
 				}			
 		}
 		var id=Tasks.insert(task);
-		Rss.insert({
-				rss_title: "has created a task",
-				title: text,
-				user_action: "/user_dashboard/"+ this.userId,
-				user_name: Meteor.user().profile.name,
-				group_name: group_name,
-				createdAt: new Date().toLocaleString(),
-				group_action: "/group/"+group_id+"/",
-				action:"/group/"+group_id+"/group_task/"
-		});
+		var group = Groups.findOne({ _id : group_id });
 		Rss.insert({
 				rss_title: "has assigned you a task",
 				title: text,
@@ -341,29 +324,21 @@ Meteor.methods({
     },
     deleteReminder : function(taskId){
 		var task = Tasks.findOne(taskId);
-		if(task.owner.id !== this.userId){
-			throw new Meteor.Error("not-authorized");
-		}
 		var id=Tasks.remove(taskId);
 		Meteor.users.update({ _id: this.userId },{ 
-				$pull: {
-					reminder_ids: taskId 
-				}
+			$pull: {
+				reminder_ids: taskId 
+			}
 		});
 		return id;
     },
 
     setCheckedReminder : function(taskId, setChecked){
 		var task = Tasks.findOne(taskId);
-		if(task.owner.id !== this.userId){
-			throw new Meteor.Error("not-authorized");
-		}
-		else{
-			Tasks.update({_id: taskId},{$set: {checked:setChecked}});
-		}
+		Tasks.update({_id: taskId},{$set: {checked:setChecked}});
     },
      //--------------------------------group Discussion--------------------------
-	addThread : function(msg, groupId,post_id){
+	addThread : function(msg, groupId,post_id, post_name){
 		var user= Meteor.user().profile.name;
 		var group= Groups.findOne({_id: groupId});
 		var group_name= group.gname;
@@ -376,23 +351,34 @@ Meteor.methods({
 				like: 0,
 				likedBy: [],
 				publishedAt: new Date().toLocaleString(),
-				postId: post_id
+				postId: post_id,
+				type: "comment"
 
 		};
 		var id=Thread.insert(thread);
+		/*var group = Groups.findOne({ _id : groupId });
+		var gname = group.gname;
+		var members = group.members;
+		for (var i = 0; i <members.length; i++){
+			if(members[i].id !== user_id){
+				Rss.insert({
+		          rss_title: "has commented on note",
+		          title: post_name,
+		          user_action: "/user_dashboard/"+ this.userId,
+		          user_name: user,
+		          group_name: gname,
+		          group_action: "/group/"+groupId+"/",
+		          createdAt: new Date().toLocaleString(),
+		          action: '/group/'+groupId+'/notes/'+post_id+"/",
+		          user: members[i].name
+		        });
+		    }
+		}*/
 		Posts.update({ _id: post_id},{
 			$addToSet: {
-				threads: id
+				comments: id
 			}
 		});
-		/*Rss.insert({
-			rss_title:"'" + user + "' has posted a comment",
-			title:msg,
-			user: user,
-			createdAt: new Date().toLocaleString(),
-			action: "/group/"+groupId,
-			id: groupId
-		});*/
 		return id;
 	},
 
@@ -405,31 +391,44 @@ Meteor.methods({
 				likedBy: Meteor.user().profile.name
 			}
 		});
-		/*Rss.insert({
-			rss_title: user + " has liked " + owner_name +" post",
-			title:content,
-			user: user,
-			owner: owner,
-			createdAt: new Date().toLocaleString(),
-			action: "/group/"+group_id,
-			id: group_id
-		});*/
 		return id;
 		
 	},
 
 	deleteThread: function(thread_id,note_id){
 		var did=Thread.remove(thread_id);
+		Thread.remove({threadID: thread_id});
 		Posts.update({_id: note_id},{
 			$pull: {
-				threads: thread_id
+				comments: thread_id
 			}
 		});
 		return did;
 	},
+	setReply: function( userid, username, value, thread_id,type){
+		var thread ={
+        		title: value,
+        		owner:{
+        			id: userid,
+        			name: username
+        		},
+        		threadID: thread_id,
+        		publishedAt: new Date().toLocaleString(),
+        		type: type
+        }
+        var id =Thread.insert(thread);
+        if(type==="reply"){
+			Thread.update({ _id: thread_id },{
+					$addToSet:{
+						comments: id
+					}
+			});
+		}
+		return id;
+	},
 
 	//SummerNote------------------------------------
-	addPost: function (title, /*message,*/ postBody, loc, tags, privacy, created_date) {
+	addPost: function (title, postBody, loc, tags, privacy, created_date) {
 		var doc;
 		var user= Meteor.user().profile.name;
 		if(!this.userId){// NOt logged in
@@ -439,7 +438,6 @@ Meteor.methods({
 			doc={
 				
 				Title: title,
-				//Message: message,
 				Body: postBody,
 				owner:{
 					id:this.userId, 
@@ -461,12 +459,11 @@ Meteor.methods({
 		
 	},
 
-	editPost: function (postID, title,/* message,*/ postBody, owner, loc, tags, updatedAt) {
+	editPost: function (postID, title, postBody, owner, loc, tags, updatedAt) {
 		var user=Meteor.user().profile.name;
 		var id =Posts.update(postID,{
 			$set:{
 				Title: title,
-				//Message: message,
 				Body: postBody,
 				Location: loc,
 				Tags:tags,
@@ -498,7 +495,7 @@ Meteor.methods({
   				}
   			});
   	},
-  	addGroupNote: function (title, /*message,*/ postBody, loc, tags, privacy, group_id, group_name) {
+  	addGroupNote: function (title, postBody, loc, tags, privacy, group_id, group_name) {
 		var doc;
 		var user= Meteor.user().profile.name;
 		if(!this.userId){// NOt logged in
@@ -508,7 +505,6 @@ Meteor.methods({
 			doc={
 				
 				Title: title,
-				//Message: message,
 				Body: postBody,
 				owner:{
 					id:this.userId, 
@@ -521,16 +517,23 @@ Meteor.methods({
 				createdOn:new Date().toLocaleString(), 
 			};
 			var id = Posts.insert(doc);
-			Rss.insert({
-				rss_title: "has created a note",
-				title: title,
-				user_action: "/user_dashboard/"+ this.userId,
-				user_name: user,
-				group_name: group_name,
-				createdAt: new Date().toLocaleString(),
-				group_action: "/group/"+group_id+"/",
-				action: "/group_notes/"+id+"/"
-			});
+			var group = Groups.findOne({ _id : group_id });
+			var members = group.members;
+			for (var i = 0; i <members.length; i++){
+				if(members[i].id !== this.userId){
+					Rss.insert({
+						rss_title: "has created a note",
+						title: title,
+						user_action: "/user_dashboard/"+ this.userId,
+						user_name: user,
+						group_name: group_name,
+						createdAt: new Date().toLocaleString(),
+						group_action: "/group/"+group_id+"/",
+						action: "group/"+group_id+"/notes/"+id+"/",
+						user: members[i].name
+					});
+				}
+			}
 			var postId= Meteor.users.update({ _id: this.userId },{
 				$addToSet: {
 					post_ids: id
@@ -540,18 +543,55 @@ Meteor.methods({
 		}  
 		
 	},
-	editGroupNote: function (postID, title,/* message,*/ postBody, owner, loc, tags, updatedAt) {
+	editGroupNote: function (postID, title, postBody, owner, loc, tags, updatedAt, groupId) {
 		var user=Meteor.user().profile.name;
+		var user_id = this.userId;
 		var id =Posts.update(postID,{
 			$set:{
 				Title: title,
-				//Message: message,
 				Body: postBody,
 				Location: loc,
 				Tags:tags,
-				updatedAt: updatedAt
+				updatedAt: updatedAt,
+				updatedBy: user
 			}
 		});
+		var group = Groups.findOne({ _id : groupId });
+		var name = group.gname;
+		var members = group.members;
+		for (var i = 0; i <members.length; i++){
+			Rss.insert({
+	          rss_title: "has edited a note",
+	          title: title,
+	          user_action: "/user_dashboard/"+ user_id,
+	          user_name: user,
+	          group_name: name,
+	          group_action: "/group/"+groupId+"/",
+	          createdAt: new Date().toLocaleString(),
+	          action: '/group/'+groupId+'/shared_media/',
+	          user: members[i].name
+	        });
+		   
+		}
 		return id;
 	},
+	Media_Rss: function(rss_title, title, user_id, user_name, group_name, groupId){
+		var group = Groups.findOne({ _id : groupId });
+		var members = group.members;
+		for (var i = 0; i <members.length; i++){
+			if(members[i].id !== user_id){
+				Rss.insert({
+		          rss_title: rss_title,
+		          title: title,
+		          user_action: "/user_dashboard/"+ user_id,
+		          user_name: user_name,
+		          group_name: group_name,
+		          group_action: "/group/"+groupId+"/",
+		          createdAt: new Date().toLocaleString(),
+		          action: '/group/'+groupId+'/shared_media/',
+		          user: members[i].name
+		        });
+		    }
+		}
+	}
 });

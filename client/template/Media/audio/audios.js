@@ -19,13 +19,18 @@ Meteor.startup(function() {
 	            	name: Meteor.user().profile.name
 	          	},
 	          	dropped: false,
-          		privacy:"private"
+          		privacy:"private",
+          		createdAt: new Date().toLocaleString()
 	        };
 		},
 
 		after : function (error,fileobj){
 			if(!error){
+				Toast.success('Successful');
 				Router.go('/user/showMedia/');
+			}
+			else{
+				Toast.error('Unsuccessful');
 			}
 		}
 	}),
@@ -68,16 +73,11 @@ Meteor.startup(function() {
 			var groupId = Session.get('groupId');
 			var group= Groups.findOne({ _id: groupId});
 	        var group_name = group.gname;
-	        Rss.insert({
-	          rss_title: "has added a new audio",
-	          title: "audio",
-	          user_action: "/user_dashboard/"+ Meteor.userId(),
-	          user_name: Meteor.user().profile.name,
-	          group_name: group_name,
-	          createdAt: new Date().toLocaleString(),
-	          group_action: "/group/"+groupId,
-	          action: '/group/'+groupId+'/shared_media/'
-	        });
+	        var rss_title = "has added a new ";
+        	var title = "audio";
+        	var user_id = Meteor.userId();
+        	var user_name = Meteor.user().profile.name;
+        	Meteor.call('Media_Rss', rss_title, title, user_id, user_name, group_name, groupId);
 	    	return {
 	          	owner:{
 	            	id: Meteor.userId(),
@@ -85,14 +85,19 @@ Meteor.startup(function() {
 	          	},
 	          	groupID: groupId,
 	          	dropped: false,
-          		privacy:"public"
+          		privacy:"public",
+          		createdAt: new Date().toLocaleString()
 	        };
 		},
 
 		after : function (error,fileobj){
 			if(!error){
 				var groupID = Session.get('groupId');
+				Toast.success('Successful');
           		Router.go('/group/'+groupID+'/shared_media/');
+			}
+			else{
+				Toast.error('Unsuccessful');
 			}
 		}
 	}),
@@ -110,25 +115,26 @@ Meteor.startup(function() {
 
 Template.audio_group.helpers({
   uploadedAudios: function() {
-  	
     return Collections.Audios.find({});
   }
 });
 
 
+Meteor.startup(function() {
 Template.uploadedAudio.events({
-	'click .btnmd5': function(event) {
-		event.preventDefault();
-		var urltxt = event.target.utlTxt.value;
-		Session.set('urlData',urltxt);
-		console.log(urltxt);
+	"click .btn-share":function(event){
+		var idurl = event.target.id;
+		var urlAudio =$('#'+idurl).val();
+		//alert("idss : "+idurl+"...... urlAudio : "+urlAudio);
+		Session.set("urlData",urlAudio);	
 	}
-})
+});
+});
+
 
 Template.uploadedAudio.helpers({
     opts: function() {
-    	var src = Session.get('urlData');
-    	alert(src);
+    	var srcAudio = Session.get('urlData');
     	var opts = {
 	        bootstrap: true, // enables bootstrap styles
 	        email: true,
@@ -138,27 +144,27 @@ Template.uploadedAudio.helpers({
 	        googlePlus: true,
 	        linkedIn: true,
 	        pinterest: true,
-	        sms: true,
+	        sms: false,
 	        twitter: true,
-	        url: true,
+	        url: false,
 	        shareData: {
-	          url:'//'+src,
+	          url:'http://localhost:3000'+srcAudio,
 	          facebookAppId: '195380783916970',
 	          subject: 'test subject',
-	          body: 'test body',
+	          textbody:'http://localhost:3000'+srcAudio,
 	          redirectUrl: 'http://localhost:3000/test'
 	        },
 	        customClasses: {
-		        facebook: 'btn-sm btn-xs',
-		        twitter: 'btn-sm btn-xs',
-		        pinterest: 'btn-sm btn-xs',
-		        bootstrap: 'btn-sm btn-xs',
-		        email: 'btn-sm btn-xs',
-		        facebookMessage:'btn-sm btn-xs',
-		        gmail: 'btn-sm btn-xs',
-		        googlePlus: 'btn-sm btn-xs',
-		        linkedIn:'btn-sm btn-xs',
-		        sms: 'btn-sm btn-xs'
+		        facebook: 'btn-lg',
+		        twitter: 'btn-lg',
+		        pinterest: 'btn-lg',
+		        bootstrap: 'btn-lg',
+		        email: 'btn-lg',
+		        facebookMessage:'btn-lg',
+		        gmail: 'btn-lg',
+		        googlePlus: 'btn-lg',
+		        linkedIn:'btn-lg',
+		        sms: 'btn-lg'
 	        }
       };
       return opts;

@@ -10,9 +10,11 @@ Template.groupdiscussion.events({
     "submit .new-post": function(event){
         event.preventDefault();
         var post_id= Session.get('postId');
+        var post = Posts.findOne({ _id: post_id });
+        var pname = post.Title;
         var text = event.target.commentbox.value;
         var groupId = Session.get('groupId'); //instead of Router.current().params.gameId;
-        Meteor.call("addThread",text, groupId,post_id);
+        Meteor.call("addThread",text, groupId,post_id, pname);
         event.target.commentbox.value='';  
     }
 });
@@ -24,12 +26,24 @@ Template.postMessage.helpers({
     },
     'gdPost': function(){   
         var postid= Session.get('postId');
-        return Thread.find({ postId:postid},{sort: {publishedAt: -1}});
+        return Thread.find({ postId:postid, type: "comment"},{sort: {publishedAt: -1}});
     },
     admin: function(){
        var owner= this.owner.id;
        if(owner === Meteor.userId())
         return true;
+    },
+    'threads': function(){
+        return Thread.find({type: "thread"},{sort: {publishedAt: -1}});
+    },
+    'threadCount': function(){
+        return Thread.find({type: "thread"}).count();
+    },
+    'reply': function(){
+        return Thread.find({type: "reply"});
+    },
+    'replyCount': function(){
+        return Thread.find({type: "reply"}).count();
     }
 });
  
@@ -59,7 +73,6 @@ Template.postMessage.events({
         var group_id= Session.get('groupId');
         var owner_name= this.owner.name;
         for(var i=0;i<likedBy.length;i++){
-            //console.log(likedBy[i]);
             if(likedBy[i]===Meteor.user().profile.name){
                 return false;
             }
@@ -69,17 +82,68 @@ Template.postMessage.events({
     },
     'click #replyIcon' : function(e){
         var $this = $(e.target);
-        count =1;
-        var textbox = $('<div id="replyboxContainer" class="container-fluid"><div class="col-md-8">Reply: &nbsp;<input type="text" id="replyBox"><input type="submit" id="replyOkbtn" class="btn btn-primary" value="Ok"></div></div><br>');
-        $($this).parents("#ultest").append(textbox);
+        $($this).parents("#li1").siblings("#commentboxContainer").slideToggle();
         
     },
+    /*'click #hidebtn' : function(e){
+        e.preventDefault();
+        var $this = $(e.target);         
+        $($this).parents("#commentboxContainer").find("#replyPostboxContainer").slideToggle();
+
+    },*/
+
     'click #replyOkbtn' : function(e){
-        var value = $("#replyBox").val();
+        e.preventDefault();
+        var value = $("#replyBox1").val();
+        if(value === ""){
+            $("#replyBox1").focus();
+            return false;
+        }
         var $this = $(e.target);
-        $($this).parents("#ultest").append('<li>'+ value +'</li>');
-        $("#replyboxContainer").hide(" ");
-    }
+        var userid= Meteor.userId();
+        var username = Meteor.user().profile.name;
+        var id= this._id;
+        var type = "thread";
+        Meteor.call('setReply', userid, username, value, id, type, function(err,res){
+            if(!err){
+                $("#replyBox1").val(" ");
+                $('#replyPostboxContainer').hide();
+            }
+        });   
+    },
+
+    'click #reply_replyIcon':function(e){
+        e.preventDefault();
+        var $this = $(e.target); 
+        var count = 1;
+        var idgenerate = "reply_replyBox_"+(count++);
+        var textbox = '<li id="reply_replyBox_li1"><div class="container-fluid"><div class="col-md-12"><form id="form_reply_replyIcon"><input type="text" id="reply_replyBox" style="float:left;"><input type="submit" id="reply_replyOkbtn" class="btn btn-primary" value="Ok"></form></div></div></li>';
+        $($this).after(textbox);
+        $($this).off('click');
+        
+    },
+    'click #reply_replyOkbtn':function(e){
+        e.preventDefault();
+        var $this = $(e.target);
+        var id = this._id;
+        var value = $($this).prev("#reply_replyBox").val();
+        var userid= Meteor.userId();
+        var username = Meteor.user().profile.name;
+        var id= this._id;
+        var type = "reply";
+        Meteor.call('setReply', userid, username, value, id,type, function(err,res){
+            if(!err){
+                $('#reply_replyBox_li1').hide();
+            }
+        });
+        
+        $($this).prev().val(" ");
+    }/*,
+    'click #reply_hidebtn' : function(e){
+        e.preventDefault();
+        var $this = $(e.target);
+        $($this).parents("#reply_replyBox_li1").find("#li_test").slideToggle();
+    } */
 });
 
 

@@ -29,9 +29,9 @@
 <template name="Upload">
   <ul class="nav nav-tabs">
     <li><a data-toggle="tab" href="#Images">Images</a></li>
-    <li><a data-toggle="tab" href="#Files">Files</a></li>
     <li><a data-toggle="tab" href="#Audio">Audio</a></li>
     <li><a data-toggle="tab" href="#Video">Video</a></li>
+        <li><a data-toggle="tab" href="#Files">Files</a></li>
   </ul>
       <br>
       <button type="button" class="btn btn-xs resumeUploads">Resume All Uploads</button> &nbsp;&nbsp;&nbsp;
@@ -46,16 +46,16 @@
         {{> images }}
     </div>
 
-    <div id="Files" class="tab-pane fade">
-        {{> files }}  
-    </div>
-
     <div id="Audio" class="tab-pane fade">
         {{> audio }}
     </div>
 
     <div id="Video" class="tab-pane fade">
         {{> video }}
+    </div>
+
+    <div id="Files" class="tab-pane fade">
+        {{> files }}  
     </div>
 
   </div>
@@ -78,6 +78,19 @@
       {{else}}
        <h3>No images</h3>
        <a href="{{pathFor route='AddMedia'}}">Add Images</a>
+      {{/if}}
+      <hr class="divider"><br>
+
+      {{#if audio}}
+        <div class="imageArea clearfix">    
+          <h3>Audio: ({{audio}})</h3>
+          {{#each audios}}
+            {{> uploadedAudio}}
+          {{/each}}
+        </div>
+        {{else}}
+        <h3>No audios</h3>
+        <a href="{{pathFor route='AddMedia'}}">Add Audio</a>
       {{/if}}
       <hr class="divider"><br>
 
@@ -105,19 +118,7 @@
         <h3>No files</h3>
         <a href="{{pathFor route='AddMedia'}}">Add Files</a>
       {{/if}}
-      <hr class="divider"><br>
 
-      {{#if audio}}
-        <div class="imageArea clearfix">    
-          <h3>Audio: ({{audio}})</h3>
-          {{#each audios}}
-            {{> uploadedAudio}}
-          {{/each}}
-        </div>
-        {{else}}
-        <h3>No audios</h3>
-        <a href="{{pathFor route='AddMedia'}}">Add Audio</a>
-      {{/if}}
     {{else}}
       <p>Loading... {{> spinner}}</p>
     {{/if}}
@@ -149,9 +150,9 @@
 <template name="UploadGroup">
   <ul class="nav nav-tabs">
     <li><a data-toggle="tab" href="#Images">Images</a></li>
-    <li><a data-toggle="tab" href="#Files">Files</a></li>
     <li><a data-toggle="tab" href="#Audio">Audio</a></li>
     <li><a data-toggle="tab" href="#Video">Video</a></li>
+        <li><a data-toggle="tab" href="#Files">Files</a></li>
   </ul>
       <br>
       <button type="button" class="btn btn-xs resumeUploads">Resume All Uploads</button> &nbsp;&nbsp;&nbsp;
@@ -166,16 +167,16 @@
         {{> images_group }}
     </div>
 
-    <div id="Files" class="tab-pane fade">
-        {{> files_group }}  
-    </div>
-
     <div id="Audio" class="tab-pane fade">
         {{> audio_group }}
     </div>
 
     <div id="Video" class="tab-pane fade">
         {{> video_group }}
+    </div>
+
+    <div id="Files" class="tab-pane fade">
+        {{> files_group }}  
     </div>
 
   </div>
@@ -198,6 +199,19 @@
       {{else}}
         <h3>No images</h3>
         <a href="{{pathFor route='AddMediaInGroup'}}">Add Images</a>
+      {{/if}}
+      <hr class="divider"><br>
+
+      {{#if audio}}
+        <div class="imageArea clearfix">    
+          <h3>Audio: ({{audio}})</h3>
+          {{#each audios}}
+            {{> uploadedAudio}}
+          {{/each}}
+        </div>
+      {{else}}
+        <h3>No audios</h3>
+        <a href="{{pathFor route='AddMediaInGroup'}}">Add Audio</a>
       {{/if}}
       <hr class="divider"><br>
 
@@ -225,19 +239,7 @@
         <h3>No files</h3>
         <a href="{{pathFor route='AddMediaInGroup'}}">Add Files</a>
       {{/if}}
-      <hr class="divider"><br>
 
-      {{#if audio}}
-        <div class="imageArea clearfix">    
-          <h3>Audio: ({{audio}})</h3>
-          {{#each audios}}
-            {{> uploadedAudio}}
-          {{/each}}
-        </div>
-      {{else}}
-        <h3>No audios</h3>
-        <a href="{{pathFor route='AddMediaInGroup'}}">Add Audio</a>
-      {{/if}}
     {{else}}
       <p>Loading... {{> spinner}}</p>
     {{/if}}

@@ -3,7 +3,6 @@ Template.CreateNote.onCreated(function(){
 	this.autorun( function() {
 		self.subscribe('posts');
 	});
-	console.log(Meteor.status());
 });
 
 Template.CreateNote.events({
@@ -12,24 +11,28 @@ Template.CreateNote.events({
 		var title = event.target.postTitle.value;
 		var result = Posts.findOne({ Title: title, "owner.id": Meteor.userId() });
         if (result) {
-              alert("Post name already exists");
+              Toast.info("Note with same name already exists.","Warning!!!");
               event.target.postTitle.value = "";
               return false;
         }
-		//var message = event.target.postMessage.value;
 		var postBody = $('#summernote').summernote('code');
 		var loc = Session.get('location');
 		var tags = Session.get('tag');
 		var privacy= "private";
 		var created_date = new Date().toLocaleString();
-		Meteor.call('addPost', title, /*message,*/ postBody,loc, tags, privacy, created_date, function(err, res){
+		Meteor.call('addPost', title, postBody,loc, tags, privacy, created_date, function(err, res){
 				if(!err){//all good
 					var note= Posts.findOne({ Title: title });
 					var id= note._id;
-					Router.go('/posts/'+id);
+					Toast.success('Created successfully');
+					Router.go('/notes/'+id);
+				}
+				else{
+					Toast.error('Unsuccessful');
 				}
 			});
-		//location.reload();
+		
+		
 	}
 });
 
@@ -39,8 +42,39 @@ Template.CreateNote.onRendered(function () {
 		  $('#summernote').summernote();
 		});
 });
+Template.CreateNote.onDestroyed(function(){
+	location.reload();
+});
+
 
 //-------------------single note page------------------
+Template.SingleNote.onRendered(function() {
+	$(function() { 
+		var showTotalChar = 200, showChar = "Read more (+)", hideChar = "Less (-)";
+		$('.show').each(function() { 
+			var content = $(this).text(); 
+			if (content.length > showTotalChar) { 
+				var con = content.substr(0, showTotalChar); 
+				var hcon = content.substr(showTotalChar, content.length - showTotalChar); 
+				var txt= con + '<span class="dots">...</span><span class="morectnt"><span>' + hcon + '</span>&nbsp;&nbsp;<a href="" class="showmoretxt">' + showChar + '</a></span>'; 
+				$(this).html(txt); 
+			} 
+		}); 
+		$(".showmoretxt").click(function() { 
+			if ($(this).hasClass("sample")) { 
+				$(this).removeClass("sample"); 
+				$(this).text(showChar); 
+			} 
+			else { 
+				$(this).addClass("sample"); 
+				$(this).text(hideChar); 
+			} 
+			$(this).parent().prev().toggle(); 
+			$(this).prev().toggle(); 
+			return false; 
+		}); 
+	});
+});
 
 Template.SingleNote.helpers({
 	post: function() { 
@@ -75,14 +109,21 @@ Template.SingleNote.events({
 	'click #deletePost': function () {
 		var id = Session.get('postId');
 		console.log(id);
-		Meteor.call('deletePost', id);
-		Router.go('User');
-	},
+		Meteor.call('deletePost', id,function(err,res){
+			if(!err){
+				Toast.success('Successful');
+				Router.go('YourNotes');
+			}
+			else{
+				Toast.error('Unsuccessful');
+			}
+		});
+	}/*,
 	'click #publishNote': function () {
 		var id = Session.get('postId');
 		Session.set('note_id',id);
 		Router.go('publishNote');
-	}
+	}*/
 });
 //-------------------------------editing personal notes-----------------
 Template.EditNote.events({
@@ -90,16 +131,19 @@ Template.EditNote.events({
 		event.preventDefault();
 		var id = Session.get('postId');
 		var title = event.target.postTitle.value;
-		//var message = event.target.postMessage.value;
 		var post= Posts.findOne({_id: id});
 		var owner= post.owner.id;
 		var postBody = $('#summernote').summernote('code');
 		var loc = Session.get('location');
 		var tags = Session.get('tag');
 		var updatedAt = new Date().toLocaleString();
-		Meteor.call('editPost',id, title, /*message,*/ postBody, owner, loc, tags, updatedAt, function (error) {
+		Meteor.call('editPost',id, title, postBody, owner, loc, tags, updatedAt, function (error) {
 			if(!error){
-				Router.go('/posts/'+id);
+				Toast.success('Saved successfully');
+				Router.go('/notes/'+id);
+			}
+			else{
+				Toast.error('Unsuccessful');
 			}
 		});
 	}
@@ -205,11 +249,10 @@ Template.CreateNoteInGroup.events({
 		var title = event.target.postTitle.value;
 		var result = Posts.findOne({ Title: title, "owner.id": Meteor.userId() });
         if (result) {
-              alert("Post name already exists");
+              Toast.info("Note with same name already exists.","Warning!!!");
               event.target.postTitle.value = "";
               return false;
         }
-		//var message = event.target.postMessage.value;
 		var postBody = $('#summernote').summernote('code');
 		var loc = Session.get('location');
 		var tags = Session.get('tag');
@@ -217,12 +260,16 @@ Template.CreateNoteInGroup.events({
 		var groupID= Session.get('groupId');
 		var group= Groups.findOne({ _id: groupID});
 		var group_name = group.gname;
-		Meteor.call('addGroupNote', title, /*message,*/ postBody,loc, tags, privacy, groupID, group_name, function(err, res){
+		Meteor.call('addGroupNote', title, postBody,loc, tags, privacy, groupID, group_name, function(err, res){
 				if(!err){//all good
 	                  var note= Posts.findOne({ Title: title });
 	                  var id= note._id;
-	                  Router.go('/group_notes/'+id);
+	                  Toast.success('Created successfully')
+	                  Router.go('/group/'+groupID+'/notes/'+id);
 	                  //location.reload();
+				}
+				else{
+					Toast.error('Unsuccessful');
 				}
 			});
 		
@@ -235,39 +282,14 @@ Template.CreateNoteInGroup.onRendered(function () {
 		  $('#summernote').summernote();
 		});
 });
+Template.CreateNoteInGroup.onDestroyed(function(){
+	location.reload();
+});
+
 
 Template.SingleNoteOfGroup.onRendered(function(){
-	$(document).ready(function() {
-    // Configure/customize these variables.
-    var showChar = 100;  // How many characters are shown by default
-    var ellipsestext = "...";
-    var moretext = "Show less >";
-    var lesstext = "Show more";
-    
-
-    $('.more').each(function() {
-        var content = $(this).html();
-         if(content.length > showChar) {
-            var c = content.substr(0, showChar);
-            var h = content.substr(showChar, content.length - showChar);
-             var html = c + '<span class="moreellipses">' + ellipsestext+ '&nbsp;</span><span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a href="" class="morelink">' + moretext + '</a></span>';
-             $(this).html(html);
-        }
- 
-    });
- 
-    $(".morelink").click(function(){
-        if($(this).hasClass("less")) {
-            $(this).removeClass("less");
-            $(this).html(moretext);
-        } else {
-            $(this).addClass("less");
-            $(this).html(lesstext);
-        }
-        $(this).parent().prev().toggle();
-        $(this).prev().toggle();
-        return false;
-    });
+	$(document).ready(function(){
+	
 	});
 });
 
@@ -302,15 +324,24 @@ Template.SingleNoteOfGroup.onCreated(function(){
 Template.SingleNoteOfGroup.events({
 	'click #deletePost': function () {
 		var id = Session.get('postId');
+		var groupID= Session.get('groupId');
 		console.log(id);
-		Meteor.call('deletePost', id);
-		Router.go('/group/'+groupID+'/shared_notes/');
-	},
+		Meteor.call('deletePost', id, function(err,res){
+			if(!err){
+				Toast.success('Successful');
+				Router.go('/group/'+groupID+'/shared_notes/');
+			}
+			else{
+				Toast.error('Unsuccessful');
+			}
+		});
+		
+	}/*,
 	'click #publishNote': function () {
 		var id = Session.get('postId');
 		Session.set('note_id',id);
 		Router.go('publishNote');
-	}
+	}*/
 });
 //-------------------------------editing personal notes-----------------
 Template.EditNoteOfGroup.events({
@@ -318,16 +349,20 @@ Template.EditNoteOfGroup.events({
 		event.preventDefault();
 		var id = Session.get('postId');
 		var title = event.target.postTitle.value;
-		//var message = event.target.postMessage.value;
 		var post= Posts.findOne({_id: id});
 		var owner= post.owner.id;
 		var postBody = $('#summernote').summernote('code');
 		var loc = Session.get('location');
 		var tags = Session.get('tag');
+		var group_id= Session.get('groupId');
 		var updatedAt = new Date().toLocaleString();
-		Meteor.call('editGroupNote',id, title, /*message,*/ postBody, owner, loc, tags, updatedAt, function (error) {
+		Meteor.call('editGroupNote',id, title, postBody, owner, loc, tags, updatedAt, group_id, function (error) {
 			if(!error){
-				Router.go('/group_notes/'+id);
+				Toast.success('Saved successfully');
+				Router.go('/group/'+group_id+'/notes/'+id);
+			}
+			else{
+				Toast.error('Unsuccessful');
 			}
 		});
 	}

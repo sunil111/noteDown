@@ -71,16 +71,6 @@ Groups.allow({
   }
 });
 
-Notify.allow({ 
-  insert: function(userId, doc) {
-    // only allow posting if you are logged in    
-    return true;  
-  },
-  remove:function (userId, doc) {
-    return true;
-  }
-});
-
 Tasks.allow({
   insert: function (userId, doc) {
     return true;
@@ -110,6 +100,24 @@ Posts.allow({
     return true;
   },
   remove:function (userId, doc) {
+    return true;
+  }
+});
+
+Meteor.users.allow({
+  insert: function (userId,loc) {
+    return true;
+  },
+  update: function (userId,loc) {
+    return true;
+  },
+  remove:function (userId, doc) {
+    return true;
+  }
+});
+
+Meteor.users.deny({
+  update: function() {
     return true;
   }
 });

@@ -45,8 +45,11 @@ Template.CreateTodo.events({
 		console.log(time);
 		Meteor.call("createReminder",text, desc, date, function(err,res){
 			if(!err){
-				console.log("callback recieved: "+res);
+				Toast.success('Created successfully');
 			}
+			else{
+                Toast.error('Unsuccessful');
+            }
 		});
 		Router.go('/user/showTodo/');
 		// Insert a task into the collection
@@ -65,7 +68,15 @@ Template.Task.events({
 	},
 	"click .delete": function () {
 		//Tasks.remove(this._id);
-		Meteor.call("deleteReminder",this._id);
+		Meteor.call("deleteReminder",this._id,function(err,res){
+			if(!err){
+				Toast.success('Successful');
+			}
+			else{
+
+                Toast.error('Unsuccessful');
+            }
+		});
 	}
 });
 
@@ -112,53 +123,7 @@ Template.YourTodo.helpers({
     }
   });
 
-//--------- Group Task----------------
-Template.GroupTask.onCreated(function(){
-	var self= this;
-	this.autorun( function() {
-		self.subscribe('tasks');
-		self.subscribe('groups');
-	});
-});
 
-Template.GroupTask.events({
-	"change .hide-completed input": function (event) {
-		Session.set("hideCompleted", event.target.checked);
-	}
-});
-
-Template.GroupTask.helpers({
-    tasks: function () {
-    	var groupId = Session.get('groupId'); 
-      	if (Session.get("hideCompleted")) {
-        	// If hide completed is checked, filter tasks
-        	return Tasks.find({checked: {$ne: true}, groupID:groupId, action:"task" }, {sort: {createdAt: -1}});
-      	} 
-      	else {
-        	// Otherwise, return all of the tasks
-
-        	return Tasks.find({ groupID: groupId, action:"task" }, {sort: {createdAt: -1}});
-      	}
-    },
-    task: function () {
-    	var groupId = Session.get('groupId');
-      	if (Session.get("hideCompleted")) {
-        	// If hide completed is checked, filter tasks
-        	return Tasks.find({checked: {$ne: true}, groupID:groupId, action:"task"}).count();
-      	} 
-      	else {
-        	// Otherwise, return all of the tasks
-        	return Tasks.find({groupID:groupId, action:"task"}).count();
-      	}
-    },
-    hideCompleted: function () {
-      	return Session.get("hideCompleted");
-    },
-    incompleteCount : function(){
-    	var groupId = Session.get('groupId');
-      	return Tasks.find({checked : {$ne: true}, groupID:groupId, action:"task" }).count();
-    }
-  });
 
 //--------------Group create task--------------
 Template.CreateTask.onCreated(function(){
@@ -211,11 +176,15 @@ Template.CreateTask.events({
 		var group_name = group.gname;
 		Meteor.call("createTask",text, desc, date, assign, groupID, group_name, function(err,res){
 			if(!err){
-				console.log("callback recieved: "+res);
+				Toast.success('Created successfully');
+				Router.go('/group/'+groupID+'/group_task/');
+			}
+			else{
+				Toast.error('Unsuccessful');
 			}
 		});
 
-		Router.go('/group/'+groupID+'/group_task/');
+		
 		
 		// Insert a task into the collection
 		// Clear form
@@ -236,14 +205,64 @@ Template.CreateTask.helpers({
 	}
 });
 
+//--------- Group Task----------------
+Template.GroupTask.onCreated(function(){
+	var self= this;
+	this.autorun( function() {
+		self.subscribe('tasks');
+		self.subscribe('groups');
+	});
+});
 
-Template.Task1.events({
+Template.GroupTask.events({
+	"change .hide-completed input": function (event) {
+		Session.set("hideCompleted", event.target.checked);
+	},
 	"click .toggle-checked": function () {
 	 	// Set the checked property to the opposite of its current value
 		Meteor.call("setCheckedReminder",this._id, !this.checked);
 	},
 	"click .delete": function () {
 		//Tasks.remove(this._id);
-		Meteor.call("deleteReminder",this._id);
+		Meteor.call("deleteReminder",this._id,function(err,res){
+			if(!err){
+				Toast.success('Successful');
+			}
+			else{
+                Toast.error('Not-authorised');
+            }
+		});
 	}
+});
+
+Template.GroupTask.helpers({
+    tasks: function () {
+    	var groupId = Session.get('groupId'); 
+      	if (Session.get("hideCompleted")) {
+        	// If hide completed is checked, filter tasks
+        	return Tasks.find({checked: {$ne: true}, groupID:groupId, action:"task" }, {sort: {createdAt: -1}});
+      	} 
+      	else {
+        	// Otherwise, return all of the tasks
+        	return Tasks.find({ groupID: groupId, action:"task" }, {sort: {createdAt: -1}});
+      	}
+    },
+    task: function () {
+    	var groupId = Session.get('groupId');
+      	if (Session.get("hideCompleted")) {
+        	// If hide completed is checked, filter tasks
+        	return Tasks.find({checked: {$ne: true}, groupID:groupId, action:"task"}).count();
+      	} 
+      	else {
+        	// Otherwise, return all of the tasks
+        	return Tasks.find({groupID:groupId, action:"task"}).count();
+      	}
+    },
+    hideCompleted: function () {
+      	return Session.get("hideCompleted");
+    },
+    incompleteCount : function(){
+    	var groupId = Session.get('groupId');
+      	return Tasks.find({checked : {$ne: true}, groupID:groupId, action:"task" }).count();
+    }
 });

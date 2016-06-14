@@ -2,7 +2,6 @@ Template.SingleGroup.onCreated(function(){
 	var self= this;
 	this.autorun( function() {
 		self.subscribe('groups',Session.get('groupId'));
-		self.subscribe('notify');
 		Session.set('group',Session.get('groupId'));
 	});
 });
@@ -43,16 +42,7 @@ Template.SingleGroup.helpers({
         var group = Groups.findOne({_id: groupId});
         var members= group.members;
         return members;
-    },
-    notification: function(){
-    	var groupId = Session.get('groupId');
-    	var notification= Notify.find({"owner.id": Meteor.user()._id},{sort : {createdAt:-1} });
-    	return notification;
-    },
-    notificationCount: function(){
-    	var groupId = Session.get('groupId');
-    	return Notify.find({"group.id": groupId}).count();
-  	}
+    }
 });
 
 Template.SingleGroup.events({
@@ -60,7 +50,11 @@ Template.SingleGroup.events({
 		var groupId = Session.get('groupId');
 		Meteor.call('deleteGroup', groupId, function(err,res){
 			if(!err){//all good
-                Router.go('User');
+				Toast.success('Successful');
+                Router.go('YourGroup');
+			}
+			else{
+				Toast.error("Unsuccesful");
 			}
 		});
 	},
@@ -77,6 +71,10 @@ Template.SingleGroup.events({
 			var msg;
 			Meteor.call('joinGroup',groupId, memberId, memberName, function(err,res){
 				if(!err){//all good
+					Toast.success("Welcome to the group");
+				}
+				else{
+					Toast.error('Unsuccessful');
 				}
 			});	
 		
@@ -91,7 +89,11 @@ Template.SingleGroup.events({
 			var name= data.gname;
 			Meteor.call('leaveGroup',groupId, function(err,res){
 				if(!err){//all good
-	               Router.go('User');
+					Toast.success('Successful');
+	                Router.go('YourGroup');
+				}
+				else{
+					Toast.error("Unsuccesful");
 				}
 			});	
 		
@@ -140,54 +142,20 @@ Template.SingleGroup.events({
 
 		Meteor.call('saveGroup',groupId,gtitle, gdesc, function(err,res){
 			if(!err){//all good
-				console.log("group saved: "+res);
+				
 				$('#gname').text(gtitle);
 				$('#gdesc').text(gdesc);
                 $("#save").prop('value', 'Edit');
                 $("#save").prop('class', 'btn btn-success pull-right glyphicon glyphicon-pencil');
 				$("#save").prop('id', 'edit');
 				$("#save").prop('title', 'Edit');
+				Toast.success('Successful');
+			}
+			else{
+				Toast.error('Unsuccessful');
 			}
 		});
-	}/*,
-
-	"click #request": function(event){
-		var groupId = Session.get('groupId');
-		var group= Groups.findOne({ _id: groupId});
-		var owner= group.owner.id;
-		var ownerName=group.owner.name;
-		var currentUser= Meteor.user()._id;
-		var currentUserName= Meteor.user().profile.name;
-		if(owner!== currentUser){
-			Meteor.call("requestJoin", groupId, owner,ownerName, currentUser, currentUserName, function(err,res){
-				if(!err){//all good)
-					Router.go('User');
-				}
-			});
-		}
-	},
-
-	"click #accept": function(event){
-		var id= this._id;
-		console.log(id);
-		var data= Notify.findOne(id);
-		var userId= data.user.id;
-		var username= data.user.name;
-		var groupId= data.group.id;
-		var group=Groups.findOne(groupId);
-		var gname= group.gname;
-		Meteor.call('joinGroup',groupId, userId, username, function(err,res){
-				if(!err){//all good
-					var nid= Notify.remove(id);
-	                return nid;
-				}
-		});	
-	},
-	"click #decline": function(event){
-		var id= this._id;
-		var nid= Notify.remove(id);
-	    return nid;
-	}*/
+	}
 });
 
 Template.Members.onCreated(function(){
@@ -246,7 +214,11 @@ Template.Members.events({
 		var memberName= this.name;
 		console.log(memberName);
 		Meteor.call('removeMember',groupId, memberId, memberName, function(err,res){
-			if(!err){
+			if(!err){//all good
+				Toast.success('Successful');
+			}
+			else{
+				Toast.error("Unsuccesful");
 			}
 		});
 	}
@@ -256,15 +228,19 @@ Template.Members.events({
 Template.Invite.onCreated(function(){
 	var self= this;
 	this.autorun( function() {
-		self.subscribe('groups');
+		self.subscribe('user');
 	});
 });
 
 Template.Invite.helpers({
-	searchIndexes: () => [groupsIndex, postsIndex,usersIndex],
-  		groupIndex: () => groupsIndex,
-  		postIndex: () => postsIndex,
-  		userIndex: () => usersIndex
+  	users: function () {
+  		var groupId = Session.get('groupId');
+  		var group = Groups.findOne({_id: groupId});
+  		var owner = group.owner.name;
+    	var regexp = new RegExp(Session.get('search/members'), 'i');
+    	return Meteor.users.find({"profile.name": regexp, "profile.name": {$ne: owner} });
+    	
+  	}
 });
 
 Template.Invite.events({
@@ -281,8 +257,15 @@ Template.Invite.events({
 			createdAt: new Date().toLocaleString(),
 			group_action: "/group/"+group_id+'/'	
 		});
-		Router.go('/group/'+group_id+"/");
-	}
+		//Router.go('/group/'+group_id+"/");
+	},
+	'keyup #search': function(event) {
+    	Session.set('search/members', event.target.value);
+  	}
+});
+
+Template.Invite.onDestroyed(function(){
+	Session.set('search/members', null);
 });
 
 Template.YourGroup.onCreated(function(){
