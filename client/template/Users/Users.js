@@ -23,11 +23,11 @@ Template.UserDashboard.events({
 		var first_name = $("#firsttxt").text();
 		var last_name = $("#lasttxt").text();
 		var email = $("#emailtxt").text();
-		var input2 = $('<input id="firsttxt" type="text" value="' + first_name + '" />');
+		var input2 = $('<input id="firsttxt" class="form-control" type="text" value="' + first_name + '" />');
 		$("#firsttxt").replaceWith(input2);
-		var input3 = $('<input id="lasttxt" type="text" value="' + last_name + '" />');
+		var input3 = $('<input id="lasttxt" class="form-control" type="text" value="' + last_name + '" />');
 		$("#lasttxt").replaceWith(input3);
-		var input4 = $('<input id="emailtxt" type="text" value="' + email + '" />');
+		var input4 = $('<input id="emailtxt" class="form-control" type="text" value="' + email + '" />');
 		$("#emailtxt").replaceWith(input4);
 
 		document.getElementById('save').disabled = false; 
