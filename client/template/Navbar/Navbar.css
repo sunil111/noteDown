@@ -5,6 +5,8 @@ a#list{
 li#navli{
 	padding-top: 0px;
 	padding-bottom: 0px;
+	padding-right: 10px;
+	padding-left: 20px;
 }
 
 .navbar-toggle{
@@ -14,4 +16,3 @@ li#navli{
 .dropdown{
 	position: relative;
 }
-
