@@ -12,16 +12,18 @@
 
 	    <div class="collapse navbar-collapse" id="navbar-collapse-2">
 		    <ul class="nav navbar-nav">
-		    	{{#each user}}
-					<li id="navli"><a id="list" title="Dashboard" href="/user_dashboard/{{_id}}">Dashboard</a></li>&nbsp;
-				{{/each}}
 				<li id="navli"><a id="list" title="Notes" href="{{pathFor route='YourNotes'}}">Notes</a></li>&nbsp;
 				<li id="navli"><a id="list" title="Groups" href="{{pathFor route='YourGroup'}}">Groups</a></li>&nbsp;
 				<li id="navli"><a id="list" title="Todo" href="{{pathFor route='YourTodo'}}">Todo</a></li>&nbsp;
 				<li id="navli"><a id="list" title="Media" href="{{pathFor route='YourMedia'}}">Media</a></li>&nbsp;
 				<li id="navli"><a id="list" title="Updates" href="{{pathFor route='Updates'}}">Updates</a></li>&nbsp;
-				<li id="navli"><i><input id="search" name='search' placeholder="Search.." required></i></li>
-		    </ul>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				{{#each user}}
+					<li id="navli"><a id="list" title="Dashboard" href="/user_dashboard/{{_id}}">Dashboard</a></li>&nbsp;
+				{{/each}}	
+				<li id="navli"><i><input id="search" class="form-control" name='search' placeholder="Search.." required></i></li>
+			</ul>
 	    </div>
 	  </div>
 	</nav>
