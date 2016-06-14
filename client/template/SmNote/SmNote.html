@@ -1,10 +1,3 @@
-<template name="Note">
-	<div class="container">  
-		<h2>Note &nbsp;&nbsp;&nbsp;&nbsp;<a href="{{pathFor route='CreateNote'}}"><img src="/images/add.png"  height="50" title="Create note"></a></h2>
-		<hr class="divider">
-	</div>
-</template>
-
 <template name="CreateNote">
 	{{> Navbar}}
 	<div class="container">
@@ -13,7 +6,7 @@
 				<div class="form-group container-fluid">
 					<h2>Create Note</h2> 
 					<!--label for="postTitle">Post Title: </label-->
-					<input type="text" value={{Title}} name="postTitle" id="postTitle" class="from-control" placeholder="Enter your post title here..."  style="width: 100%; border-radius: 0px; border: 1px solid #BFBFBF; height: 40px; font-size :18px;" required/>
+					<input type="text" value={{Title}} name="postTitle" id="postTitle" class="form-control" placeholder="Enter your post title here..."  style="width: 100%; border-radius: 0px; border: 1px solid #BFBFBF; height: 40px; font-size :18px;" required/>
 				</div>
 				<div id="summernote" class="form-group">
 				
@@ -73,10 +66,10 @@
 	<div class="container">
 		<div class="col-xs-12">
 			<h2>Edit Note</h2>
-			<form role="form" id ="editPost">
+			<form class="form-horizontal" role="form" id ="editPost">
 				<div class="form-group container-fluid">
 					<!--label for="postTitle">Post Title: </label-->
-					<input type="text" value={{edit.Title}} name="postTitle" id="postTitle" class="from-control" placeholder="Enter your post title here..."  style="width: 100%; border-radius: 0px; border: 1px solid #BFBFBF; height: 40px; font-size :18px;" required>
+					<input type="text" value={{edit.Title}} name="postTitle" id="postTitle" class="form-control" placeholder="Enter your post title here..."  style="width: 100%; border-radius: 0px; border: 1px solid #BFBFBF; height: 40px; font-size :18px;" required>
 
 				</div>
 
@@ -217,7 +210,7 @@
 				<div class="form-group container-fluid">
 					<h2>Create Note</h2> 
 					<!--label for="postTitle">Post Title: </label-->
-					<input type="text" value={{Title}} name="postTitle" id="postTitle" class="from-control" placeholder="Enter your post title here..."  style="width: 100%; border-radius: 0px; border: 1px solid #BFBFBF; height: 40px; font-size :18px;" required/>
+					<input type="text" value={{Title}} name="postTitle" id="postTitle" class="form-control" placeholder="Enter your post title here..."  style="width: 100%; border-radius: 0px; border: 1px solid #BFBFBF; height: 40px; font-size :18px;" required/>
 				</div>
 				<div id="summernote" class="form-group">
 				</div>
@@ -281,7 +274,7 @@
 			<form role="form" id ="editPost">
 				<div class="form-group container-fluid">
 					<!--label for="postTitle">Post Title: </label-->
-					<input type="text" value={{edit.Title}} name="postTitle" id="postTitle" class="from-control" placeholder="Enter your post title here..."  style="width: 100%; border-radius: 0px; border: 1px solid #BFBFBF; height: 40px; font-size :18px;" required>
+					<input type="text" value={{edit.Title}} name="postTitle" id="postTitle" class="form-control" placeholder="Enter your post title here..."  style="width: 100%; border-radius: 0px; border: 1px solid #BFBFBF; height: 40px; font-size :18px;" required>
 
 				</div>
 
