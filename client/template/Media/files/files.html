@@ -8,7 +8,7 @@
 <template name="uploadedFile">
   <div class="media well pull-left">
     <div class="media-body">
-      <h4 class="media-heading">{{this.name}}</h4>
+      <h4 class="media-heading"><a href={{this.url}}>{{this.name}}</a></h4>
       <p>
         <em>Original size: {{this.size}} bytes<br>Type: {{this.type store="any"}}<br>Owner: {{this.owner.name}}<br>Added At: {{this.createdAt}}</em>
       </p>
